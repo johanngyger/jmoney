@@ -47,11 +47,11 @@ public class OptionsService {
 
     private net.sf.jmoney.model.Session oldSession;
 
-    private Map<net.sf.jmoney.model.Category, Category> oldToNewCategoryMap = new HashMap<>();
+    private Map<net.sf.jmoney.model.Category, Category> oldToNewCategoryMap = new HashMap<net.sf.jmoney.model.Category, Category>();
 
-    private Map<Entry, net.sf.jmoney.model.Category> entryToOldCategoryMap = new HashMap<>();
+    private Map<Entry, net.sf.jmoney.model.Category> entryToOldCategoryMap = new HashMap<Entry, net.sf.jmoney.model.Category>();
 
-    private Map<net.sf.jmoney.model.DoubleEntry, DoubleEntry> oldToNewDoubleEntryMap = new HashMap<>();
+    private Map<net.sf.jmoney.model.DoubleEntry, DoubleEntry> oldToNewDoubleEntryMap = new HashMap<net.sf.jmoney.model.DoubleEntry, DoubleEntry>();
 
     @Inject
     private SessionService sessionService;

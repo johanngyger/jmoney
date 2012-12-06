@@ -45,7 +45,7 @@ public class ReportService {
 
     public List<BalanceDto> getBalances(Date date) {
         Session session = sessionService.getSession();
-        List<BalanceDto> result = new ArrayList<>();
+        List<BalanceDto> result = new ArrayList<BalanceDto>();
 
         long totalBalance = 0;
         for (Account account : session.getAccounts()) {
@@ -81,7 +81,7 @@ public class ReportService {
 
     public List<CashFlowDto> getCashFlow(Date from, Date to) {
         Session session = sessionService.getSession();
-        List<CashFlowDto> resultList = new ArrayList<>();
+        List<CashFlowDto> resultList = new ArrayList<CashFlowDto>();
         Category root = session.getRootCategory();
         long totalSum = 0;
         for (Category child : root.getChildren()) {
