@@ -1,0 +1,25 @@
+Periode:
+<select id="period" ng-model="period" ng-options="p.value as p.description for p in periods"
+        ng-change="updatePeriod()">
+</select>
+Von:
+<input id="fromDate" name="fromDate" title="Datum von" placeholder="Datum von"
+       ng-model="fromDate" ui-date>
+Bis: <input id="toDate" name="toDate" title="Datum bis" placeholder="Datum bis"
+            ng-model="toDate" ui-date>
+<button type="submit" ng-click="generate()">Erstellen</button>
+
+<!--
+<pre>period={{period}}</pre>
+<pre>fromDate={{fromDate}}</pre>
+<pre>toDate={{toDate}}</pre>
+<pre>cashFlows={{cashFlows}}</pre>
+-->
+<hr>
+
+<img src="img/loader.gif" ng-show="isLoading">
+
+<div class="report-entry" ng-repeat="cashFlow in cashFlows" ng-class="{'report-total': cashFlow.total}">
+    <div class="pull-right" ng-class="">{{cashFlow.amount / 100 | number:2}}</div>
+    <div style>{{cashFlow.categoryName}}</div>
+</div>

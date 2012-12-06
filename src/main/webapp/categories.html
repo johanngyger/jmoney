@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html ng-app="categories">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>JMoney</title>
+
+    <link rel="icon" type="image/x-icon" href="img/jmoney.ico"/>
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.custom.css"/>
+    <link rel="stylesheet" type="text/css" href="css/jmoney.css"/>
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui.custom.css"/>
+</head>
+
+<body ng-controller="CategoryTreeController">
+
+<div id="header" class="clear">
+    <h1>JMoney</h1>
+</div>
+
+<div id="nav" class="clear">
+    <ul>
+        <li><a href="accounts.html" class="ui-corner-top">Konten</a></li>
+        <li><strong><a href="#" class="ui-corner-top">Kategorien</a></strong></li>
+        <li><a href="reports.html" class="ui-corner-top">Berichte</a></li>
+        <li><a href="options.html" class="ui-corner-top">Optionen</a></li>
+    </ul>
+</div>
+
+<script type="text/ng-template" id="tree-item.html">
+    <input id="name" class="input-large" ng-model="item.name"/>
+    <a title="Unterkategorie hinzufügen" ng-click="add(item)"><i class="icon-plus-sign"></i></a>
+    <a title="Kategorie löschen" ng-click="remove(item)"><i class="icon-minus-sign"></i></a>
+
+    <ul>
+        <li ng-repeat="item in item.children" ng-include="'tree-item.html'"></li>
+    </ul>
+</script>
+
+<div id="content" class="clear">
+    <div id="main">
+        <a ng-click="add(tree)"><i class="icon-plus-sign"></i> Neue Hauptkategorie</a>
+        <hr>
+
+        <div class="button-bar">
+            <button type="submit" ng-click="save()">Speichern</button>
+        </div>
+
+        <img src="img/loader.gif" ng-show="isLoading">
+
+        <ul>
+            <li ng-repeat="item in tree.children" ng-include="'tree-item.html'"></li>
+        </ul>
+
+        <div class="button-bar">
+            <button type="submit" ng-click="save()">Speichern</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<div id="footer" class="clear">
+    <span class="left"><a href="#">Terms &amp; Conditions</a></span>
+    <span class="right">Copyright 2012 © Johann Gyger</span>
+</div>
+
+<!-- jQuery -->
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>-->
+<script src="js/jquery.js"></script>
+<!--<script src="js/jquery.dataTables.js"></script>-->
+
+<!-- jQuery UI -->
+<!--<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>-->
+<script src="js/jquery-ui.js"></script>
+<script src="js/jquery.ui.datepicker-de-CH.js"></script>
+
+<!-- Twitter Bootstrap -->
+<script src="js/bootstrap.js"></script>
+
+<!-- AngularJS -->
+<!--<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>-->
+<script src="js/angular.js"></script>
+<!--<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular-resource.min.js"></script>-->
+<script src="js/angular-resource.js"></script>
+
+<!-- AngularUI -->
+<script src="js/angular-ui.js"></script>
+
+<!-- JMoney -->
+<script src="js/categories.js"></script>
+
+</body>
+</html>

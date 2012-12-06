@@ -1,0 +1,23 @@
+Filter:
+<select id="filter" ng-model="filter">
+    <option value="date">Datum</option>
+    <option value="all">Alle Buchungen</option>
+    <option value="balanced">Verrechnete Buchungen</option>
+</select>
+Datum:
+<input id="date" name="date" title="Datum" placeholder="Datum"
+       ng-model="filterDate" ui-date>
+<button type="submit" ng-click="generate()">Erstellen</button>
+
+<!--
+<pre>filterDate={{filterDate}}</pre>
+<pre>balances={{balances}}</pre>
+-->
+<hr>
+
+<div class="report-entry" ng-repeat="balance in balances" ng-class="{'report-total': balance.total}">
+    <div class="pull-right" ng-class="">{{balance.balance / 100 | number:2}}</div>
+    <div style>{{balance.accountName}}</div>
+</div>
+
+

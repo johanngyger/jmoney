@@ -1,0 +1,95 @@
+<div id="subnav">
+    <a href="#/accounts/{{accountId}}/entries">
+        <i class="icon-circle-arrow-left"></i> Zurück
+    </a>
+    <a ng-click="delete()" ng-show="entry.id != null">
+        <i class="icon-trash"></i> Buchung löschen
+    </a>
+</div>
+
+
+<form id="entryForm" class="ui-corner-all">
+    <table>
+        <tbody>
+        <!--
+        <tr>
+            <td class="entryDate">
+                <label for="date">Datum</label>
+            </td>
+            <td class="entryDesc">
+                <label for="description">Beschreibung</label>
+            <td class="entryStatus">
+                <label for="status">Status</label>
+            <td class="entryAmount">
+                <label for="income">Einnahme</label>
+            </td>
+            <td class="entryAmount">
+                <label for="expense">Ausgabe</label>
+            </td>
+        </tr>
+        -->
+        <tr>
+            <td class="entryDate">
+                <input id="date" name="date" title="Datum" class="full-width" placeholder="Datum"
+                       ng-model="entry.date" ui-date>
+            </td>
+            <td class="entryDesc">
+                <input id="description" type="text" class="full-width" placeholder="Beschreibung"
+                       ng-model="entry.description"></td>
+            <td class="entryStatus">
+                <select id="status" size="0" ng-model="entry.status"></select></td>
+            <td class="entryAmount">
+                <input id="income" type="number" step="0.01" name="income"
+                       class="amount full-width" placeholder="Einnahme"
+                       ng-model="entry.income" ui-event="{blur:'updateIncome()'}"/>
+            </td>
+            <td class="entryAmount">
+                <input id="expense" type="number" step="0.01" name="expense"
+                       class="amount full-width" placeholder="Ausgabe"
+                       ng-model="entry.expense" ui-event="{blur:'updateExpense()'}"/>
+            </td>
+        </tr>
+        <!--
+        <tr>
+            <td class="entryDate">
+                <label for="valuta">Valuta</label>
+            </td>
+            <td class="entryDesc">
+                <label for="category">Kategorie</label> <br>
+            </td>
+            <td class="entryStatus"></td>
+            <td class="entryAmount"></td>
+            <td class="entryAmount"></td>
+        </tr>
+        -->
+        <tr>
+            <td class="entryDate">
+                <input id="valuta" name="valuta" ng-model="entry.valuta" class="full-width" placeholder="Valuta"
+                       ui-date>
+            </td>
+            <td class="entryDesc">
+                <select id="category" class="entryCategory" ng-model="entry.categoryId"
+                        ng-options="c.id as c.nameIndented for c in categories">
+                </select><input type="button" value="Splitten..."
+                                class="entrySplitButton" disabled="disabled">
+            </td>
+            <td class="entryStatus"></td>
+            <td class="entryAmount"></td>
+            <td class="entryAmount"></td>
+        </tr>
+        <tr>
+            <td class="entryDate"></td>
+            <td class="entryDesc">
+                <!--<label for="memo">Memo</label>-->
+                <input id="Memo" type="text" class="full-width" placeholder="Memo" ng-model="entry.memo">
+            </td>
+            <td class="entryStatus"></td>
+            <td class="entryAmount"></td>
+            <td class="entryAmount"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <input type="submit" value="Speichern" ng-click="save()">
+    <input type="reset" value="Zurücksetzen" ng-show="entry.id == null">
+</form>
