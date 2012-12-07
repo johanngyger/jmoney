@@ -17,11 +17,12 @@ function BalancesController($scope, $http, $filter) {
         $http.get('rest/reports/balances', {params: {date: dateParam}})
             .success(function (data) {
                 $scope.balances = data;
+                $scope.loading = false;
             }).error(function () {
                 $scope.error = true;
+                $scope.loading = false;
             });
     }
-    $scope.loading = false;
 
     $scope.filter = "date";
     $scope.filterDate = null;
@@ -37,11 +38,12 @@ function CashFlowController($scope, $http, $filter) {
         $http.get('rest/reports/cash-flows', {params: {fromDate: fromDateParam, toDate: toDateParam}})
             .success(function (data) {
                 $scope.cashFlows = data;
+                $scope.loading = false;
             })
             .error(function () {
                 $scope.error = true;
+                $scope.loading = false;
             });
-        $scope.loading = false;
     }
 
     $scope.periods = [

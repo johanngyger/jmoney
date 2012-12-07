@@ -289,6 +289,10 @@ div#sub .selected {
     font-weight: bold;
 }
 
+.loader {
+    padding: 10px 0;
+}
+
 #entryTable .selected {
     background: #DDBF99 url(../img/ui-bg_highlight-soft_75_ddbf99_1x100.png) 50% 50% repeat-x;
 }

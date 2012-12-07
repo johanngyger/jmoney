@@ -19,6 +19,8 @@ Datum:
 -->
 <hr>
 
+<img src="img/loader.gif" ng-show="loading">
+
 <div class="report-entry" ng-repeat="balance in balances" ng-class="{'report-total': balance.total}">
     <div class="pull-right" ng-class="">{{balance.balance / 100 | number:2}}</div>
     <div style>{{balance.accountName}}</div>

@@ -23,10 +23,11 @@ function AccountController($scope, $http, $routeParams, $rootScope) {
         $http.get('rest/accounts')
             .success(function (data) {
                 $scope.accounts = data;
+                $scope.loadingAccounts = false;
             }).error(function (data) {
                 $scope.error = true;
+                $scope.loadingAccounts = false;
             });
-        $scope.loadingAccounts = false;
     }
 
     load();
@@ -87,18 +88,21 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
             $scope.page = 1;
         }
 
-        $scope.loading = true;
 
         $http.get('rest/accounts/' + $routeParams.accountId + '/entries/count').success(function (data) {
             $scope.entryCount = parseInt(data);
             $scope.maxPage = Math.ceil($scope.entryCount / 10);
         });
 
-        $http.get('rest/accounts/' + $routeParams.accountId + '/entries?page=' + $scope.page).success(function (data) {
-            $scope.entries = data;
-        });
+        $scope.loading = true;
+        $http.get('rest/accounts/' + $routeParams.accountId + '/entries?page=' + $scope.page)
+            .success(function (data) {
+                $scope.entries = data;
+                $scope.loading = false;
+            }).error(function (data) {
+                $scope.loading = false;
+            });
 
-        $scope.loading = false;
 
         $scope.entry = {};
         if ($routeParams.entryId) {

@@ -13,10 +13,11 @@ function CategoryTreeController($scope, $http, $routeParams, $rootScope) {
         $http.get('rest/category-tree')
             .success(function (data) {
                 $scope.tree = data;
+                $scope.loading = false;
             }).error(function (data) {
                 $scope.error = true;
+                $scope.loading = false;
             });
-        $scope.loading = false;
     }
 
     load();

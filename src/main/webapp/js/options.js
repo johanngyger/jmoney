@@ -16,11 +16,12 @@ function InitController($scope, $http) {
         $http.put('rest/options/init', {timeout: 5000})
             .success(function () {
                 $scope.success = true;
+                $scope.loading = false;
             })
             .error(function () {
                 $scope.error = true;
+                $scope.loading = false;
             });
-        $scope.loading = false;
     }
 }
 
