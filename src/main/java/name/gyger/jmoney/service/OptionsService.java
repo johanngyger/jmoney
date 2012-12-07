@@ -31,7 +31,9 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -58,14 +60,93 @@ public class OptionsService {
 
     public void init() {
         removeOldSession();
-
-        Category rootCategory = new Category();
-        rootCategory.setName("root");
-        em.persist(rootCategory);
-
         Session session = new Session();
-        session.setRootCategory(rootCategory);
+        Category root = initCategories();
+        session.setRootCategory(root);
         em.persist(session);
+    }
+
+    public Category initCategories() {
+        List<Category> cList = new ArrayList<Category>();
+
+        Category root = createCategory("Root", null, cList);
+
+        Category income = createCategory("Einnahmen", root, cList);
+        createCategory("Lohn", income, cList);
+        createCategory("Nebenerwerb", income, cList);
+        createCategory("Wertschriftenerträge", income, cList);
+
+        Category expenses = createCategory("Ausgaben", root, cList);
+        createCategory("Steuern", expenses, cList);
+        createCategory("Mitgliedschaften", expenses, cList);
+        createCategory("Spenden", expenses, cList);
+        createCategory("Gebühren", expenses, cList);
+        createCategory("Geschenke", expenses, cList);
+
+        Category children = createCategory("Kinder", expenses, cList);
+        createCategory("Arzt", children, cList);
+        createCategory("Kleidung", children, cList);
+        createCategory("Hüten", children, cList);
+        createCategory("Spielsachen", children, cList);
+
+        Category housing = createCategory("Wohnen", expenses, cList);
+        createCategory("Nebenkosten/Unterhalt", housing, cList);
+        createCategory("Miete/Hypozins", housing, cList);
+        createCategory("TV", housing, cList);
+
+        Category communication = createCategory("Kommunikation", expenses, cList);
+        createCategory("Telefon", communication, cList);
+        createCategory("Mobile", communication, cList);
+        createCategory("Internet", communication, cList);
+
+        Category insurance = createCategory("Versicherungen", expenses, cList);
+        createCategory("Krankenkasse", insurance, cList);
+        createCategory("Haushalt/Haftpflicht", insurance, cList);
+
+        Category household = createCategory("Haushalt", expenses, cList);
+        createCategory("Lebensmittel", household, cList);
+        createCategory("Ausser-Haus-Verpflegung", household, cList);
+        createCategory("Kleidung", household, cList);
+
+        Category transport = createCategory("Verkehr", expenses, cList);
+        createCategory("Auto", transport, cList);
+        createCategory("ÖV", transport, cList);
+
+        Category entertainment = createCategory("Unterhaltung", expenses, cList);
+        createCategory("Bücher", entertainment, cList);
+        createCategory("Zeitungen", entertainment, cList);
+        createCategory("Zeitschriften", entertainment, cList);
+        createCategory("Musik", entertainment, cList);
+        createCategory("Filme", entertainment, cList);
+        createCategory("Spiele", entertainment, cList);
+
+        Category leisure = createCategory("Freizeit", expenses, cList);
+        createCategory("Ausgang", leisure, cList);
+        createCategory("Kino", leisure, cList);
+        createCategory("Sportanlässe", leisure, cList);
+        createCategory("Konzerte", leisure, cList);
+        createCategory("Ausflüge", leisure, cList);
+        createCategory("Bücher", leisure, cList);
+        createCategory("Ferien", leisure, cList);
+
+        Category healthCare = createCategory("Gesundheit", expenses, cList);
+        createCategory("Arzt", healthCare, cList);
+        createCategory("Apotheke", healthCare, cList);
+        createCategory("Zahnarzt", healthCare, cList);
+        createCategory("Körperpflege", healthCare, cList);
+
+        for (Category c : cList) {
+            em.persist(c);
+        }
+
+        return root;
+    }
+
+    private Category createCategory(String name, Category parent, List<Category> cList) {
+        Category c = new Category(name);
+        c.setParent(parent);
+        cList.add(c);
+        return c;
     }
 
     private void removeOldSession() {
