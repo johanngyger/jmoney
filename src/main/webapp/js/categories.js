@@ -1,17 +1,22 @@
 angular.module('categories', ['ui.directives']).
     config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-    //$locationProvider.html5Mode(true);
-    $routeProvider.
-        otherwise({redirectTo:'/categories.html'});
-}]);
+        //$locationProvider.html5Mode(true);
+        $routeProvider.
+            otherwise({redirectTo: '/categories.html'});
+    }]);
 
 function CategoryTreeController($scope, $http, $routeParams, $rootScope) {
+
     var load = function () {
-        $scope.isLoading = true;
-        $http.get('rest/category-tree').success(function (data) {
-            $scope.tree = data;
-            $scope.isLoading = false;
-        });
+        $scope.loading = true;
+        $scope.error = false;
+        $http.get('rest/category-tree')
+            .success(function (data) {
+                $scope.tree = data;
+            }).error(function (data) {
+                $scope.error = true;
+            });
+        $scope.loading = false;
     }
 
     load();
@@ -24,7 +29,7 @@ function CategoryTreeController($scope, $http, $routeParams, $rootScope) {
     }
 
     $scope.add = function (parent) {
-        var newCat = {name:'<Neue Kategorie>', children:[], parentId:parent.id};
+        var newCat = {name: '<Neue Kategorie>', children: [], parentId: parent.id};
         $http.post('rest/categories', newCat).success(function (data) {
             newCat.id = data;
         });
@@ -45,7 +50,6 @@ function CategoryTreeController($scope, $http, $routeParams, $rootScope) {
             }
             removeNode(node, n.children);
         }
-
     }
 
 }

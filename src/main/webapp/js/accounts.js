@@ -1,13 +1,13 @@
 angular.module('accounts', ['ui.directives']).
     config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-    //$locationProvider.html5Mode(true);
-    $routeProvider.
-        when('/accounts/:accountId', {controller:'AccountDetailsController', templateUrl:'templates/accounts/account-details.html'}).
-        when('/accounts/:accountId/entries', {controller:'EntryController', templateUrl:'templates/accounts/entries.html'}).
-        when('/accounts/:accountId/entries/new', {controller:'EntryController', templateUrl:'templates/accounts/entry-details.html'}).
-        when('/accounts/:accountId/entries/:entryId', {controller:'EntryController', templateUrl:'templates/accounts/entry-details.html'}).
-        otherwise({redirectTo:'/accounts'});
-}]);
+        //$locationProvider.html5Mode(true);
+        $routeProvider.
+            when('/accounts/:accountId', {controller: 'AccountDetailsController', templateUrl: 'templates/accounts/account-details.html'}).
+            when('/accounts/:accountId/entries', {controller: 'EntryController', templateUrl: 'templates/accounts/entries.html'}).
+            when('/accounts/:accountId/entries/new', {controller: 'EntryController', templateUrl: 'templates/accounts/entry-details.html'}).
+            when('/accounts/:accountId/entries/:entryId', {controller: 'EntryController', templateUrl: 'templates/accounts/entry-details.html'}).
+            otherwise({redirectTo: '/accounts'});
+    }]);
 
 function parseDate(dateString) {
     if (dateString == undefined || dateString == null) {
@@ -19,9 +19,14 @@ function parseDate(dateString) {
 
 function AccountController($scope, $http, $routeParams, $rootScope) {
     var load = function () {
-        $http.get('rest/accounts').success(function (data) {
-            $scope.accounts = data;
-        });
+        $scope.loadingAccounts = true;
+        $http.get('rest/accounts')
+            .success(function (data) {
+                $scope.accounts = data;
+            }).error(function (data) {
+                $scope.error = true;
+            });
+        $scope.loadingAccounts = false;
     }
 
     load();
@@ -82,7 +87,7 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
             $scope.page = 1;
         }
 
-        $scope.isLoading = true;
+        $scope.loading = true;
 
         $http.get('rest/accounts/' + $routeParams.accountId + '/entries/count').success(function (data) {
             $scope.entryCount = parseInt(data);
@@ -93,7 +98,7 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
             $scope.entries = data;
         });
 
-        $scope.isLoading = false;
+        $scope.loading = false;
 
         $scope.entry = {};
         if ($routeParams.entryId) {

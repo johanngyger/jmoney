@@ -30,8 +30,9 @@
 </div>
 
 
-<div id="content" class="clear">
-    <div id="sub" ng-controller="AccountController">
+<div id="content" class="clear" ng-controller="AccountController">
+    <div id="sub">
+        <img src="img/loader.gif" ng-show="loadingAccounts">
         <ul>
             <li ng-repeat="account in accounts">
                 <div class="dropdown">
@@ -47,6 +48,7 @@
     </div>
 
     <div id="main">
+        <div ng-include="'templates/alerts.html'"></div>
         <div ng-view></div>
     </div>
 </div>

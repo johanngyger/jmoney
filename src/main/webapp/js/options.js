@@ -3,8 +3,7 @@ angular.module('options', ['ui.directives']).
         //$locationProvider.html5Mode(true);
         $routeProvider.
             when('/options/init', {controller: 'InitController', templateUrl: 'templates/options/init.html'}).
-            when('/options/import', {controller: 'ImportController', templateUrl: 'templates/options/import.html'}).
-            when('/options/export', {controller: 'ExportController', templateUrl: 'templates/options/export.html'});
+            when('/options/import', {controller: 'ImportController', templateUrl: 'templates/options/import.html'});
     }]);
 
 function OptionsController($scope, $location) {
@@ -13,19 +12,24 @@ function OptionsController($scope, $location) {
 
 function InitController($scope, $http) {
     $scope.init = function () {
-        $scope.isLoading = true;
-        $http.put('rest/options/init').success(function () {
-            $scope.isLoading = false;
-        });
+        $scope.loading = true;
+        $http.put('rest/options/init', {timeout: 5000})
+            .success(function () {
+                $scope.success = true;
+            })
+            .error(function () {
+                $scope.error = true;
+            });
+        $scope.loading = false;
     }
 }
 
 function ImportController($scope, $routeParams) {
     $scope.success = $routeParams.success;
-    $scope.failure = $routeParams.failure;
+    $scope.error = $routeParams.error;
 
     $scope.load = function () {
-        $scope.isLoading = true;
+        $scope.loading = true;
     }
 }
 

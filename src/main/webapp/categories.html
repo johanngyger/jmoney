@@ -29,18 +29,10 @@
     </ul>
 </div>
 
-<script type="text/ng-template" id="tree-item.html">
-    <input id="name" class="input-large" ng-model="item.name"/>
-    <a title="Unterkategorie hinzufügen" ng-click="add(item)"><i class="icon-plus-sign"></i></a>
-    <a title="Kategorie löschen" ng-click="remove(item)"><i class="icon-minus-sign"></i></a>
-
-    <ul>
-        <li ng-repeat="item in item.children" ng-include="'tree-item.html'"></li>
-    </ul>
-</script>
-
 <div id="content" class="clear">
     <div id="main">
+        <div ng-include="'templates/alerts.html'"></div>
+
         <a ng-click="add(tree)"><i class="icon-plus-sign"></i> Neue Hauptkategorie</a>
         <hr>
 
@@ -48,11 +40,9 @@
             <button type="submit" ng-click="save()">Speichern</button>
         </div>
 
-        <img src="img/loader.gif" ng-show="isLoading">
+        <img src="img/loader.gif" ng-show="loading">
 
-        <ul>
-            <li ng-repeat="item in tree.children" ng-include="'tree-item.html'"></li>
-        </ul>
+        <div ng-include="'templates/categories/category-tree.html'"></div>
 
         <div class="button-bar">
             <button type="submit" ng-click="save()">Speichern</button>

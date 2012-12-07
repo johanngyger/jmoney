@@ -45,7 +45,7 @@ img {
 
     color: #AC443A; /* rouge vermillon 59 */
     color: #F2BB1D; /* le jaune vif */
-    color: #428F70  /* vert 59 */
+    color: #428F70; /* vert 59 */
 }
 
 .gray-background {
@@ -278,7 +278,8 @@ div#sub ul li {
     margin-left: 0;
 }
 
-div#sub a {
+div#sub a,
+div#sub img {
     padding: 5px 5px 5px 14px;
     display: block;
     overflow: hidden;

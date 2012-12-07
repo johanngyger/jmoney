@@ -1,7 +1,7 @@
 <div class="alert alert-success" ng-show="success">
     Datei wurde erfolgreich importiert.
 </div>
-<div class="alert alert-error" ng-show="failure">
+<div class="alert alert-error" ng-show="error">
     Beim Import ist ein Fehler aufgetreten.
 </div>
 <p>Import einer alten JMoney-Datei (Version 0.4.4,
@@ -13,5 +13,5 @@
 <form method="post" action="/rest/options/import" enctype="multipart/form-data">
     <input id="file" name="file" title="JMoney-Datei (*.jmx)" placeholder="JMoney-Datei (*.jmx)" type="file">
     <button type="submit" ng-click="load()">Importieren</button>
-    <img src="img/loader.gif" ng-show="isLoading">
+    <img src="img/loader.gif" ng-show="loading">
 </form>

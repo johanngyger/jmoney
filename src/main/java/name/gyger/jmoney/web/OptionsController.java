@@ -49,7 +49,7 @@ public class OptionsController {
             return "redirect:/options.html#/options/import?success";
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return "redirect:/options.html#/options/import?failure";
+            return "redirect:/options.html#/options/import?error";
         }
     }
 
