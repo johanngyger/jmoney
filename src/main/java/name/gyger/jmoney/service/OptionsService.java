@@ -70,49 +70,47 @@ public class OptionsService {
         List<Category> cList = new ArrayList<Category>();
 
         Category root = createCategory("Root", null, cList);
+        createCategory("Steuern", root, cList);
+        createCategory("Mitgliedschaften", root, cList);
+        createCategory("Spenden", root, cList);
+        createCategory("Gebühren", root, cList);
+        createCategory("Geschenke", root, cList);
 
-        Category income = createCategory("Einnahmen", root, cList);
+        Category income = createCategory("Einkünfte", root, cList);
         createCategory("Lohn", income, cList);
         createCategory("Nebenerwerb", income, cList);
         createCategory("Wertschriftenerträge", income, cList);
 
-        Category expenses = createCategory("Ausgaben", root, cList);
-        createCategory("Steuern", expenses, cList);
-        createCategory("Mitgliedschaften", expenses, cList);
-        createCategory("Spenden", expenses, cList);
-        createCategory("Gebühren", expenses, cList);
-        createCategory("Geschenke", expenses, cList);
-
-        Category children = createCategory("Kinder", expenses, cList);
+        Category children = createCategory("Kinder", root, cList);
         createCategory("Arzt", children, cList);
         createCategory("Kleidung", children, cList);
         createCategory("Hüten", children, cList);
         createCategory("Spielsachen", children, cList);
 
-        Category housing = createCategory("Wohnen", expenses, cList);
+        Category housing = createCategory("Wohnen", root, cList);
         createCategory("Nebenkosten/Unterhalt", housing, cList);
         createCategory("Miete/Hypozins", housing, cList);
         createCategory("TV", housing, cList);
 
-        Category communication = createCategory("Kommunikation", expenses, cList);
+        Category communication = createCategory("Kommunikation", root, cList);
         createCategory("Telefon", communication, cList);
         createCategory("Mobile", communication, cList);
         createCategory("Internet", communication, cList);
 
-        Category insurance = createCategory("Versicherungen", expenses, cList);
+        Category insurance = createCategory("Versicherungen", root, cList);
         createCategory("Krankenkasse", insurance, cList);
         createCategory("Haushalt/Haftpflicht", insurance, cList);
 
-        Category household = createCategory("Haushalt", expenses, cList);
+        Category household = createCategory("Haushalt", root, cList);
         createCategory("Lebensmittel", household, cList);
         createCategory("Ausser-Haus-Verpflegung", household, cList);
         createCategory("Kleidung", household, cList);
 
-        Category transport = createCategory("Verkehr", expenses, cList);
+        Category transport = createCategory("Verkehr", root, cList);
         createCategory("Auto", transport, cList);
         createCategory("ÖV", transport, cList);
 
-        Category entertainment = createCategory("Unterhaltung", expenses, cList);
+        Category entertainment = createCategory("Unterhaltung", root, cList);
         createCategory("Bücher", entertainment, cList);
         createCategory("Zeitungen", entertainment, cList);
         createCategory("Zeitschriften", entertainment, cList);
@@ -120,7 +118,7 @@ public class OptionsService {
         createCategory("Filme", entertainment, cList);
         createCategory("Spiele", entertainment, cList);
 
-        Category leisure = createCategory("Freizeit", expenses, cList);
+        Category leisure = createCategory("Freizeit", root, cList);
         createCategory("Ausgang", leisure, cList);
         createCategory("Kino", leisure, cList);
         createCategory("Sportanlässe", leisure, cList);
@@ -129,7 +127,7 @@ public class OptionsService {
         createCategory("Bücher", leisure, cList);
         createCategory("Ferien", leisure, cList);
 
-        Category healthCare = createCategory("Gesundheit", expenses, cList);
+        Category healthCare = createCategory("Gesundheit", root, cList);
         createCategory("Arzt", healthCare, cList);
         createCategory("Apotheke", healthCare, cList);
         createCategory("Zahnarzt", healthCare, cList);
