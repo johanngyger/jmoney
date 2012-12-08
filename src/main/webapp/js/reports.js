@@ -76,6 +76,7 @@ function CashFlowController($scope, $http, $filter) {
                 $scope.toDate = new Date(year - 1, 11, 31);
                 break
         }
+        $scope.generate();
     };
 
     $scope.period = "thisMonth";
