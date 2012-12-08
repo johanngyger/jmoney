@@ -83,53 +83,91 @@ public class ReportService {
         Session session = sessionService.getSession();
         List<CashFlowDto> resultList = new ArrayList<CashFlowDto>();
         Category root = session.getRootCategory();
-        long totalSum = 0;
+
+        long totalIncome = 0;
+        long totalExpense = 0;
+
         for (Category child : root.getChildren()) {
-            long childSum = getCashFlowForCategory(resultList, child, null, from, to);
-            if (childSum != 0) {
-                CashFlowDto childDto = new CashFlowDto(child.getName() + " (Gesamt)", childSum);
-                childDto.setTotal(true);
-                resultList.add(childDto);
+            List<CashFlowDto> subList = new ArrayList<CashFlowDto>();
+            calculateCashFlowForCategory(subList, child, null, from, to);
+
+            long income = 0;
+            long expense = 0;
+            for (CashFlowDto cashFlow : subList) {
+                income += toZeroIfNull(cashFlow.getIncome());
+                expense += toZeroIfNull(cashFlow.getExpense());
             }
-            totalSum += childSum;
+
+            if (income != 0 || expense != 0) {
+                CashFlowDto childDto = new CashFlowDto(child.getName() + " (Gesamt)", income, expense, income - expense);
+                childDto.setTotal(true);
+                subList.add(childDto);
+            }
+
+            totalIncome += income;
+            totalExpense += expense;
+            resultList.addAll(subList);
         }
-        CashFlowDto total = new CashFlowDto("Gesamttotal", totalSum);
+
+        CashFlowDto total = new CashFlowDto("Gesamttotal", totalIncome, totalExpense, totalIncome - totalExpense);
         total.setTotal(true);
         resultList.add(total);
         return resultList;
     }
 
-    private long getCashFlowForCategory(List<CashFlowDto> resultList, Category category, String parentName, Date from, Date to) {
-        long sum = 0;
+    private long toZeroIfNull(Long value) {
+        if (value != null) {
+            return value;
+        } else {
+            return 0;
+        }
+    }
 
+    private void calculateCashFlowForCategory(List<CashFlowDto> resultList, Category category, String parentName, Date from, Date to) {
+        String name = createCategoryName(category, parentName);
+
+        if (!(category instanceof SpecialCategory) && !(category instanceof Account)) {
+            Query q = createCategorySumQuery(category, from, to);
+            Long sum = (Long) q.getSingleResult();
+            createCategoryFlowDto(resultList, name, sum);
+        }
+
+        for (Category child : category.getChildren()) {
+            calculateCashFlowForCategory(resultList, child, name, from, to);
+        }
+    }
+
+    private Query createCategorySumQuery(Category category, Date from, Date to) {
+        String queryString = "SELECT SUM(e.amount) FROM Entry e WHERE e.category.id = :categoryId " +
+                "AND e.date > :from AND e.date <= :to";
+        Query q = em.createQuery(queryString);
+        q.setParameter("categoryId", category.getId());
+        q.setParameter("from", from);
+        q.setParameter("to", to);
+        return q;
+    }
+
+    private void createCategoryFlowDto(List<CashFlowDto> resultList, String name, Long sum) {
+        if (sum != null) {
+            Long income = null;
+            Long expense = null;
+
+            if (sum > 0) {
+                income = sum;
+            } else if (sum < 0) {
+                expense = -sum;
+            }
+
+            CashFlowDto dto = new CashFlowDto(name, income, expense, null);
+            resultList.add(dto);
+        }
+    }
+
+    private String createCategoryName(Category category, String parentName) {
         String name = category.getName();
         if (parentName != null) {
             name = parentName + ":" + name;
         }
-
-        if (!(category instanceof SpecialCategory) && !(category instanceof Account)) {
-            String queryString = "SELECT SUM(e.amount) FROM Entry e WHERE e.category.id = :categoryId " +
-                    "AND e.date > :from AND e.date <= :to";
-            Query q = em.createQuery(queryString);
-            q.setParameter("categoryId", category.getId());
-            q.setParameter("from", from);
-            q.setParameter("to", to);
-            Long qr = (Long) q.getSingleResult();
-
-            if (qr != null) {
-                sum = qr;
-            }
-
-            if (sum != 0) {
-                CashFlowDto dto = new CashFlowDto(name, sum);
-                resultList.add(dto);
-            }
-        }
-
-        for (Category child : category.getChildren()) {
-            sum += getCashFlowForCategory(resultList, child, name, from, to);
-        }
-
-        return sum;
+        return name;
     }
 }

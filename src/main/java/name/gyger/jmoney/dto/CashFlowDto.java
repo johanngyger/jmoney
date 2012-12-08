@@ -19,15 +19,19 @@ package name.gyger.jmoney.dto;
 public class CashFlowDto {
 
     private String categoryName;
-    private long amount;
+    private Long income;
+    private Long expense;
+    private Long difference;
     private boolean total;
 
     public CashFlowDto() {
     }
 
-    public CashFlowDto(String categoryName, long amount) {
+    public CashFlowDto(String categoryName, Long income, Long expense, Long difference) {
         this.categoryName = categoryName;
-        this.amount = amount;
+        this.income = income;
+        this.expense = expense;
+        this.difference = difference;
     }
 
     public String getCategoryName() {
@@ -38,20 +42,36 @@ public class CashFlowDto {
         this.categoryName = categoryName;
     }
 
-    public long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(long amount) {
-        this.amount = amount;
-    }
-
     public boolean isTotal() {
         return total;
     }
 
     public void setTotal(boolean total) {
         this.total = total;
+    }
+
+    public Long getIncome() {
+        return income;
+    }
+
+    public void setIncome(Long income) {
+        this.income = income;
+    }
+
+    public Long getExpense() {
+        return expense;
+    }
+
+    public void setExpense(Long expense) {
+        this.expense = expense;
+    }
+
+    public Long getDifference() {
+        return difference;
+    }
+
+    public void setDifference(Long difference) {
+        this.difference = difference;
     }
 
 }

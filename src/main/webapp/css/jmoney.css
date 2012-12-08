@@ -99,11 +99,27 @@ a {
 
 table {
     border-collapse: collapse;
-    width: 100%;
+}
+
+thead, tbody {
+    border-top: 1px solid #92969A;
+    border-bottom: 1px solid #92969A;
 }
 
 tr {
     vertical-align: top;
+}
+
+th, td {
+    padding: 3px;
+}
+
+.thSpace {
+    padding-right: 20px;
+}
+
+#entryTable {
+    width: 100%;
 }
 
 #entryTable td {
@@ -121,9 +137,6 @@ tr {
     border-bottom: 1px solid #92969A;
 }
 
-#entryTable th, #entryTable td {
-    padding: 3px;
-}
 
 #entryForm table {
     background: #DDBF99 url(../img/ui-bg_highlight-soft_75_ddbf99_1x100.png) 50% 50% repeat-x;
@@ -211,6 +224,7 @@ div#header {
 
 .pull-right {
     float: right;
+    margin-right: 0;
 }
 
 div#content {

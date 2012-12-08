@@ -2,28 +2,59 @@
     Beim Erstellen des Berichts ist ein Fehler aufgetreten.
 </div>
 
-Periode:
-<select id="period" ng-model="period" ng-options="p.value as p.description for p in periods"
-        ng-change="updatePeriod()">
-</select>
-Von:
-<input id="fromDate" name="fromDate" title="Datum von" placeholder="Datum von"
-       ng-model="fromDate" ui-date>
-Bis: <input id="toDate" name="toDate" title="Datum bis" placeholder="Datum bis"
-            ng-model="toDate" ui-date>
-<button type="submit" ng-click="generate()">Erstellen</button>
+<div id="subnav">
+    Periode:
+    <select id="period" ng-model="period" ng-options="p.value as p.description for p in periods"
+            ng-change="updatePeriod()">
+    </select>
+    Von:
+    <input id="fromDate" name="fromDate" title="Datum von" placeholder="Datum von"
+           ng-model="fromDate" ui-date>
+    Bis: <input id="toDate" name="toDate" title="Datum bis" placeholder="Datum bis"
+                ng-model="toDate" ui-date>
+    <button type="submit" ng-click="generate()">Erstellen</button>
+
+    <!--
+    <pre>period={{period}}</pre>
+    <pre>fromDate={{fromDate}}</pre>
+    <pre>toDate={{toDate}}</pre>
+    <pre>cashFlows={{cashFlows}}</pre>
+    -->
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th scope="col" class="thSpace">Kategorie</th>
+        <th scope="col" class="amount thSpace">Einnahmen</th>
+        <th scope="col" class="amount thSpace">Ausgaben</th>
+        <th scope="col" class="amount">Differenz</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="cashFlow in cashFlows" ng-class="{'report-total': cashFlow.total}">
+        <td class="thSpace">
+            {{cashFlow.categoryName}}
+        </td>
+        <td class="amount thSpace">
+            <span ng-show="cashFlow.income != null">{{cashFlow.income / 100 | number:2}}</span>
+        </td>
+        <td class="amount thSpace">
+            <span ng-show="cashFlow.expense != null">{{cashFlow.expense / 100 | number:2}}</span>
+        </td>
+        <td class="amount">
+            <span ng-show="cashFlow.difference != null">{{cashFlow.difference / 100 | number:2}}</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<img class="loader" src="img/loader.gif" ng-show="loading">
+
 
 <!--
-<pre>period={{period}}</pre>
-<pre>fromDate={{fromDate}}</pre>
-<pre>toDate={{toDate}}</pre>
-<pre>cashFlows={{cashFlows}}</pre>
--->
-<hr>
-
-<img src="img/loader.gif" ng-show="loading">
-
 <div class="report-entry" ng-repeat="cashFlow in cashFlows" ng-class="{'report-total': cashFlow.total}">
     <div class="pull-right" ng-class="">{{cashFlow.amount / 100 | number:2}}</div>
     <div style>{{cashFlow.categoryName}}</div>
 </div>
+-->
