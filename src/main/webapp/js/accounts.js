@@ -80,7 +80,7 @@ function AccountDetailsController($scope, $http, $routeParams, $location, $rootS
 }
 
 function EntryController($scope, $http, $routeParams, $filter, $location) {
-    var load = function () {
+    $scope.load = function () {
         $scope.accountId = $routeParams.accountId;
 
         $scope.page = parseInt($routeParams.page);
@@ -95,7 +95,7 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
         });
 
         $scope.loading = true;
-        $http.get('rest/accounts/' + $routeParams.accountId + '/entries?page=' + $scope.page)
+        $http.get('rest/accounts/' + $routeParams.accountId + '/entries', {params: {page: $scope.page, filter: $scope.filter}})
             .success(function (data) {
                 $scope.entries = data;
                 $scope.loading = false;
@@ -121,7 +121,8 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
         }
     }
 
-    load();
+    $scope.filter = $routeParams.filter;
+    $scope.load();
 
     $http.get('rest/categories').success(function (data) {
         $scope.categories = data;

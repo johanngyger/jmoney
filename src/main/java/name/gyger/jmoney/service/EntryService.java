@@ -43,7 +43,7 @@ public class EntryService {
         return (Long) q.getSingleResult();
     }
 
-    public List<EntryDto> getEntries(long accountId, Integer page) {
+    public List<EntryDto> getEntries(long accountId, Integer page, String filter) {
         Query q = em.createQuery("SELECT e FROM Entry e LEFT JOIN FETCH e.category WHERE e.account.id = :id" +
                 " ORDER BY CASE WHEN e.date IS NULL THEN 1 ELSE 0 END, e.date, e.creation");
         q.setParameter("id", accountId);
@@ -53,15 +53,17 @@ public class EntryService {
         List<EntryDto> result = new ArrayList<EntryDto>();
         EntryDto previousEntryDto = null;
         for (Entry entry : entries) {
-            EntryDto entryDto = new EntryDto(entry);
-            result.add(entryDto);
-            if (previousEntryDto == null) {
-                Account a = entry.getAccount();
-                entryDto.setBalance(entry.getAmount() + a.getStartBalance());
-            } else {
-                entryDto.setBalance(entry.getAmount() + previousEntryDto.getBalance());
+            if (entry.contains(filter)) {
+                EntryDto entryDto = new EntryDto(entry);
+                result.add(entryDto);
+                if (previousEntryDto == null) {
+                    Account a = entry.getAccount();
+                    entryDto.setBalance(entry.getAmount() + a.getStartBalance());
+                } else {
+                    entryDto.setBalance(entry.getAmount() + previousEntryDto.getBalance());
+                }
+                previousEntryDto = entryDto;
             }
-            previousEntryDto = entryDto;
         }
 
         Collections.reverse(result);

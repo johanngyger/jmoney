@@ -237,9 +237,8 @@ div#nav {
 
 div#nav ul {
     list-style: none;
-    padding: 0;
+    padding: 2.5em 0 0 0;
     margin: 0;
-    padding-top: 2.5em;
     line-height: 1em;
 }
 
@@ -264,9 +263,8 @@ div#nav a:hover {
 
 div#paging ul {
     list-style: none;
-    padding: 0;
+    padding: 0 0 2.5em 0;
     margin: 0;
-    padding-bottom: 2.5em;
 }
 
 div#paging li {
@@ -330,6 +328,11 @@ div#subnav {
 
 div#subnav a {
     margin-right: 1em;
+    vertical-align: middle;
+}
+
+div#subnav a.pull-right {
+    margin-right: 0;
 }
 
 div#footer {

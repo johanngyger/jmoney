@@ -42,8 +42,10 @@ public class EntryController {
 
     @RequestMapping(value = "/accounts/{accountId}/entries", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<EntryDto> getEntries(@PathVariable long accountId, @RequestParam(value = "page", required = false) Integer page) {
-        return entryService.getEntries(accountId, page);
+    public Collection<EntryDto> getEntries(@PathVariable long accountId,
+                                           @RequestParam(value = "page", required = false) Integer page,
+                                           @RequestParam(value = "filter", required = false) String filter) {
+        return entryService.getEntries(accountId, page, filter);
     }
 
     @RequestMapping(value = "/accounts/{accountId}/entries/{entryId}", method = RequestMethod.GET)

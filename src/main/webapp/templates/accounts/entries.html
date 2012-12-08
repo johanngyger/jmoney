@@ -1,5 +1,8 @@
 <div id="subnav">
     <a href="#/accounts/{{accountId}}/entries/new" class="ui-corner-all"><i class="icon-plus-sign"></i> Neue Buchung</a>
+    <input id="filter" name="filter" title="Fitler" placeholder="Filter" ng-model="filter">
+    <button type="submit" ng-click="load()">Filtern</button>
+
     <a href="#/accounts/{{accountId}}" class="pull-right"><i class="icon-wrench"></i> Kontoeinstellungen</a>
 </div>
 
@@ -50,20 +53,22 @@
 <div id="paging">
     <ul>
         <li>
-            <a href="#/accounts/{{accountId}}/entries/{{e.id}}?page=1"><i class="icon-fast-backward"></i></a>
+            <a href="#/accounts/{{accountId}}/entries/{{e.id}}?page=1&filter={{filter}}"><i
+                    class="icon-fast-backward"></i></a>
         </li>
         <li>
-            <a href="#/accounts/{{accountId}}/entries/{{e.id}}?page={{prevPage()}}"><i
+            <a href="#/accounts/{{accountId}}/entries/{{e.id}}?page={{prevPage()}}&filter={{filter}}"><i
                     class="icon-backward"></i></a>
         </li>
         <li class="text-padding">
             {{page}}/{{maxPage}}
         </li>
         <li>
-            <a href="#/accounts/{{accountId}}/entries/{{e.id}}?page={{nextPage()}}"><i class="icon-forward"></i></a>
+            <a href="#/accounts/{{accountId}}/entries/{{e.id}}?page={{nextPage()}}&filter={{filter}}"><i
+                    class="icon-forward"></i></a>
         </li>
         <li>
-            <a href="#/accounts/{{accountId}}/entries/{{e.id}}?page={{maxPage}}"><i
+            <a href="#/accounts/{{accountId}}/entries/{{e.id}}?page={{maxPage}}&filter={{filter}}"><i
                     class="icon-fast-forward"></i></a>
         </li>
     </ul>

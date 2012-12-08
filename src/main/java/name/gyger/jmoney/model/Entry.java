@@ -16,6 +16,8 @@
 
 package name.gyger.jmoney.model;
 
+import org.apache.commons.lang.StringUtils;
+
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
@@ -130,6 +132,18 @@ public class Entry {
 
     public void setSplitEntry(SplitEntry splitEntry) {
         this.splitEntry = splitEntry;
+    }
+
+    public boolean contains(String filter) {
+        if (StringUtils.isEmpty(filter)) {
+            return true;
+        }
+
+        String categoryName = category != null ? category.getName() : null;
+
+        return StringUtils.contains(StringUtils.defaultString(description), filter)
+                || StringUtils.contains(StringUtils.defaultString(categoryName), filter)
+                || StringUtils.contains(StringUtils.defaultString(memo), filter);
     }
 
 }
