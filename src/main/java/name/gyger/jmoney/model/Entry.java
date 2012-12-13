@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.persistence.*;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -36,7 +37,14 @@ public class Entry {
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private SplitEntry splitEntry;
+    private Entry splitEntry;
+
+    @OneToMany(mappedBy = "splitEntry", orphanRemoval = true)
+    private Collection<Entry> subEntries;
+
+    /** Double entry booking */
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    private Entry other;
 
     private long creation = Calendar.getInstance().getTime().getTime();
     private Date date;
@@ -126,12 +134,28 @@ public class Entry {
         this.memo = memo;
     }
 
-    public SplitEntry getSplitEntry() {
+    public Entry getSplitEntry() {
         return splitEntry;
     }
 
-    public void setSplitEntry(SplitEntry splitEntry) {
+    public void setSplitEntry(Entry splitEntry) {
         this.splitEntry = splitEntry;
+    }
+
+    public Collection<Entry> getSubEntries() {
+        return subEntries;
+    }
+
+    public void setSubEntries(Collection<Entry> subEntries) {
+        this.subEntries = subEntries;
+    }
+
+    public Entry getOther() {
+        return other;
+    }
+
+    public void setOther(Entry other) {
+        this.other = other;
     }
 
     public boolean contains(String filter) {

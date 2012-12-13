@@ -16,12 +16,13 @@
 
 package name.gyger.jmoney.service;
 
+import name.gyger.jmoney.model.Account;
+import name.gyger.jmoney.model.Category;
 import name.gyger.jmoney.model.*;
+import name.gyger.jmoney.model.Entry;
+import name.gyger.jmoney.model.Session;
 import net.sf.jmoney.XMLReader;
-import net.sf.jmoney.model.CategoryNode;
-import net.sf.jmoney.model.SplitCategory;
-import net.sf.jmoney.model.SplittedEntry;
-import net.sf.jmoney.model.TransferCategory;
+import net.sf.jmoney.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class OptionsService {
 
     private Map<Entry, net.sf.jmoney.model.Category> entryToOldCategoryMap = new HashMap<Entry, net.sf.jmoney.model.Category>();
 
-    private Map<net.sf.jmoney.model.DoubleEntry, DoubleEntry> oldToNewDoubleEntryMap = new HashMap<net.sf.jmoney.model.DoubleEntry, DoubleEntry>();
+    private Map<net.sf.jmoney.model.DoubleEntry, Entry> oldToNewDoubleEntryMap = new HashMap<net.sf.jmoney.model.DoubleEntry, Entry>();
 
     @Inject
     private SessionService sessionService;
@@ -61,77 +62,84 @@ public class OptionsService {
     public void init() {
         removeOldSession();
         Session session = new Session();
-        Category root = initCategories();
-        session.setRootCategory(root);
+        initCategories(session);
         em.persist(session);
     }
 
-    public Category initCategories() {
+    public Category initCategories(Session session) {
         List<Category> cList = new ArrayList<Category>();
 
-        Category root = createCategory("Root", null, cList);
-        createCategory("Steuern", root, cList);
-        createCategory("Mitgliedschaften", root, cList);
-        createCategory("Spenden", root, cList);
-        createCategory("Gebühren", root, cList);
-        createCategory("Geschenke", root, cList);
+        Category root = createCategory(CategoryType.ROOT, "[ROOT]", null, cList);
+        session.setRootCategory(root);
 
-        Category income = createCategory("Einkünfte", root, cList);
-        createCategory("Lohn", income, cList);
-        createCategory("Nebenerwerb", income, cList);
-        createCategory("Wertschriftenerträge", income, cList);
+        Category transfer = createCategory(CategoryType.TRANSFER, "[UMBUCHUNG]", root, cList);
+        session.setTransferCategory(transfer);
 
-        Category children = createCategory("Kinder", root, cList);
-        createCategory("Arzt", children, cList);
-        createCategory("Kleidung", children, cList);
-        createCategory("Hüten", children, cList);
-        createCategory("Spielsachen", children, cList);
+        Category split = createCategory(CategoryType.SPLIT, "[SPLITTBUCHUNG]", root, cList);
+        session.setSplitCategory(split);
 
-        Category housing = createCategory("Wohnen", root, cList);
-        createCategory("Nebenkosten/Unterhalt", housing, cList);
-        createCategory("Miete/Hypozins", housing, cList);
-        createCategory("TV", housing, cList);
+        createNormalCategory("Steuern", root, cList);
+        createNormalCategory("Mitgliedschaften", root, cList);
+        createNormalCategory("Spenden", root, cList);
+        createNormalCategory("Gebühren", root, cList);
+        createNormalCategory("Geschenke", root, cList);
 
-        Category communication = createCategory("Kommunikation", root, cList);
-        createCategory("Telefon", communication, cList);
-        createCategory("Mobile", communication, cList);
-        createCategory("Internet", communication, cList);
+        Category income = createNormalCategory("Einkünfte", root, cList);
+        createNormalCategory("Lohn", income, cList);
+        createNormalCategory("Nebenerwerb", income, cList);
+        createNormalCategory("Wertschriftenerträge", income, cList);
 
-        Category insurance = createCategory("Versicherungen", root, cList);
-        createCategory("Krankenkasse", insurance, cList);
-        createCategory("Haushalt/Haftpflicht", insurance, cList);
+        Category children = createNormalCategory("Kinder", root, cList);
+        createNormalCategory("Arzt", children, cList);
+        createNormalCategory("Kleidung", children, cList);
+        createNormalCategory("Hüten", children, cList);
+        createNormalCategory("Spielsachen", children, cList);
 
-        Category household = createCategory("Haushalt", root, cList);
-        createCategory("Lebensmittel", household, cList);
-        createCategory("Ausser-Haus-Verpflegung", household, cList);
-        createCategory("Kleidung", household, cList);
+        Category housing = createNormalCategory("Wohnen", root, cList);
+        createNormalCategory("Nebenkosten/Unterhalt", housing, cList);
+        createNormalCategory("Miete/Hypozins", housing, cList);
+        createNormalCategory("TV", housing, cList);
 
-        Category transport = createCategory("Verkehr", root, cList);
-        createCategory("Auto", transport, cList);
-        createCategory("ÖV", transport, cList);
+        Category communication = createNormalCategory("Kommunikation", root, cList);
+        createNormalCategory("Telefon", communication, cList);
+        createNormalCategory("Mobile", communication, cList);
+        createNormalCategory("Internet", communication, cList);
 
-        Category entertainment = createCategory("Unterhaltung", root, cList);
-        createCategory("Bücher", entertainment, cList);
-        createCategory("Zeitungen", entertainment, cList);
-        createCategory("Zeitschriften", entertainment, cList);
-        createCategory("Musik", entertainment, cList);
-        createCategory("Filme", entertainment, cList);
-        createCategory("Spiele", entertainment, cList);
+        Category insurance = createNormalCategory("Versicherungen", root, cList);
+        createNormalCategory("Krankenkasse", insurance, cList);
+        createNormalCategory("Haushalt/Haftpflicht", insurance, cList);
 
-        Category leisure = createCategory("Freizeit", root, cList);
-        createCategory("Ausgang", leisure, cList);
-        createCategory("Kino", leisure, cList);
-        createCategory("Sportanlässe", leisure, cList);
-        createCategory("Konzerte", leisure, cList);
-        createCategory("Ausflüge", leisure, cList);
-        createCategory("Bücher", leisure, cList);
-        createCategory("Ferien", leisure, cList);
+        Category household = createNormalCategory("Haushalt", root, cList);
+        createNormalCategory("Lebensmittel", household, cList);
+        createNormalCategory("Ausser-Haus-Verpflegung", household, cList);
+        createNormalCategory("Kleidung", household, cList);
 
-        Category healthCare = createCategory("Gesundheit", root, cList);
-        createCategory("Arzt", healthCare, cList);
-        createCategory("Apotheke", healthCare, cList);
-        createCategory("Zahnarzt", healthCare, cList);
-        createCategory("Körperpflege", healthCare, cList);
+        Category transport = createNormalCategory("Verkehr", root, cList);
+        createNormalCategory("Auto", transport, cList);
+        createNormalCategory("ÖV", transport, cList);
+
+        Category entertainment = createNormalCategory("Unterhaltung", root, cList);
+        createNormalCategory("Bücher", entertainment, cList);
+        createNormalCategory("Zeitungen", entertainment, cList);
+        createNormalCategory("Zeitschriften", entertainment, cList);
+        createNormalCategory("Musik", entertainment, cList);
+        createNormalCategory("Filme", entertainment, cList);
+        createNormalCategory("Spiele", entertainment, cList);
+
+        Category leisure = createNormalCategory("Freizeit", root, cList);
+        createNormalCategory("Ausgang", leisure, cList);
+        createNormalCategory("Kino", leisure, cList);
+        createNormalCategory("Sportanlässe", leisure, cList);
+        createNormalCategory("Konzerte", leisure, cList);
+        createNormalCategory("Ausflüge", leisure, cList);
+        createNormalCategory("Bücher", leisure, cList);
+        createNormalCategory("Ferien", leisure, cList);
+
+        Category healthCare = createNormalCategory("Gesundheit", root, cList);
+        createNormalCategory("Arzt", healthCare, cList);
+        createNormalCategory("Apotheke", healthCare, cList);
+        createNormalCategory("Zahnarzt", healthCare, cList);
+        createNormalCategory("Körperpflege", healthCare, cList);
 
         for (Category c : cList) {
             em.persist(c);
@@ -140,8 +148,15 @@ public class OptionsService {
         return root;
     }
 
-    private Category createCategory(String name, Category parent, List<Category> cList) {
-        Category c = new Category(name);
+    private Category createCategory(CategoryType type, String name, Category parent, List<Category> cList) {
+        Category c = new Category(type, name);
+        c.setParent(parent);
+        cList.add(c);
+        return c;
+    }
+
+    private Category createNormalCategory(String name, Category parent, List<Category> cList) {
+        Category c = new Category(CategoryType.NORMAL, name);
         c.setParent(parent);
         cList.add(c);
         return c;
@@ -210,17 +225,16 @@ public class OptionsService {
 
     private Category createCategory(Category parent,
                                     net.sf.jmoney.model.Category oldCat) {
-        Category cat;
+        Category cat = new Category();
         if (oldCat instanceof SplitCategory) {
-            SpecialCategory c = new SpecialCategory();
-            c.setSplitCategory(true);
-            cat = c;
+            cat.setType(CategoryType.SPLIT);
+            session.setSplitCategory(cat);
         } else if (oldCat instanceof TransferCategory) {
-            SpecialCategory c = new SpecialCategory();
-            c.setTransferCategory(true);
-            cat = c;
-        } else {
-            cat = new Category();
+            cat.setType(CategoryType.TRANSFER);
+            session.setTransferCategory(cat);
+        } else if (oldCat instanceof RootCategory) {
+            cat.setType(CategoryType.ROOT);
+            session.setTransferCategory(cat);
         }
         cat.setName(oldCat.getCategoryName());
         cat.setParent(parent);
@@ -253,32 +267,32 @@ public class OptionsService {
     @SuppressWarnings("unchecked")
     private void mapSplitEntry(Account acc, net.sf.jmoney.model.Entry oldEntry) {
         net.sf.jmoney.model.SplittedEntry oldSe = (net.sf.jmoney.model.SplittedEntry) oldEntry;
-        SplitEntry se = new SplitEntry();
+        Entry splitEntry = new Entry();
 
-        mapEntry(se, acc, null, oldSe);
+        mapEntry(splitEntry, acc, null, oldSe);
 
         for (Object o : oldSe.getEntries()) {
             net.sf.jmoney.model.Entry oldSubEntry = (net.sf.jmoney.model.Entry) o;
-            mapEntryOrDoubleEntry(null, se, oldSubEntry);
+            mapEntryOrDoubleEntry(null, splitEntry, oldSubEntry);
         }
     }
 
-    private void mapEntryOrDoubleEntry(Account acc, SplitEntry se, net.sf.jmoney.model.Entry oldEntry) {
+    private void mapEntryOrDoubleEntry(Account acc, Entry splitEntry, net.sf.jmoney.model.Entry oldEntry) {
         if (oldEntry instanceof net.sf.jmoney.model.DoubleEntry) {
-            mapDoubleEntry(new DoubleEntry(), acc, se, (net.sf.jmoney.model.DoubleEntry) oldEntry);
+            mapDoubleEntry(new Entry(), acc, splitEntry, (net.sf.jmoney.model.DoubleEntry) oldEntry);
         } else {
-            mapEntry(new Entry(), acc, se, oldEntry);
+            mapEntry(new Entry(), acc, splitEntry, oldEntry);
         }
     }
 
-    private void mapDoubleEntry(DoubleEntry de, Account acc, SplitEntry se, net.sf.jmoney.model.DoubleEntry oldDe) {
-        mapEntry(de, acc, se, oldDe);
-        oldToNewDoubleEntryMap.put(oldDe, de);
+    private void mapDoubleEntry(Entry doubleEntry, Account acc, Entry splitEntry, net.sf.jmoney.model.DoubleEntry oldDe) {
+        mapEntry(doubleEntry, acc, splitEntry, oldDe);
+        oldToNewDoubleEntryMap.put(oldDe, doubleEntry);
     }
 
-    private void mapEntry(Entry e, Account acc, SplitEntry se, net.sf.jmoney.model.Entry oldEntry) {
+    private void mapEntry(Entry e, Account acc, Entry splitEntry, net.sf.jmoney.model.Entry oldEntry) {
         e.setAccount(acc);
-        e.setSplitEntry(se);
+        e.setSplitEntry(splitEntry);
         e.setAmount(oldEntry.getAmount());
         e.setCreation(oldEntry.getCreation());
         e.setDate(oldEntry.getDate());
@@ -316,10 +330,10 @@ public class OptionsService {
     }
 
     private void mapDoubleEntries() {
-        for (Map.Entry<net.sf.jmoney.model.DoubleEntry, DoubleEntry> mapEntry : oldToNewDoubleEntryMap.entrySet()) {
+        for (Map.Entry<net.sf.jmoney.model.DoubleEntry, Entry> mapEntry : oldToNewDoubleEntryMap.entrySet()) {
             net.sf.jmoney.model.DoubleEntry oldDe = mapEntry.getKey();
-            DoubleEntry de = mapEntry.getValue();
-            DoubleEntry otherDe = oldToNewDoubleEntryMap.get(oldDe.getOther());
+            Entry de = mapEntry.getValue();
+            Entry otherDe = oldToNewDoubleEntryMap.get(oldDe.getOther());
             if (otherDe == null) {
                 log.warn("Dangling double entry: " + oldDe.getDescription() + ", " + oldDe.getFullCategoryName() + ", " + oldDe.getDate());
             }

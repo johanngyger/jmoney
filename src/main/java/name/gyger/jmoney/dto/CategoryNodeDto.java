@@ -16,9 +16,8 @@
 
 package name.gyger.jmoney.dto;
 
-import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Category;
-import name.gyger.jmoney.model.SpecialCategory;
+import name.gyger.jmoney.model.CategoryType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,7 @@ public class CategoryNodeDto {
         }
 
         for (Category child : category.getChildren()) {
-            if (!(child instanceof Account) && !(child instanceof SpecialCategory)) {
+            if (child.getType() == CategoryType.NORMAL) {
                 CategoryNodeDto childDto = new CategoryNodeDto(child);
                 children.add(childDto);
             }

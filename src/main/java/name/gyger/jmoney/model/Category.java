@@ -36,10 +36,13 @@ public class Category {
 
     private String name;
 
+    private CategoryType type = CategoryType.NORMAL;
+
     public Category() {
     }
 
-    public Category(String name) {
+    public Category(CategoryType type, String name) {
+        this.type = type;
         this.name = name;
     }
 
@@ -73,6 +76,14 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public CategoryType getType() {
+        return type;
+    }
+
+    public void setType(CategoryType type) {
+        this.type = type;
     }
 
 }

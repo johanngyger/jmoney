@@ -17,9 +17,7 @@
 package name.gyger.jmoney.service;
 
 import name.gyger.jmoney.dto.EntryDto;
-import name.gyger.jmoney.model.Account;
-import name.gyger.jmoney.model.Category;
-import name.gyger.jmoney.model.Entry;
+import name.gyger.jmoney.model.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,13 +83,25 @@ public class EntryService {
     }
 
     public long createEntry(EntryDto dto) {
-        Entry e = new Entry();
-        dto.mapToModel(e);
-
         Account a = em.find(Account.class, dto.getAccountId());
-        e.setAccount(a);
-
         Category c = em.find(Category.class, dto.getCategoryId());
+        Entry e = new Entry();
+
+        if (c instanceof Account) {
+            Account otherAccount = (Account) c;
+
+            Entry other = new Entry();
+            other.setOther(e);
+            other.setCategory(a);
+            other.setAccount(otherAccount);
+
+            e.setOther(other);
+
+            em.persist(other);
+        }
+
+        dto.mapToModel(e);
+        e.setAccount(a);
         e.setCategory(c);
 
         em.persist(e);
@@ -100,11 +110,35 @@ public class EntryService {
     }
 
     public void updateEntry(EntryDto dto) {
+        Account a = em.find(Account.class, dto.getAccountId());
         Entry e = em.find(Entry.class, dto.getId());
-        dto.mapToModel(e);
-
         Category c = em.find(Category.class, dto.getCategoryId());
-        e.setCategory(c);
+
+        if (c == null || c.getType() == CategoryType.NORMAL) {
+            dto.mapToModel(e);
+            e.setOther(null);
+            //e.setSubEntries(null);
+            e.setCategory(c);
+        } else if (c instanceof Account) {
+            Account otherAccount = (Account) c;
+
+            Entry other = e.getOther();
+            if (other == null) {
+                other = new Entry();
+                em.persist(other);
+            }
+
+            other.setOther(e);
+            other.setCategory(a);
+            other.setAccount(otherAccount);
+
+            dto.mapToModel(e);
+            e.setOther(other);
+            //e.setSubEntries(null);
+            e.setCategory(c);
+        } else if (c.getType() == CategoryType.SPLIT) {
+            // TODO
+        }
     }
 
     public void deleteEntry(long entryId) {

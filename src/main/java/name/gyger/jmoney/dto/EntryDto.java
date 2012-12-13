@@ -61,6 +61,13 @@ public class EntryDto {
         entry.setMemo(getMemo());
         entry.setStatus(getStatus());
         entry.setValuta(getValuta());
+
+        Entry other = entry.getOther();
+        if (other != null) {
+            other.setAmount(-amount);
+            other.setDescription(description);
+            other.setMemo(memo);
+        }
     }
 
     public long getId() {

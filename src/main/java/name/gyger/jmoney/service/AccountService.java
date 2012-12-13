@@ -67,9 +67,9 @@ public class AccountService {
 
         Session s = sessionService.getSession();
         a.setSession(s);
+        a.setParent(s.getTransferCategory());
 
         em.persist(a);
-        em.flush();
 
         return a.getId();
     }

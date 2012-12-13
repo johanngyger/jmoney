@@ -38,6 +38,10 @@ public class Account extends Category {
     private String abbreviation;
     private String comment;
 
+    public Account() {
+        setType(CategoryType.ACCOUNT);
+    }
+
     public Collection<Entry> getEntries() {
         return entries;
     }

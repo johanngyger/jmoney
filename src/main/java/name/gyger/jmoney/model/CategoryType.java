@@ -16,22 +16,6 @@
 
 package name.gyger.jmoney.model;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import java.util.Collection;
-
-@Entity
-public class SplitEntry extends Entry {
-
-    @OneToMany(mappedBy = "splitEntry", orphanRemoval = true)
-    private Collection<Entry> subEntries;
-
-    public Collection<Entry> getSubEntries() {
-        return subEntries;
-    }
-
-    public void setSubEntries(Collection<Entry> subEntries) {
-        this.subEntries = subEntries;
-    }
-
+public enum CategoryType {
+    NORMAL, SPLIT, TRANSFER, ACCOUNT, ROOT
 }
