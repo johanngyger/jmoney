@@ -37,6 +37,12 @@ public class CategoryController {
         return categoryService.getCategories();
     }
 
+    @RequestMapping(value = "/split-category", method = RequestMethod.GET)
+    @ResponseBody
+    public CategoryDto getSplitCategory() {
+        return categoryService.getSplitCategory();
+    }
+
     @RequestMapping(value = "/categories", method = RequestMethod.POST)
     @ResponseBody
     public long createCategory(@RequestBody CategoryNodeDto dto) {

@@ -4,8 +4,8 @@ angular.module('accounts', ['ui.directives']).
         $routeProvider.
             when('/accounts/:accountId', {controller: 'AccountDetailsController', templateUrl: 'templates/accounts/account-details.html'}).
             when('/accounts/:accountId/entries', {controller: 'EntryController', templateUrl: 'templates/accounts/entries.html'}).
-            when('/accounts/:accountId/entries/new', {controller: 'EntryController', templateUrl: 'templates/accounts/entry-details.html'}).
-            when('/accounts/:accountId/entries/:entryId', {controller: 'EntryController', templateUrl: 'templates/accounts/entry-details.html'}).
+            when('/accounts/:accountId/entries/new', {controller: 'EntryDetailsController', templateUrl: 'templates/accounts/entry-details.html'}).
+            when('/accounts/:accountId/entries/:entryId', {controller: 'EntryDetailsController', templateUrl: 'templates/accounts/entry-details.html'}).
             otherwise({redirectTo: '/accounts'});
     }]);
 
@@ -88,7 +88,6 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
             $scope.page = 1;
         }
 
-
         $http.get('rest/accounts/' + $routeParams.accountId + '/entries/count').success(function (data) {
             $scope.entryCount = parseInt(data);
             $scope.maxPage = Math.ceil($scope.entryCount / 10);
@@ -102,31 +101,10 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
             }).error(function (data) {
                 $scope.loading = false;
             });
-
-
-        $scope.entry = {};
-        if ($routeParams.entryId) {
-            $http.get('rest/accounts/' + $routeParams.accountId + '/entries/' + $routeParams.entryId)
-                .success(function (data) {
-                    if (data.amount >= 0) {
-                        data.income = data.amount / 100;
-                    } else {
-                        data.expense = -data.amount / 100;
-                    }
-                    $scope.entry = data;
-                    $scope.entry.categoryId += ''; // numbers don't work for select options, probably a bug
-                    $scope.entry.date = parseDate($scope.entry.date);
-                    $scope.entry.valuta = parseDate($scope.entry.valuta);
-                });
-        }
     }
 
     $scope.filter = $routeParams.filter;
     $scope.load();
-
-    $http.get('rest/categories').success(function (data) {
-        $scope.categories = data;
-    });
 
     $scope.prevPage = function () {
         return Math.max($scope.page - 1, 1);
@@ -136,16 +114,93 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
         return Math.min($scope.page + 1, $scope.maxPage);
     }
 
+}
+
+function EntryDetailsController($scope, $http, $routeParams, $filter, $location) {
+    $scope.updateSubEntryTotal = function () {
+        $scope.subEntryTotal = 0;
+        for (var i = 0; i < $scope.entry.subEntries.length; i++) {
+            var subEntry = $scope.entry.subEntries[i];
+            $scope.subEntryTotal += subEntry.amount;
+        }
+    }
+
+    $scope.initAmount = function (entry) {
+        if (entry.amount >= 0) {
+            entry.income = entry.amount / 100;
+        } else {
+            entry.expense = -entry.amount / 100;
+        }
+    }
+
+    $scope.initSubEntries = function () {
+        if (!$scope.entry.subEntries) {
+            $scope.entry.subEntries = [];
+        }
+
+        for (var i = 0; i < $scope.entry.subEntries.length; i++) {
+            var subEntry = $scope.entry.subEntries[i];
+            $scope.initAmount(subEntry);
+            subEntry.categoryId += '';
+        }
+
+        $scope.updateSubEntryTotal();
+    }
+
+    $scope.load = function () {
+        $scope.accountId = $routeParams.accountId;
+
+        $http.get('rest/accounts/' + $routeParams.accountId + '/entries', {params: {page: $scope.page, filter: $scope.filter}})
+            .success(function (data) {
+                $scope.entries = data;
+
+            }).error(function (data) {
+
+            });
+
+        $scope.entry = {};
+        $scope.entry.subEntries = [];
+
+        $scope.loading = true;
+        if ($routeParams.entryId) {
+            $http.get('rest/accounts/' + $routeParams.accountId + '/entries/' + $routeParams.entryId)
+                .success(function (data) {
+                    $scope.entry = data;
+                    $scope.initAmount($scope.entry);
+                    $scope.entry.categoryId += ''; // numbers don't work for select options, probably a bug
+                    $scope.entry.date = parseDate($scope.entry.date);
+                    $scope.entry.valuta = parseDate($scope.entry.valuta);
+                    $scope.initSubEntries();
+
+                    $scope.loading = false;
+                }).error(function (data) {
+                    $scope.loading = false;
+                });
+        }
+
+    }
+
+    $scope.load();
+
+    $http.get('rest/categories').success(function (data) {
+        $scope.categories = data;
+    });
+
+    $http.get('rest/split-category').success(function (data) {
+        $scope.splitCategory = data;
+    });
+
+
     $scope.save = function () {
         if ($scope.entry.id) {
             $http.put('rest/accounts/' + $routeParams.accountId + '/entries/' + $scope.entry.id, $scope.entry)
                 .success(function (data) {
-                    $location.url('/accounts/' + $routeParams.accountId + '/entries')
+                    $location.path('/accounts/' + $routeParams.accountId + '/entries')
                 });
         } else {
             $http.post('rest/accounts/' + $routeParams.accountId + '/entries', $scope.entry)
                 .success(function (data) {
-                    $location.url('/accounts/' + $routeParams.accountId + '/entries');
+                    $location.path('/accounts/' + $routeParams.accountId + '/entries');
                 });
         }
     }
@@ -159,26 +214,45 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
         }
     }
 
-    $scope.updateIncome = function () {
-        $scope.initAmount();
-        if ($scope.entry.income != null) {
-            $scope.entry.amount = $scope.entry.income * 100;
-            $scope.entry.expense = null;
+    $scope.updateIncome = function (entry) {
+        $scope.updateAmount(entry);
+        if (entry.income != null) {
+            entry.amount = entry.income * 100;
+            entry.expense = null;
         }
     }
 
-    $scope.updateExpense = function () {
-        $scope.initAmount();
-        if ($scope.entry.expense != null) {
-            $scope.entry.amount = -$scope.entry.expense * 100;
-            $scope.entry.income = null;
+    $scope.updateExpense = function (entry) {
+        $scope.updateAmount(entry);
+        if (entry.expense != null) {
+            entry.amount = -entry.expense * 100;
+            entry.income = null;
         }
     }
 
-    $scope.initAmount = function () {
-        if ($scope.entry.income == null && $scope.entry.expense == null) {
-            $scope.entry.amount = null;
+    $scope.updateAmount = function (entry) {
+        if (entry.income == null && entry.expense == null) {
+            entry.amount = null;
         }
+    }
+
+    $scope.addSubEntry = function () {
+        $scope.entry.subEntries.push({description: '', categoryId: null, amount: 0});
+    }
+
+    $scope.removeSubEntry = function (subEntry) {
+        var index = $scope.entry.subEntries.indexOf(subEntry);
+        $scope.entry.subEntries.splice(index, 1);
+    }
+
+    $scope.updateSubEntryIncome = function (entry) {
+        $scope.updateIncome(entry);
+        $scope.updateSubEntryTotal();
+    }
+
+    $scope.updateSubEntryExpense = function (entry) {
+        $scope.updateExpense(entry);
+        $scope.updateSubEntryTotal();
     }
 
 }

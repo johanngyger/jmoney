@@ -17,7 +17,7 @@
 package name.gyger.jmoney.model;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class Session {
@@ -27,7 +27,7 @@ public class Session {
     private long id;
 
     @OneToMany(mappedBy = "session", orphanRemoval = true)
-    private Collection<Account> accounts;
+    private List<Account> accounts;
 
     @OneToOne(orphanRemoval = true)
     private Category rootCategory;
@@ -46,11 +46,11 @@ public class Session {
         this.id = id;
     }
 
-    public Collection<Account> getAccounts() {
+    public List<Account> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(Collection<Account> accounts) {
+    public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
     }
 

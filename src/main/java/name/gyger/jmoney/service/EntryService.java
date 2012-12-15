@@ -16,8 +16,13 @@
 
 package name.gyger.jmoney.service;
 
+import name.gyger.jmoney.dto.EntryDetailsDto;
 import name.gyger.jmoney.dto.EntryDto;
-import name.gyger.jmoney.model.*;
+import name.gyger.jmoney.dto.SubEntryDto;
+import name.gyger.jmoney.model.Account;
+import name.gyger.jmoney.model.Category;
+import name.gyger.jmoney.model.CategoryType;
+import name.gyger.jmoney.model.Entry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,49 +82,28 @@ public class EntryService {
         return result;
     }
 
-    public EntryDto getEntry(long id) {
+    public EntryDetailsDto getEntry(long id) {
         Entry e = em.find(Entry.class, id);
-        return new EntryDto(e);
+        return new EntryDetailsDto(e);
     }
 
-    public long createEntry(EntryDto dto) {
-        Account a = em.find(Account.class, dto.getAccountId());
-        Category c = em.find(Category.class, dto.getCategoryId());
+    public long createEntry(EntryDetailsDto dto) {
         Entry e = new Entry();
-
-        if (c instanceof Account) {
-            Account otherAccount = (Account) c;
-
-            Entry other = new Entry();
-            other.setOther(e);
-            other.setCategory(a);
-            other.setAccount(otherAccount);
-
-            e.setOther(other);
-
-            em.persist(other);
-        }
-
-        dto.mapToModel(e);
-        e.setAccount(a);
-        e.setCategory(c);
-
         em.persist(e);
-
+        updateEntryInternal(dto, e);
         return e.getId();
     }
 
-    public void updateEntry(EntryDto dto) {
-        Account a = em.find(Account.class, dto.getAccountId());
+    public void updateEntry(EntryDetailsDto dto) {
         Entry e = em.find(Entry.class, dto.getId());
+        updateEntryInternal(dto, e);
+    }
+
+    private void updateEntryInternal(EntryDetailsDto dto, Entry e) {
+        Account a = em.find(Account.class, dto.getAccountId());
         Category c = em.find(Category.class, dto.getCategoryId());
 
-        if (c == null || c.getType() == CategoryType.NORMAL) {
-            dto.mapToModel(e);
-            e.setOther(null);
-            //e.setSubEntries(null);
-            e.setCategory(c);
-        } else if (c instanceof Account) {
+        if (c instanceof Account) {
             Account otherAccount = (Account) c;
 
             Entry other = e.getOther();
@@ -131,13 +115,48 @@ public class EntryService {
             other.setOther(e);
             other.setCategory(a);
             other.setAccount(otherAccount);
-
-            dto.mapToModel(e);
             e.setOther(other);
-            //e.setSubEntries(null);
-            e.setCategory(c);
-        } else if (c.getType() == CategoryType.SPLIT) {
-            // TODO
+        } else {
+            Entry other = e.getOther();
+            e.setOther(null);
+
+            if (other != null) {
+                other.setOther(null);
+                em.remove(other);
+            }
+        }
+
+        removeSubEntries(e);
+        if (c != null && c.getType() == CategoryType.SPLIT) {
+            createSubEntries(dto, e);
+        }
+
+        dto.mapToModel(e);
+        e.setCategory(c);
+        e.setAccount(a);
+    }
+
+    private void removeSubEntries(Entry e) {
+        List<Entry> subEntries = e.getSubEntries();
+        if (subEntries != null) {
+            for (Entry subEntry : subEntries) {
+                em.remove(subEntry);
+            }
+        }
+    }
+
+    private void createSubEntries(EntryDetailsDto dto, Entry e) {
+        List<SubEntryDto> subEntryDtos = dto.getSubEntries();
+        if (subEntryDtos != null) {
+            for (SubEntryDto subEntryDto : subEntryDtos) {
+                Entry subEntry = new Entry();
+                em.persist(subEntry);
+                subEntryDto.mapToModel(subEntry);
+
+                Category subCat = em.find(Category.class, subEntryDto.getCategoryId());
+                subEntry.setCategory(subCat);
+                subEntry.setSplitEntry(e);
+            }
         }
     }
 

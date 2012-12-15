@@ -20,8 +20,8 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.persistence.*;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Entry {
@@ -40,10 +40,10 @@ public class Entry {
     private Entry splitEntry;
 
     @OneToMany(mappedBy = "splitEntry", orphanRemoval = true)
-    private Collection<Entry> subEntries;
+    private List<Entry> subEntries;
 
     /** Double entry booking */
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Entry other;
 
     private long creation = Calendar.getInstance().getTime().getTime();
@@ -142,11 +142,11 @@ public class Entry {
         this.splitEntry = splitEntry;
     }
 
-    public Collection<Entry> getSubEntries() {
+    public List<Entry> getSubEntries() {
         return subEntries;
     }
 
-    public void setSubEntries(Collection<Entry> subEntries) {
+    public void setSubEntries(List<Entry> subEntries) {
         this.subEntries = subEntries;
     }
 

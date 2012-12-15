@@ -19,13 +19,13 @@ package name.gyger.jmoney.model;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class Account extends Category {
 
     @OneToMany(mappedBy = "account", orphanRemoval = true)
-    private Collection<Entry> entries;
+    private List<Entry> entries;
 
     @ManyToOne
     private Session session;
@@ -42,11 +42,11 @@ public class Account extends Category {
         setType(CategoryType.ACCOUNT);
     }
 
-    public Collection<Entry> getEntries() {
+    public List<Entry> getEntries() {
         return entries;
     }
 
-    public void setEntries(Collection<Entry> entries) {
+    public void setEntries(List<Entry> entries) {
         this.entries = entries;
     }
 

@@ -141,19 +141,15 @@ th, td {
 #entryForm table {
     background: #DDBF99 url(../img/ui-bg_highlight-soft_75_ddbf99_1x100.png) 50% 50% repeat-x;
     margin-bottom: 10px;
+    width: 100%
 }
 
 #entryForm td {
-    padding: 2px 5px;
+    padding: 4px 10px;
 }
 
-#entryForm input.entrySplitButton {
-    width: 20%;
-}
-
-#entryForm select {
-    width: 79%;
-    margin-right: 5px;
+#entryForm td.last {
+    padding: 4px 15px 4px 10px;
 }
 
 .full-width {
@@ -322,16 +318,16 @@ div#main a {
     /*display: block;*/
 }
 
-div#subnav {
+div.subnav {
     margin-bottom: 10px;
 }
 
-div#subnav a {
+div.subnav a {
     margin-right: 1em;
     vertical-align: middle;
 }
 
-div#subnav a.pull-right {
+div.subnav a.pull-right {
     margin-right: 0;
 }
 

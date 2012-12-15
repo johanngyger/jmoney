@@ -16,6 +16,7 @@
 
 package name.gyger.jmoney.web;
 
+import name.gyger.jmoney.dto.EntryDetailsDto;
 import name.gyger.jmoney.dto.EntryDto;
 import name.gyger.jmoney.service.EntryService;
 import org.slf4j.Logger;
@@ -50,20 +51,20 @@ public class EntryController {
 
     @RequestMapping(value = "/accounts/{accountId}/entries/{entryId}", method = RequestMethod.GET)
     @ResponseBody
-    public EntryDto getEntry(@PathVariable long accountId, @PathVariable long entryId) {
+    public EntryDetailsDto getEntry(@PathVariable long accountId, @PathVariable long entryId) {
         return entryService.getEntry(entryId);
     }
 
     @RequestMapping(value = "/accounts/{accountId}/entries", method = RequestMethod.POST)
     @ResponseBody
-    public long createEntry(@RequestBody EntryDto entry, @PathVariable long accountId) {
+    public long createEntry(@RequestBody EntryDetailsDto entry, @PathVariable long accountId) {
         entry.setAccountId(accountId);
         return entryService.createEntry(entry);
     }
 
     @RequestMapping(value = "/accounts/{accountId}/entries/{entryId}", method = RequestMethod.PUT)
     @ResponseBody
-    public void updateEntry(@PathVariable long accountId, @PathVariable long entryId, @RequestBody EntryDto entry) {
+    public void updateEntry(@PathVariable long accountId, @PathVariable long entryId, @RequestBody EntryDetailsDto entry) {
         entryService.updateEntry(entry);
     }
 

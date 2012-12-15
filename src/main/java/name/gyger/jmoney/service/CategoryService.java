@@ -107,4 +107,9 @@ public class CategoryService {
         em.remove(category);
     }
 
+    public CategoryDto getSplitCategory() {
+        Session s = sessionService.getSession();
+        Category splitCategory = s.getSplitCategory();
+        return new CategoryDto(splitCategory);
+    }
 }
