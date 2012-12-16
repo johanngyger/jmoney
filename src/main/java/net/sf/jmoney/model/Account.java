@@ -116,49 +116,49 @@ public class Account implements Category, Serializable, Constants {
 	 */
 	public String getBank() {
 		return bank;
-	}
+	};
 
 	/**
 	 * @return the account number of this account.
 	 */
 	public String getAccountNumber() {
 		return accountNumber;
-	}
+	};
 
 	/**
 	 * @return the initial balance of this account.
 	 */
 	public long getStartBalance() {
 		return startBalance;
-	}
+	};
 
 	/**
 	 * @return the minimal balance of this account.
 	 */
 	public Long getMinBalance() {
 		return minBalance;
-	}
+	};
 
 	/**
 	 * @return the abbrevation of this account.
 	 */
 	public String getAbbrevation() {
 		return abbrevation;
-	}
+	};
 
 	/**
 	 * @return the comment of this account.
 	 */
 	public String getComment() {
 		return comment;
-	}
+	};
 
 	/**
 	 * @return the entries of this account.
 	 */
 	public Vector getEntries() {
 		return entries;
-	}
+	};
 
 	public void addEntry(Entry entry) {
 		entries.addElement(entry);
@@ -197,11 +197,10 @@ public class Account implements Category, Serializable, Constants {
 	 * @return amount
 	 */
 	public long parseAmount(String amountString) {
-		Number amount = (double) 0;
+		Number amount = new Double(0);
 		try {
 			amount = getCurrency().getNumberFormat().parse(amountString);
 		} catch (ParseException pex) {
-            pex.printStackTrace();
 		}
 		return Math.round(
 			amount.doubleValue() * getCurrency().getScaleFactor());
@@ -222,7 +221,7 @@ public class Account implements Category, Serializable, Constants {
 	}
 
 	/**
-	 * @param newEntries the entries of this account.
+	 * @param theEntries the entries of this account.
 	 */
 	public void setEntries(Vector newEntries) {
 		entries = newEntries;
@@ -265,14 +264,14 @@ public class Account implements Category, Serializable, Constants {
 		if (startBalance == s)
 			return;
 		startBalance = s;
-		changeSupport.firePropertyChange("startBalance", null, s);
+		changeSupport.firePropertyChange("startBalance", null, new Long(s));
 	}
 
 	/**
 	 * @param m the minimal balance which may be null.
 	 */
 	public void setMinBalance(Long m) {
-		if (minBalance != null && minBalance.equals(m))
+		if (minBalance == m)
 			return;
 		minBalance = m;
 		changeSupport.firePropertyChange("minBalance", null, m);

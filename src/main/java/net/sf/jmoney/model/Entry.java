@@ -219,7 +219,7 @@ public class Entry implements Serializable {
 		if (amount == anAmount)
 			return;
 		amount = anAmount;
-		changeSupport.firePropertyChange("amount", null, (double) amount);
+		changeSupport.firePropertyChange("amount", null, new Double(amount));
 	}
 
 	/**

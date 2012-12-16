@@ -33,7 +33,7 @@ public class EntryDetailsDto extends EntryDto {
 
         List<Entry> ses = e.getSubEntries();
         if (ses != null && ses.size() > 0) {
-            subEntries = new ArrayList<>();
+            subEntries = new ArrayList<SubEntryDto>();
             for (Entry se : ses) {
                 subEntries.add(new SubEntryDto(se));
             }

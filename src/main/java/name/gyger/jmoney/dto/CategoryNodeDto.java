@@ -27,7 +27,7 @@ public class CategoryNodeDto {
     private String name;
     private long id;
     private long parentId;
-    private List<CategoryNodeDto> children = new ArrayList<>();
+    private List<CategoryNodeDto> children = new ArrayList<CategoryNodeDto>();
 
     public CategoryNodeDto() {
     }

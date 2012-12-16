@@ -46,10 +46,10 @@ public class Session implements Serializable {
 
     public Account getAccountByNumber(String accountNumber) {
         Vector accounts = getAccounts();
-        for (Object account1 : accounts) {
-            Account account = (Account) account1;
+        for (int i = 0; i < accounts.size(); i++) {
+            Account account = (Account) accounts.get(i);
             if (account.getAccountNumber() != null
-                    && account.getAccountNumber().equals(accountNumber)) {
+                && account.getAccountNumber().equals(accountNumber)) {
                 return account;
             }
         }
