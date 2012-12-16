@@ -46,7 +46,7 @@ public class CategoryService {
 
     public List<CategoryDto> getCategories() {
         Session s = sessionService.getSession();
-        List<CategoryDto> categories = new ArrayList<CategoryDto>();
+        List<CategoryDto> categories = new ArrayList<>();
         Category rootCategory = s.getRootCategory();
         if (rootCategory != null) {
             addChildCategories(categories, rootCategory, 0);

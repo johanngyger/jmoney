@@ -50,11 +50,11 @@ public class OptionsService {
 
     private net.sf.jmoney.model.Session oldSession;
 
-    private Map<net.sf.jmoney.model.Category, Category> oldToNewCategoryMap = new HashMap<net.sf.jmoney.model.Category, Category>();
+    private Map<net.sf.jmoney.model.Category, Category> oldToNewCategoryMap = new HashMap<>();
 
-    private Map<Entry, net.sf.jmoney.model.Category> entryToOldCategoryMap = new HashMap<Entry, net.sf.jmoney.model.Category>();
+    private Map<Entry, net.sf.jmoney.model.Category> entryToOldCategoryMap = new HashMap<>();
 
-    private Map<net.sf.jmoney.model.DoubleEntry, Entry> oldToNewDoubleEntryMap = new HashMap<net.sf.jmoney.model.DoubleEntry, Entry>();
+    private Map<net.sf.jmoney.model.DoubleEntry, Entry> oldToNewDoubleEntryMap = new HashMap<>();
 
     @Inject
     private SessionService sessionService;
@@ -67,7 +67,7 @@ public class OptionsService {
     }
 
     public Category initCategories(Session session) {
-        List<Category> cList = new ArrayList<Category>();
+        List<Category> cList = new ArrayList<>();
 
         Category root = createCategory(CategoryType.ROOT, "[ROOT]", null, cList);
         session.setRootCategory(root);

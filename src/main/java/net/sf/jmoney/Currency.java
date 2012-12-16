@@ -64,11 +64,13 @@ public class Currency implements Comparable {
 				try {
 					d = Byte.parseByte(line.substring(4, 5));
 				} catch (Exception ex) {
+                    ex.printStackTrace();
 				}
 				currencies.put(c, new Currency(c, d));
 				line = buffer.readLine();
 			}
 		} catch (IOException ioex) {
+            ioex.printStackTrace();
 		}
 	}
 

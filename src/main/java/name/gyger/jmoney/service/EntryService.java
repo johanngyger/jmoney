@@ -53,7 +53,7 @@ public class EntryService {
 
         @SuppressWarnings("unchecked")
         List<Entry> entries = q.getResultList();
-        List<EntryDto> result = new ArrayList<EntryDto>();
+        List<EntryDto> result = new ArrayList<>();
         EntryDto previousEntryDto = null;
         for (Entry entry : entries) {
             if (entry.contains(filter)) {

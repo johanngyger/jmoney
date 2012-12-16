@@ -42,7 +42,7 @@ public class AccountService {
     public Collection<AccountDto> getAccounts() {
         Session s = sessionService.getSession();
         Collection<Account> accounts = s.getAccounts();
-        Collection<AccountDto> result = new ArrayList<AccountDto>();
+        Collection<AccountDto> result = new ArrayList<>();
 
         for (Account next : accounts) {
             AccountDto nextDto = new AccountDto(next);
