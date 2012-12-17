@@ -18,7 +18,6 @@ package name.gyger.jmoney.service;
 
 import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Category;
-import name.gyger.jmoney.model.*;
 import name.gyger.jmoney.model.Entry;
 import name.gyger.jmoney.model.Session;
 import net.sf.jmoney.XMLReader;
@@ -42,6 +41,8 @@ import java.util.Map;
 public class OptionsService {
 
     private static final Logger log = LoggerFactory.getLogger(OptionsService.class);
+
+    private static final Entry.Status[] entryStates = {null, Entry.Status.RECONCILING, Entry.Status.CLEARED};
 
     @PersistenceContext
     private EntityManager em;
@@ -69,13 +70,13 @@ public class OptionsService {
     public Category initCategories(Session session) {
         List<Category> cList = new ArrayList<Category>();
 
-        Category root = createCategory(CategoryType.ROOT, "[ROOT]", null, cList);
+        Category root = createCategory(Category.Type.ROOT, "[ROOT]", null, cList);
         session.setRootCategory(root);
 
-        Category transfer = createCategory(CategoryType.TRANSFER, "[UMBUCHUNG]", root, cList);
+        Category transfer = createCategory(Category.Type.TRANSFER, "[UMBUCHUNG]", root, cList);
         session.setTransferCategory(transfer);
 
-        Category split = createCategory(CategoryType.SPLIT, "[SPLITTBUCHUNG]", root, cList);
+        Category split = createCategory(Category.Type.SPLIT, "[SPLITTBUCHUNG]", root, cList);
         session.setSplitCategory(split);
 
         createNormalCategory("Steuern", root, cList);
@@ -148,7 +149,7 @@ public class OptionsService {
         return root;
     }
 
-    private Category createCategory(CategoryType type, String name, Category parent, List<Category> cList) {
+    private Category createCategory(Category.Type type, String name, Category parent, List<Category> cList) {
         Category c = new Category(type, name);
         c.setParent(parent);
         cList.add(c);
@@ -156,7 +157,7 @@ public class OptionsService {
     }
 
     private Category createNormalCategory(String name, Category parent, List<Category> cList) {
-        Category c = new Category(CategoryType.NORMAL, name);
+        Category c = new Category(Category.Type.NORMAL, name);
         c.setParent(parent);
         cList.add(c);
         return c;
@@ -227,13 +228,13 @@ public class OptionsService {
                                     net.sf.jmoney.model.Category oldCat) {
         Category cat = new Category();
         if (oldCat instanceof SplitCategory) {
-            cat.setType(CategoryType.SPLIT);
+            cat.setType(Category.Type.SPLIT);
             session.setSplitCategory(cat);
         } else if (oldCat instanceof TransferCategory) {
-            cat.setType(CategoryType.TRANSFER);
+            cat.setType(Category.Type.TRANSFER);
             session.setTransferCategory(cat);
         } else if (oldCat instanceof RootCategory) {
-            cat.setType(CategoryType.ROOT);
+            cat.setType(Category.Type.ROOT);
             session.setTransferCategory(cat);
         }
         cat.setName(oldCat.getCategoryName());
@@ -298,7 +299,7 @@ public class OptionsService {
         e.setDate(oldEntry.getDate());
         e.setDescription(oldEntry.getDescription());
         e.setMemo(oldEntry.getMemo());
-        e.setStatus(oldEntry.getStatus());
+        e.setStatus(entryStates[oldEntry.getStatus()]);
         e.setValuta(oldEntry.getValuta());
 
         // Category might not exist yet, so this is done in a second pass.

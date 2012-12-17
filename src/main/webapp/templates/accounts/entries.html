@@ -8,7 +8,6 @@
 <table id="entryTable">
     <thead>
     <tr>
-        <!--<th scope="col"><input type="checkbox" class="entryCheckBoxHeader"></th>-->
         <th scope="col">Datum<br>Valuta</th>
         <th scope="col">Beschreibung<br>Kategorie<br>Memo</th>
         <th scope="col">Status</th>
@@ -25,7 +24,6 @@
     </thead>
     <tbody>
     <tr ng-repeat="e in entries" ng-class="{selected: e.id==entry.id}">
-        <!--<td class="entryCheckBox"><input type="checkbox"></td>-->
         <td class="entryDate"><a href="#/accounts/{{accountId}}/entries/{{e.id}}?page={{page}}">
             {{e.date | date:'dd.MM.yyyy'}}
             <br>
@@ -35,7 +33,7 @@
             {{e.description}}<br>{{e.categoryName}}<br>{{e.memo}}
         </a></td>
         <td class="entryStatus"><a href="#/accounts/{{accountId}}/entries/{{e.id}}">
-            2
+            {{getStatusText(e.status)}}
         </a></td>
         <td class="entryAmount"><a href="#/accounts/{{accountId}}/entries/{{e.id}}"
                                    ng-show="e.amount >= 0">{{e.amount / 100 | number:2}}</a></td>
@@ -72,6 +70,3 @@
         </li>
     </ul>
 </div>
-<!--DEBUG:-->
-<!--<pre>page={{page}}</pre>-->
-

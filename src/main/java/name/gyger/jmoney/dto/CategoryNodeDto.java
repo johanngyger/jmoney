@@ -17,7 +17,6 @@
 package name.gyger.jmoney.dto;
 
 import name.gyger.jmoney.model.Category;
-import name.gyger.jmoney.model.CategoryType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,7 @@ public class CategoryNodeDto {
         }
 
         for (Category child : category.getChildren()) {
-            if (child.getType() == CategoryType.NORMAL) {
+            if (child.getType() == Category.Type.NORMAL) {
                 CategoryNodeDto childDto = new CategoryNodeDto(child);
                 children.add(childDto);
             }

@@ -7,95 +7,68 @@
     </a>
 </div>
 
+<form>
+    <div id="entryForm" class="ui-corner-all">
+        <table>
+            <tbody>
+            <tr>
+                <td class="entryDate">
+                    <input id="date" name="date" title="Datum" class="full-width" placeholder="Datum"
+                           ng-model="entry.date" ui-date autofocus>
+                </td>
+                <td class="entryDesc">
+                    <input id="description" type="text" class="full-width" placeholder="Beschreibung"
+                           ng-model="entry.description"></td>
+                <td class="entryStatus">
+                    <select id="status" size="0" ng-model="entry.status"
+                            ng-options="s.id as s.label for s in entryStates">
+                        <option value=""></option>
+                    </select></td>
+                <td class="entryAmount">
+                    <input id="income" type="number" step="0.01" name="income"
+                           class="amount full-width" placeholder="Einnahme"
+                           ng-model="entry.income" ui-event="{blur:'updateIncome(entry)'}"/>
+                </td>
+                <td class="entryAmount last">
+                    <input id="expense" type="number" step="0.01" name="expense"
+                           class="amount full-width" placeholder="Ausgabe"
+                           ng-model="entry.expense" ui-event="{blur:'updateExpense(entry)'}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="entryDate">
+                    <input id="valuta" name="valuta" ng-model="entry.valuta" class="full-width" placeholder="Valuta"
+                           ui-date>
+                </td>
+                <td class="entryDesc">
+                    <select id="category" class="full-width" ng-model="entry.categoryId"
+                            ng-options="c.id as c.nameIndented for c in categories">
+                        <option value=""></option>
+                    </select>
+                </td>
+                <td class="entryStatus"></td>
+                <td class="entryAmount"></td>
+                <td class="entryAmount"></td>
+            </tr>
+            <tr>
+                <td class="entryDate"></td>
+                <td class="entryDesc">
+                    <!--<label for="memo">Memo</label>-->
+                    <input id="Memo" type="text" class="full-width" placeholder="Memo" ng-model="entry.memo">
+                </td>
+                <td class="entryStatus"></td>
+                <td class="entryAmount"></td>
+                <td class="entryAmount"></td>
+            </tr>
+            </tbody>
+        </table>
 
-<div id="entryForm" class="ui-corner-all">
-    <table>
-        <tbody>
-        <!--
-        <tr>
-            <td class="entryDate">
-                <label for="date">Datum</label>
-            </td>
-            <td class="entryDesc">
-                <label for="description">Beschreibung</label>
-            <td class="entryStatus">
-                <label for="status">Status</label>
-            <td class="entryAmount">
-                <label for="income">Einnahme</label>
-            </td>
-            <td class="entryAmount">
-                <label for="expense">Ausgabe</label>
-            </td>
-        </tr>
-        -->
-        <tr>
-            <td class="entryDate">
-                <input id="date" name="date" title="Datum" class="full-width" placeholder="Datum"
-                       ng-model="entry.date" ui-date>
-            </td>
-            <td class="entryDesc">
-                <input id="description" type="text" class="full-width" placeholder="Beschreibung"
-                       ng-model="entry.description"></td>
-            <td class="entryStatus">
-                <select id="status" size="0" ng-model="entry.status"></select></td>
-            <td class="entryAmount">
-                <input id="income" type="number" step="0.01" name="income"
-                       class="amount full-width" placeholder="Einnahme"
-                       ng-model="entry.income" ui-event="{blur:'updateIncome(entry)'}"/>
-            </td>
-            <td class="entryAmount last">
-                <input id="expense" type="number" step="0.01" name="expense"
-                       class="amount full-width" placeholder="Ausgabe"
-                       ng-model="entry.expense" ui-event="{blur:'updateExpense(entry)'}"/>
-            </td>
-        </tr>
-        <!--
-        <tr>
-            <td class="entryDate">
-                <label for="valuta">Valuta</label>
-            </td>
-            <td class="entryDesc">
-                <label for="category">Kategorie</label> <br>
-            </td>
-            <td class="entryStatus"></td>
-            <td class="entryAmount"></td>
-            <td class="entryAmount"></td>
-        </tr>
-        -->
-        <tr>
-            <td class="entryDate">
-                <input id="valuta" name="valuta" ng-model="entry.valuta" class="full-width" placeholder="Valuta"
-                       ui-date>
-            </td>
-            <td class="entryDesc">
-                <select id="category" class="full-width" ng-model="entry.categoryId"
-                        ng-options="c.id as c.nameIndented for c in categories">
-                </select>
-            </td>
-            <td class="entryStatus"></td>
-            <td class="entryAmount"></td>
-            <td class="entryAmount"></td>
-        </tr>
-        <tr>
-            <td class="entryDate"></td>
-            <td class="entryDesc">
-                <!--<label for="memo">Memo</label>-->
-                <input id="Memo" type="text" class="full-width" placeholder="Memo" ng-model="entry.memo">
-            </td>
-            <td class="entryStatus"></td>
-            <td class="entryAmount"></td>
-            <td class="entryAmount"></td>
-        </tr>
-        </tbody>
-    </table>
+    </div>
 
-</div>
+    <div ng-show="entry.categoryId == splitCategory.id" ng-include="'templates/accounts/sub-entries.html'"></div>
 
-<div ng-show="entry.categoryId == splitCategory.id" ng-include="'templates/accounts/sub-entries.html'"></div>
+    <input type="submit" value="Speichern" ng-click="save()">
+</form>
 
-<input type="submit" value="Speichern" ng-click="save()">
-
-<!--
-<div>
-entry={{entry}}
-</div>-->
+<hr>
+{{entry}}

@@ -21,7 +21,6 @@ import name.gyger.jmoney.dto.EntryDto;
 import name.gyger.jmoney.dto.SubEntryDto;
 import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Category;
-import name.gyger.jmoney.model.CategoryType;
 import name.gyger.jmoney.model.Entry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,6 +90,7 @@ public class EntryService {
         Entry e = new Entry();
         em.persist(e);
         updateEntryInternal(dto, e);
+        e.setStatus(Entry.Status.CLEARED);
         return e.getId();
     }
 
@@ -127,7 +127,7 @@ public class EntryService {
         }
 
         removeSubEntries(e);
-        if (c != null && c.getType() == CategoryType.SPLIT) {
+        if (c != null && c.getType() == Category.Type.SPLIT) {
             createSubEntries(dto, e);
         }
 

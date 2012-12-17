@@ -106,6 +106,16 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
     $scope.filter = $routeParams.filter;
     $scope.load();
 
+    $scope.getStatusText = function (status) {
+        if (status === "RECONCILING") {
+            return "A";
+        } else if (status === "CLEARED") {
+            return "V";
+        } else {
+            return null;
+        }
+    }
+
     $scope.prevPage = function () {
         return Math.max($scope.page - 1, 1);
     }
@@ -117,6 +127,11 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
 }
 
 function EntryDetailsController($scope, $http, $routeParams, $filter, $location) {
+    $scope.entryStates = [
+        {id: "RECONCILING", label: "Abgestimmt"},
+        {id: "CLEARED", label: "Verrechnet"}
+    ];
+
     $scope.updateSubEntryTotal = function () {
         $scope.subEntryTotal = 0;
         for (var i = 0; i < $scope.entry.subEntries.length; i++) {

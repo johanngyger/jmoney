@@ -23,6 +23,10 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Category {
 
+    public static enum Type {
+        NORMAL, SPLIT, TRANSFER, ACCOUNT, ROOT
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private long id;
@@ -36,12 +40,12 @@ public class Category {
 
     private String name;
 
-    private CategoryType type = CategoryType.NORMAL;
+    private Type type = Type.NORMAL;
 
     public Category() {
     }
 
-    public Category(CategoryType type, String name) {
+    public Category(Type type, String name) {
         this.type = type;
         this.name = name;
     }
@@ -78,11 +82,11 @@ public class Category {
         this.name = name;
     }
 
-    public CategoryType getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(CategoryType type) {
+    public void setType(Type type) {
         this.type = type;
     }
 

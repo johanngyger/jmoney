@@ -26,6 +26,10 @@ import java.util.List;
 @Entity
 public class Entry {
 
+    public static enum Status {
+        RECONCILING, CLEARED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private long id;
@@ -42,16 +46,20 @@ public class Entry {
     @OneToMany(mappedBy = "splitEntry", orphanRemoval = true)
     private List<Entry> subEntries;
 
-    /** Double entry booking */
+    /**
+     * Double entry booking
+     */
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Entry other;
+
+    @Enumerated
+    private Status status;
 
     private long creation = Calendar.getInstance().getTime().getTime();
     private Date date;
     private Date valuta;
     private String description;
     private long amount;
-    private int status;
     private String memo;
 
     public long getId() {
@@ -118,11 +126,11 @@ public class Entry {
         this.amount = amount;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

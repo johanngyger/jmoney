@@ -20,7 +20,6 @@ import name.gyger.jmoney.dto.BalanceDto;
 import name.gyger.jmoney.dto.CashFlowDto;
 import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Category;
-import name.gyger.jmoney.model.CategoryType;
 import name.gyger.jmoney.model.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -126,7 +125,7 @@ public class ReportService {
     private void calculateCashFlowForCategory(List<CashFlowDto> resultList, Category category, String parentName, Date from, Date to) {
         String name = createCategoryName(category, parentName);
 
-        if (category.getType() == CategoryType.NORMAL) {
+        if (category.getType() == Category.Type.NORMAL) {
             Query q = createCategorySumQuery(category, from, to);
             Long sum = (Long) q.getSingleResult();
             createCategoryFlowDto(resultList, name, sum);

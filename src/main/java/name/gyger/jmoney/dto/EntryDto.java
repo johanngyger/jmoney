@@ -28,7 +28,7 @@ public class EntryDto {
     private Date valuta;
     private String description;
     private long amount;
-    private int status;
+    private Entry.Status status;
     private String memo;
     private long categoryId;
     private String categoryName;
@@ -118,11 +118,11 @@ public class EntryDto {
         this.amount = amount;
     }
 
-    public int getStatus() {
+    public Entry.Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Entry.Status status) {
         this.status = status;
     }
 
