@@ -16,6 +16,7 @@
 
 package name.gyger.jmoney.dto;
 
+import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Category;
 import name.gyger.jmoney.model.Entry;
 
@@ -34,6 +35,7 @@ public class EntryDto {
     private String categoryName;
     private long balance;
     private long accountId;
+    private String accountName;
 
     public EntryDto() {
     }
@@ -51,7 +53,9 @@ public class EntryDto {
             categoryId = c.getId();
             categoryName = c.getName();
         }
-        accountId = e.getAccount().getId();
+        Account a = e.getAccount();
+        accountId = a.getId();
+        accountName = a.getName();
     }
 
     public void mapToModel(Entry entry) {
@@ -158,6 +162,14 @@ public class EntryDto {
         this.accountId = accountId;
     }
 
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
     @Override
     public String toString() {
         return "EntryDto{" +
@@ -172,6 +184,7 @@ public class EntryDto {
                 ", categoryName='" + categoryName + '\'' +
                 ", balance=" + balance +
                 ", accountId=" + accountId +
+                ", accountName='" + accountName + '\'' +
                 '}';
     }
 

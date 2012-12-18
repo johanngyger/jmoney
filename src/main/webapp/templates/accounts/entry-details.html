@@ -1,5 +1,5 @@
 <div class="subnav">
-    <a href="#/accounts/{{accountId}}/entries">
+    <a onclick="history.back()">
         <i class="icon-circle-arrow-left"></i> Zurück
     </a>
     <a ng-click="delete()" ng-show="entry.id != null">
@@ -12,53 +12,53 @@
         <table>
             <tbody>
             <tr>
-                <td class="entryDate">
+                <td class="entryTableDate">
                     <input id="date" name="date" title="Datum" class="full-width" placeholder="Datum"
                            ng-model="entry.date" ui-date autofocus>
                 </td>
-                <td class="entryDesc">
+                <td class="entryTableDesc">
                     <input id="description" type="text" class="full-width" placeholder="Beschreibung"
                            ng-model="entry.description"></td>
-                <td class="entryStatus">
+                <td class="entryTableStatus">
                     <select id="status" size="0" ng-model="entry.status"
                             ng-options="s.id as s.label for s in entryStates">
                         <option value=""></option>
                     </select></td>
-                <td class="entryAmount">
+                <td class="entryTableAmount">
                     <input id="income" type="number" step="0.01" name="income"
                            class="amount full-width" placeholder="Einnahme"
                            ng-model="entry.income" ui-event="{blur:'updateIncome(entry)'}"/>
                 </td>
-                <td class="entryAmount last">
+                <td class="entryTableAmount last">
                     <input id="expense" type="number" step="0.01" name="expense"
                            class="amount full-width" placeholder="Ausgabe"
                            ng-model="entry.expense" ui-event="{blur:'updateExpense(entry)'}"/>
                 </td>
             </tr>
             <tr>
-                <td class="entryDate">
+                <td class="entryTableDate">
                     <input id="valuta" name="valuta" ng-model="entry.valuta" class="full-width" placeholder="Valuta"
                            ui-date>
                 </td>
-                <td class="entryDesc">
+                <td class="entryTableDesc">
                     <select id="category" class="full-width" ng-model="entry.categoryId"
                             ng-options="c.id as c.nameIndented for c in categories">
                         <option value=""></option>
                     </select>
                 </td>
-                <td class="entryStatus"></td>
-                <td class="entryAmount"></td>
-                <td class="entryAmount"></td>
+                <td class="entryTableStatus"></td>
+                <td class="entryTableAmount"></td>
+                <td class="entryTableAmount"></td>
             </tr>
             <tr>
-                <td class="entryDate"></td>
-                <td class="entryDesc">
+                <td class="entryTableDate"></td>
+                <td class="entryTableDesc">
                     <!--<label for="memo">Memo</label>-->
                     <input id="Memo" type="text" class="full-width" placeholder="Memo" ng-model="entry.memo">
                 </td>
-                <td class="entryStatus"></td>
-                <td class="entryAmount"></td>
-                <td class="entryAmount"></td>
+                <td class="entryTableStatus"></td>
+                <td class="entryTableAmount"></td>
+                <td class="entryTableAmount"></td>
             </tr>
             </tbody>
         </table>
@@ -69,6 +69,3 @@
 
     <input type="submit" value="Speichern" ng-click="save()">
 </form>
-
-<hr>
-{{entry}}

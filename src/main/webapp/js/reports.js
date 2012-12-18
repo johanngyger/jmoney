@@ -3,7 +3,8 @@ angular.module('reports', ['ui.directives']).
         //$locationProvider.html5Mode(true);
         $routeProvider.
             when('/reports/balances', {controller: 'BalancesController', templateUrl: 'templates/reports/balances.html'}).
-            when('/reports/cash-flows', {controller: 'CashFlowController', templateUrl: 'templates/reports/cash-flows.html'});
+            when('/reports/cash-flows', {controller: 'CashFlowController', templateUrl: 'templates/reports/cash-flows.html'}).
+            when('/reports/consistency', {controller: 'ConsistencyController', templateUrl: 'templates/reports/consistency.html'});
     }]);
 
 function ReportsController($scope, $location) {
@@ -84,5 +85,34 @@ function CashFlowController($scope, $http, $filter) {
     $scope.generate();
 }
 
+function ConsistencyController($scope, $http) {
+
+    $http.get('rest/reports/consitency/inconsistent-split-entries')
+        .success(function (data) {
+            $scope.splitEntries = data;
+        })
+        .error(function () {
+            $scope.error = true;
+        });
+
+    $http.get('rest/reports/consitency/entries-without-category')
+        .success(function (data) {
+            $scope.entriesWithoutCategory = data;
+        })
+        .error(function () {
+            $scope.error = true;
+        });
+
+    $scope.getStatusText = function (status) {
+        if (status === "RECONCILING") {
+            return "A";
+        } else if (status === "CLEARED") {
+            return "V";
+        } else {
+            return null;
+        }
+    }
+
+}
 
 

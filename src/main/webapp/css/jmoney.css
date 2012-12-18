@@ -118,30 +118,45 @@ th, td {
     padding-right: 20px;
 }
 
-#entryTable {
-    width: 100%;
-}
-
-#entryTable td {
+.entryTable td {
     height: 3em;
 }
 
-#entryTable td a {
+.entryTable td a {
     display: block;
     width: 100%;
     height: 100%;
 }
 
-#entryTable tr {
+.entryTable tr {
     border-top: 1px solid #92969A;
     border-bottom: 1px solid #92969A;
 }
 
+.entryTable .selected {
+    background: #DDBF99 url(../img/ui-bg_highlight-soft_75_ddbf99_1x100.png) 50% 50% repeat-x;
+}
+
+.entryTableDate {
+    width: 10%;
+}
+
+.entryTableDesc {
+    width: 55%
+}
+
+.entryTableStatus {
+    width: 5%
+}
+
+.entryTableAmount {
+    width: 10%;
+    text-align: right;
+}
 
 #entryForm table {
     background: #DDBF99 url(../img/ui-bg_highlight-soft_75_ddbf99_1x100.png) 50% 50% repeat-x;
     margin-bottom: 10px;
-    width: 100%
 }
 
 #entryForm td {
@@ -154,32 +169,6 @@ th, td {
 
 .full-width {
     width: 100%;
-}
-
-.entryCheckBox {
-    width: 3%;
-    vertical-align: middle;
-}
-
-.entryCheckBoxHeader {
-    margin-top: 1em;
-}
-
-.entryDate {
-    width: 10%;
-}
-
-.entryDesc {
-    width: 55%
-}
-
-.entryStatus {
-    width: 5%
-}
-
-.entryAmount {
-    width: 10%;
-    text-align: right;
 }
 
 .report-entry {
@@ -299,10 +288,6 @@ div#sub .selected {
 
 .loader {
     padding: 10px 0;
-}
-
-#entryTable .selected {
-    background: #DDBF99 url(../img/ui-bg_highlight-soft_75_ddbf99_1x100.png) 50% 50% repeat-x;
 }
 
 div#sub a:hover {

@@ -18,6 +18,7 @@ package name.gyger.jmoney.web;
 
 import name.gyger.jmoney.dto.BalanceDto;
 import name.gyger.jmoney.dto.CashFlowDto;
+import name.gyger.jmoney.dto.EntryDto;
 import name.gyger.jmoney.service.ReportService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,5 +69,16 @@ public class ReportController {
         return reportService.getCashFlow(fromDate, toDate);
     }
 
+    @RequestMapping(value = "/reports/consitency/inconsistent-split-entries", method = RequestMethod.GET)
+    @ResponseBody
+    public List<EntryDto> getInconsistentSplitEntries() {
+        return reportService.getInconsistentSplitEntries();
+    }
+
+    @RequestMapping(value = "/reports/consitency/entries-without-category", method = RequestMethod.GET)
+    @ResponseBody
+    public List<EntryDto> getEntriesWithoutCategory() {
+        return reportService.getEntriesWithoutCategory();
+    }
 
 }
