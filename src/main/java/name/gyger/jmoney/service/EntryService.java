@@ -29,10 +29,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import javax.persistence.TypedQuery;
+import java.util.*;
 
 @Service
 @Transactional
@@ -51,11 +49,10 @@ public class EntryService {
     }
 
     public List<EntryDto> getEntries(long accountId, Integer page, String filter) {
-        Query q = em.createQuery("SELECT e FROM Entry e LEFT JOIN FETCH e.category WHERE e.account.id = :id" +
-                " ORDER BY CASE WHEN e.date IS NULL THEN 1 ELSE 0 END, e.date, e.creation");
+        TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e LEFT JOIN FETCH e.category WHERE e.account.id = :id" +
+                " ORDER BY CASE WHEN e.date IS NULL THEN 1 ELSE 0 END, e.date, e.creation", Entry.class);
         q.setParameter("id", accountId);
 
-        @SuppressWarnings("unchecked")
         List<Entry> entries = q.getResultList();
         List<EntryDto> result = new ArrayList<EntryDto>();
         EntryDto previousEntryDto = null;
@@ -86,20 +83,35 @@ public class EntryService {
         return result;
     }
 
+    private Map<Long, Long> getSplitEntrySums() {
+        Map<Long, Long> result = new HashMap<Long, Long>();
+
+        String queryString = "SELECT e.splitEntry.id, SUM(e.amount) FROM Entry e GROUP BY e.splitEntry.id";
+        Query q = em.createQuery(queryString);
+
+        List resultList = q.getResultList();
+        for (Object resultItem : resultList) {
+            Object[] resultItemArray = (Object[]) resultItem;
+            Long accountId = (Long) resultItemArray[0];
+            Long sum = (Long) resultItemArray[1];
+            result.put(accountId, sum);
+        }
+
+        return result;
+    }
+
     public List<EntryDto> getInconsistentSplitEntries() {
         Category splitCategory = sessionService.getSession().getSplitCategory();
 
-        Query q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = :categoryId" +
-                " ORDER BY CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC");
+        TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = :categoryId" +
+                " ORDER BY CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC", Entry.class);
         q.setParameter("categoryId", splitCategory.getId());
 
-        @SuppressWarnings("unchecked")
+        Map<Long, Long> splitEntrySums = getSplitEntrySums();
         List<Entry> entries = q.getResultList();
         List<EntryDto> result = new ArrayList<EntryDto>();
         for (Entry entry : entries) {
-            Query sq = em.createQuery("SELECT SUM(e.amount) FROM Entry e WHERE e.splitEntry.id = :id");
-            sq.setParameter("id", entry.getId());
-            Long sum = (Long) sq.getSingleResult();
+            Long sum = splitEntrySums.get(entry.getId());
             if (entry.getAmount() != sum) {
                 EntryDto dto = new EntryDto(entry);
                 result.add(dto);
@@ -110,10 +122,9 @@ public class EntryService {
     }
 
     public List<EntryDto> getEntriesWithoutCategory() {
-        Query q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = null AND e.splitEntry = null" +
-                " ORDER BY CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC");
+        TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = null AND e.splitEntry = null" +
+                " ORDER BY CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC", Entry.class);
 
-        @SuppressWarnings("unchecked")
         List<Entry> entries = q.getResultList();
         List<EntryDto> result = new ArrayList<EntryDto>();
         for (Entry entry : entries) {
@@ -125,13 +136,12 @@ public class EntryService {
     }
 
     public List<EntryDto> getEntriesForCategory(long categoryId, Date from, Date to) {
-        Query q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = :categoryId AND e.date > :from AND e.date <= :to" +
-                " ORDER BY e.date DESC, e.creation DESC");
+        TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = :categoryId AND e.date > :from AND e.date <= :to" +
+                " ORDER BY e.date DESC, e.creation DESC", Entry.class);
         q.setParameter("categoryId", categoryId);
         q.setParameter("from", from);
         q.setParameter("to", to);
 
-        @SuppressWarnings("unchecked")
         List<Entry> entries = q.getResultList();
         List<EntryDto> result = new ArrayList<EntryDto>();
         for (Entry entry : entries) {

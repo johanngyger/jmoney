@@ -40,12 +40,17 @@ public class CategoryService {
     @PersistenceContext
     private EntityManager em;
 
+    public void prefetchCategories() {
+        em.createQuery("SELECT c FROM Category c LEFT JOIN FETCH c.children", Category.class).getResultList();
+    }
+
     public Category getCategory(long categoryId) {
         return em.find(Category.class, categoryId);
     }
 
     public List<CategoryDto> getCategories() {
         Session s = sessionService.getSession();
+        prefetchCategories();
         List<CategoryDto> categories = new ArrayList<CategoryDto>();
         Category rootCategory = s.getRootCategory();
         if (rootCategory != null) {
@@ -65,6 +70,7 @@ public class CategoryService {
 
     public CategoryNodeDto getCategoryTree() {
         Session s = sessionService.getSession();
+        prefetchCategories();
         Category rootCategory = s.getRootCategory();
         return new CategoryNodeDto(rootCategory);
     }

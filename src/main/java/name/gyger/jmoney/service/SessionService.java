@@ -32,7 +32,7 @@ public class SessionService {
     private EntityManager em;
 
     public Session getSession() {
-        Query q = em.createQuery("SELECT s FROM Session s");
+        Query q = em.createQuery("SELECT s FROM Session s LEFT JOIN FETCH s.rootCategory LEFT JOIN FETCH s.splitCategory LEFT JOIN FETCH s.transferCategory");
         return (Session) q.getSingleResult();
     }
 
