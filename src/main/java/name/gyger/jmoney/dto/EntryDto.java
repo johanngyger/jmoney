@@ -48,14 +48,24 @@ public class EntryDto {
         amount = e.getAmount();
         status = e.getStatus();
         memo = e.getMemo();
+
         Category c = e.getCategory();
         if (c != null) {
             categoryId = c.getId();
             categoryName = c.getName();
         }
+
         Account a = e.getAccount();
-        accountId = a.getId();
-        accountName = a.getName();
+        Entry se = e.getSplitEntry();
+        if (a != null) {
+            accountId = a.getId();
+            accountName = a.getName();
+        } else if (se != null) {
+            id = se.getId();
+            a = se.getAccount();
+            accountId = a.getId();
+            accountName = "[" + a.getName() + "]";
+        }
     }
 
     public void mapToModel(Entry entry) {

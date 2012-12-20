@@ -25,16 +25,21 @@ import name.gyger.jmoney.model.Entry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @Transactional
 public class EntryService {
+
+    @Inject
+    private SessionService sessionService;
 
     @PersistenceContext
     private EntityManager em;
@@ -77,6 +82,62 @@ public class EntryService {
         int from = Math.min((page - 1) * 10, count);
         int to = Math.min((page - 1) * 10 + 10, count);
         result = result.subList(from, to);
+
+        return result;
+    }
+
+    public List<EntryDto> getInconsistentSplitEntries() {
+        Category splitCategory = sessionService.getSession().getSplitCategory();
+
+        Query q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = :categoryId" +
+                " ORDER BY CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC");
+        q.setParameter("categoryId", splitCategory.getId());
+
+        @SuppressWarnings("unchecked")
+        List<Entry> entries = q.getResultList();
+        List<EntryDto> result = new ArrayList<EntryDto>();
+        for (Entry entry : entries) {
+            Query sq = em.createQuery("SELECT SUM(e.amount) FROM Entry e WHERE e.splitEntry.id = :id");
+            sq.setParameter("id", entry.getId());
+            Long sum = (Long) sq.getSingleResult();
+            if (entry.getAmount() != sum) {
+                EntryDto dto = new EntryDto(entry);
+                result.add(dto);
+            }
+        }
+
+        return result;
+    }
+
+    public List<EntryDto> getEntriesWithoutCategory() {
+        Query q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = null AND e.splitEntry = null" +
+                " ORDER BY CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC");
+
+        @SuppressWarnings("unchecked")
+        List<Entry> entries = q.getResultList();
+        List<EntryDto> result = new ArrayList<EntryDto>();
+        for (Entry entry : entries) {
+            EntryDto dto = new EntryDto(entry);
+            result.add(dto);
+        }
+
+        return result;
+    }
+
+    public List<EntryDto> getEntriesForCategory(long categoryId, Date from, Date to) {
+        Query q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = :categoryId AND e.date > :from AND e.date <= :to" +
+                " ORDER BY e.date DESC, e.creation DESC");
+        q.setParameter("categoryId", categoryId);
+        q.setParameter("from", from);
+        q.setParameter("to", to);
+
+        @SuppressWarnings("unchecked")
+        List<Entry> entries = q.getResultList();
+        List<EntryDto> result = new ArrayList<EntryDto>();
+        for (Entry entry : entries) {
+            EntryDto dto = new EntryDto(entry);
+            result.add(dto);
+        }
 
         return result;
     }

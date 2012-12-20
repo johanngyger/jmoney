@@ -12,7 +12,7 @@
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
                 <property name="objectMapper">
-                    <bean class="name.gyger.jmoney.web.MyJsonObjectMapper"/>
+                    <bean class="name.gyger.jmoney.web.util.MyJacksonObjectMapper"/>
                 </property>
             </bean>
         </mvc:message-converters>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package name.gyger.jmoney.web;
+package name.gyger.jmoney.web.controller;
 
 import name.gyger.jmoney.dto.CategoryDto;
 import name.gyger.jmoney.dto.CategoryNodeDto;

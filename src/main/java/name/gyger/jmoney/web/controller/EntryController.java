@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package name.gyger.jmoney.web;
+package name.gyger.jmoney.web.controller;
 
 import name.gyger.jmoney.dto.EntryDetailsDto;
 import name.gyger.jmoney.dto.EntryDto;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import java.util.Collection;
+import java.util.List;
 
 @Controller
 public class EntryController {
@@ -43,9 +43,9 @@ public class EntryController {
 
     @RequestMapping(value = "/accounts/{accountId}/entries", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<EntryDto> getEntries(@PathVariable long accountId,
-                                           @RequestParam(value = "page", required = false) Integer page,
-                                           @RequestParam(value = "filter", required = false) String filter) {
+    public List<EntryDto> getEntries(@PathVariable long accountId,
+                                     @RequestParam(value = "page", required = false) Integer page,
+                                     @RequestParam(value = "filter", required = false) String filter) {
         return entryService.getEntries(accountId, page, filter);
     }
 

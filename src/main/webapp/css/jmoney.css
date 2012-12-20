@@ -99,6 +99,7 @@ a {
 
 table {
     border-collapse: collapse;
+    margin-bottom: 10px;
 }
 
 thead, tbody {

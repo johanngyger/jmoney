@@ -14,7 +14,8 @@
             <div class="amount">Ausgaben</div>
         </th>
     </tr>
-    </thead>    <tbody>
+    </thead>
+    <tbody>
     <tr ng-repeat="e in splitEntries" ng-class="{selected: e.id==entry.id}">
         <td class="entryTableDate"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}?page={{page}}">
             {{e.date | date:'dd.MM.yyyy'}}
@@ -31,9 +32,9 @@
             {{getStatusText(e.status)}}
         </a></td>
         <td class="entryTableAmount"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}"
-                                   ng-show="e.amount >= 0">{{e.amount / 100 | number:2}}</a></td>
+                                        ng-show="e.amount >= 0">{{e.amount / 100 | number:2}}</a></td>
         <td class="entryTableAmount"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}"
-                                   ng-show="e.amount < 0">{{-e.amount / 100 | number:2}}</a></td>
+                                        ng-show="e.amount < 0">{{-e.amount / 100 | number:2}}</a></td>
     </tr>
     </tbody>
 </table>
@@ -54,26 +55,27 @@
             <div class="amount">Ausgaben</div>
         </th>
     </tr>
-    </thead>    <tbody>
-<tr ng-repeat="e in entriesWithoutCategory" ng-class="{selected: e.id==entry.id}">
-    <td class="entryTableDate"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}?page={{page}}">
-        {{e.date | date:'dd.MM.yyyy'}}
-        <br>
-        {{e.valuta | date:'dd.MM.yyyy'}}
-    </a></td>
-    <td>
-        <a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}?page={{page}}">{{e.accountName}}</a>
-    </td>
-    <td class="entryTableDesc"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}">
-        {{e.description}}<br>{{e.categoryName}}<br>{{e.memo}}
-    </a></td>
-    <td class="entryTableStatus"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}">
-        {{getStatusText(e.status)}}
-    </a></td>
-    <td class="entryTableAmount"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}"
-                               ng-show="e.amount >= 0">{{e.amount / 100 | number:2}}</a></td>
-    <td class="entryTableAmount"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}"
-                               ng-show="e.amount < 0">{{-e.amount / 100 | number:2}}</a></td>
-</tr>
-</tbody>
+    </thead>
+    <tbody>
+    <tr ng-repeat="e in entriesWithoutCategory" ng-class="{selected: e.id==entry.id}">
+        <td class="entryTableDate"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}?page={{page}}">
+            {{e.date | date:'dd.MM.yyyy'}}
+            <br>
+            {{e.valuta | date:'dd.MM.yyyy'}}
+        </a></td>
+        <td>
+            <a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}?page={{page}}">{{e.accountName}}</a>
+        </td>
+        <td class="entryTableDesc"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}">
+            {{e.description}}<br>{{e.categoryName}}<br>{{e.memo}}
+        </a></td>
+        <td class="entryTableStatus"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}">
+            {{getStatusText(e.status)}}
+        </a></td>
+        <td class="entryTableAmount"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}"
+                                        ng-show="e.amount >= 0">{{e.amount / 100 | number:2}}</a></td>
+        <td class="entryTableAmount"><a href="accounts.html#/accounts/{{e.accountId}}/entries/{{e.id}}"
+                                        ng-show="e.amount < 0">{{-e.amount / 100 | number:2}}</a></td>
+    </tr>
+    </tbody>
 </table>

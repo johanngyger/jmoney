@@ -18,6 +18,7 @@ package name.gyger.jmoney.dto;
 
 public class CashFlowDto {
 
+    private Long categoryId;
     private String categoryName;
     private Long income;
     private Long expense;
@@ -27,7 +28,8 @@ public class CashFlowDto {
     public CashFlowDto() {
     }
 
-    public CashFlowDto(String categoryName, Long income, Long expense, Long difference) {
+    public CashFlowDto(Long categoryId, String categoryName, Long income, Long expense, Long difference) {
+        this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.income = income;
         this.expense = expense;
@@ -72,6 +74,14 @@ public class CashFlowDto {
 
     public void setDifference(Long difference) {
         this.difference = difference;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
 }

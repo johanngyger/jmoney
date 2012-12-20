@@ -12,53 +12,55 @@
         <table>
             <tbody>
             <tr>
-                <td class="entryTableDate">
+                <td>
                     <input id="date" name="date" title="Datum" class="full-width" placeholder="Datum"
                            ng-model="entry.date" ui-date autofocus>
                 </td>
-                <td class="entryTableDesc">
-                    <input id="description" type="text" class="full-width" placeholder="Beschreibung"
+                <td>
+                    <input class="input-xlarge" id="description" type="text" class="full-width"
+                           placeholder="Beschreibung"
                            ng-model="entry.description"></td>
-                <td class="entryTableStatus">
+                <td>
                     <select id="status" size="0" ng-model="entry.status"
                             ng-options="s.id as s.label for s in entryStates">
                         <option value=""></option>
                     </select></td>
-                <td class="entryTableAmount">
+                <td>
                     <input id="income" type="number" step="0.01" name="income"
                            class="amount full-width" placeholder="Einnahme"
                            ng-model="entry.income" ui-event="{blur:'updateIncome(entry)'}"/>
                 </td>
-                <td class="entryTableAmount last">
+                <td class="last">
                     <input id="expense" type="number" step="0.01" name="expense"
                            class="amount full-width" placeholder="Ausgabe"
                            ng-model="entry.expense" ui-event="{blur:'updateExpense(entry)'}"/>
                 </td>
             </tr>
             <tr>
-                <td class="entryTableDate">
+                <td>
                     <input id="valuta" name="valuta" ng-model="entry.valuta" class="full-width" placeholder="Valuta"
                            ui-date>
                 </td>
-                <td class="entryTableDesc">
-                    <select id="category" class="full-width" ng-model="entry.categoryId"
+                <td>
+                    <select class="input-xlarge" id="category" class="full-width" ng-model="entry.categoryId"
                             ng-options="c.id as c.nameIndented for c in categories">
                         <option value=""></option>
                     </select>
                 </td>
-                <td class="entryTableStatus"></td>
-                <td class="entryTableAmount"></td>
-                <td class="entryTableAmount"></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <td class="entryTableDate"></td>
-                <td class="entryTableDesc">
+                <td></td>
+                <td>
                     <!--<label for="memo">Memo</label>-->
-                    <input id="Memo" type="text" class="full-width" placeholder="Memo" ng-model="entry.memo">
+                    <input class="input-xlarge" id="Memo" type="text" class="full-width" placeholder="Memo"
+                           ng-model="entry.memo">
                 </td>
-                <td class="entryTableStatus"></td>
-                <td class="entryTableAmount"></td>
-                <td class="entryTableAmount"></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             </tbody>
         </table>

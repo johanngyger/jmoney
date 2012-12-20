@@ -83,6 +83,21 @@ function CashFlowController($scope, $http, $filter) {
     $scope.period = "thisMonth";
     $scope.updatePeriod();
     $scope.generate();
+
+
+    $scope.getEntriesForCategory = function (categoryId) {
+        var fromDateParam = $filter('date')($scope.fromDate, 'yyyy-MM-dd');
+        var toDateParam = $filter('date')($scope.toDate, 'yyyy-MM-dd');
+        $scope.error = false;
+        $http.get('rest/reports/entries-with-category',
+            {params: {categoryId: categoryId, fromDate: fromDateParam, toDate: toDateParam}})
+            .success(function (data) {
+                $scope.entries = data;
+            })
+            .error(function () {
+                $scope.error = true;
+            });
+    }
 }
 
 function ConsistencyController($scope, $http) {

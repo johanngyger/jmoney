@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package name.gyger.jmoney.web;
+package name.gyger.jmoney.web.controller;
 
 import name.gyger.jmoney.dto.BalanceDto;
 import name.gyger.jmoney.dto.CashFlowDto;
 import name.gyger.jmoney.dto.EntryDto;
+import name.gyger.jmoney.service.EntryService;
 import name.gyger.jmoney.service.ReportService;
+import name.gyger.jmoney.web.util.DateUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,8 +29,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.inject.Inject;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -38,24 +38,14 @@ public class ReportController {
     @Inject
     private ReportService reportService;
 
-    private Date parseDate(String dateString) {
-        Date result = null;
-        if (dateString != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                result = sdf.parse(dateString);
-            } catch (ParseException e) {
-                // ignore
-            }
-        }
-        return result;
-    }
+    @Inject
+    private EntryService entryService;
+
 
     @RequestMapping(value = "/reports/balances", method = RequestMethod.GET)
     @ResponseBody
     public List<BalanceDto> getBalances(@RequestParam(value = "date", required = false) String dateString) {
-        Date date = parseDate(dateString);
-
+        Date date = DateUtil.parse(dateString);
         return reportService.getBalances(date);
     }
 
@@ -63,22 +53,32 @@ public class ReportController {
     @ResponseBody
     public List<CashFlowDto> getCashFlow(@RequestParam(value = "fromDate", required = false) String fromDateString,
                                         @RequestParam(value = "toDate", required = false) String toDateString) {
-        Date fromDate = parseDate(fromDateString);
-        Date toDate = parseDate(toDateString);
+        Date fromDate = DateUtil.parse(fromDateString);
+        Date toDate = DateUtil.parse(toDateString);
 
         return reportService.getCashFlow(fromDate, toDate);
+    }
+
+    @RequestMapping(value = "/reports/entries-with-category", method = RequestMethod.GET)
+    @ResponseBody
+    public List<EntryDto> getEntries(@RequestParam(value = "categoryId") long categoryId,
+                                     @RequestParam(value = "fromDate") String fromDateString,
+                                     @RequestParam(value = "toDate") String toDateString) {
+        Date from = DateUtil.parse(fromDateString);
+        Date to = DateUtil.parse(toDateString);
+        return entryService.getEntriesForCategory(categoryId, from, to);
     }
 
     @RequestMapping(value = "/reports/consitency/inconsistent-split-entries", method = RequestMethod.GET)
     @ResponseBody
     public List<EntryDto> getInconsistentSplitEntries() {
-        return reportService.getInconsistentSplitEntries();
+        return entryService.getInconsistentSplitEntries();
     }
 
     @RequestMapping(value = "/reports/consitency/entries-without-category", method = RequestMethod.GET)
     @ResponseBody
     public List<EntryDto> getEntriesWithoutCategory() {
-        return reportService.getEntriesWithoutCategory();
+        return entryService.getEntriesWithoutCategory();
     }
 
 }

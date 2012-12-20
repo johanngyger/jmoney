@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package name.gyger.jmoney.web;
+package name.gyger.jmoney.web.controller;
 
 import name.gyger.jmoney.service.OptionsService;
 import org.slf4j.Logger;

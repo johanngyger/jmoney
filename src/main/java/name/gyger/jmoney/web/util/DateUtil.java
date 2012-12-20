@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package name.gyger.jmoney.web;
+package name.gyger.jmoney.web.util;
 
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-public class MyJsonObjectMapper extends ObjectMapper {
+public class DateUtil {
 
-    public MyJsonObjectMapper() {
-        //super.configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
-        super.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    public static Date parse(String dateString) {
+        Date result = null;
+        if (dateString != null) {
+            try {
+                result = sdf.parse(dateString);
+            } catch (ParseException e) {
+                // ignore
+            }
+        }
+        return result;
     }
 
 }
