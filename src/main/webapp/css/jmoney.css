@@ -255,7 +255,7 @@ div#paging ul {
 
 div#paging li {
     float: left;
-    padding: 10px 5px;
+    padding: 0 5px 10px;
 }
 
 div#paging a {
@@ -263,7 +263,7 @@ div#paging a {
 }
 
 div#paging li.text-padding {
-    padding-top: 13px;
+    padding-top: 3px;
 }
 
 div#sub {
