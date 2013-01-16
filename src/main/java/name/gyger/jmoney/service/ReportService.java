@@ -75,7 +75,7 @@ public class ReportService {
 
         String queryString = "SELECT e.account.id, SUM(e.amount) FROM Entry e";
         if (date != null) {
-            queryString += " AND e.date <= :date";
+            queryString += " WHERE e.date <= :date";
         }
         queryString += " GROUP BY e.account.id";
 
