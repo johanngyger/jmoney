@@ -1,9 +1,10 @@
-target
+build
+jmoney.iml
+.gradle
 .settings
 .classpath
 .project
 .externalToolBuilders
 .springBeans
-jmoney.iml
 .idea
 *.log
