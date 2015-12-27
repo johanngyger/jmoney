@@ -20,12 +20,11 @@ import name.gyger.jmoney.dto.CategoryDto;
 import name.gyger.jmoney.dto.CategoryNodeDto;
 import name.gyger.jmoney.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
-@Controller
+@RestController
 @RequestMapping("/rest")
 public class CategoryController {
 
@@ -33,37 +32,31 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @RequestMapping(path = "/categories", method = RequestMethod.GET)
-    @ResponseBody
     public Collection<CategoryDto> getCategories() {
         return categoryService.getCategories();
     }
 
     @RequestMapping(path = "/split-category", method = RequestMethod.GET)
-    @ResponseBody
     public CategoryDto getSplitCategory() {
         return categoryService.getSplitCategory();
     }
 
     @RequestMapping(path = "/categories", method = RequestMethod.POST)
-    @ResponseBody
     public long createCategory(@RequestBody CategoryNodeDto dto) {
         return categoryService.createCategory(dto);
     }
 
     @RequestMapping(path = "/categories/{categoryId}", method = RequestMethod.DELETE)
-    @ResponseBody
     public void deleteCategory(@PathVariable long categoryId) {
         categoryService.deleteCategory(categoryId);
     }
 
     @RequestMapping(path = "/category-tree", method = RequestMethod.GET)
-    @ResponseBody
     public CategoryNodeDto getCategoryTree() {
         return categoryService.getCategoryTree();
     }
 
     @RequestMapping(path = "/category-tree", method = RequestMethod.PUT)
-    @ResponseBody
     public void saveCategoryTree(@RequestBody CategoryNodeDto dto) {
         categoryService.saveCategoryTree(dto);
     }

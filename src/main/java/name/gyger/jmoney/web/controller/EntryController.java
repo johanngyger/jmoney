@@ -22,12 +22,11 @@ import name.gyger.jmoney.service.EntryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/rest/accounts")
 public class EntryController {
 
@@ -37,13 +36,11 @@ public class EntryController {
     private EntryService entryService;
 
     @RequestMapping(path = "/{accountId}/entries/count", method = RequestMethod.GET)
-    @ResponseBody
     public long getEntryCount(@PathVariable long accountId) {
         return entryService.getEntryCount(accountId);
     }
 
     @RequestMapping(path = "/{accountId}/entries", method = RequestMethod.GET)
-    @ResponseBody
     public List<EntryDto> getEntries(@PathVariable long accountId,
                                      @RequestParam(value = "page", required = false) Integer page,
                                      @RequestParam(value = "filter", required = false) String filter) {
@@ -51,26 +48,22 @@ public class EntryController {
     }
 
     @RequestMapping(path = "/{accountId}/entries/{entryId}", method = RequestMethod.GET)
-    @ResponseBody
     public EntryDetailsDto getEntry(@PathVariable long accountId, @PathVariable long entryId) {
         return entryService.getEntry(entryId);
     }
 
     @RequestMapping(path = "/{accountId}/entries", method = RequestMethod.POST)
-    @ResponseBody
     public long createEntry(@RequestBody EntryDetailsDto entry, @PathVariable long accountId) {
         entry.setAccountId(accountId);
         return entryService.createEntry(entry);
     }
 
     @RequestMapping(path = "/{accountId}/entries/{entryId}", method = RequestMethod.PUT)
-    @ResponseBody
     public void updateEntry(@PathVariable long accountId, @PathVariable long entryId, @RequestBody EntryDetailsDto entry) {
         entryService.updateEntry(entry);
     }
 
     @RequestMapping(path = "/{accountId}/entries/{entryId}", method = RequestMethod.DELETE)
-    @ResponseBody
     public void deleteEntry(@PathVariable long accountId, @PathVariable long entryId) {
         entryService.deleteEntry(entryId);
     }

@@ -23,16 +23,15 @@ import name.gyger.jmoney.service.EntryService;
 import name.gyger.jmoney.service.ReportService;
 import name.gyger.jmoney.web.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/rest/reports")
 public class ReportController {
 
@@ -44,14 +43,12 @@ public class ReportController {
 
 
     @RequestMapping(path = "/balances", method = RequestMethod.GET)
-    @ResponseBody
     public List<BalanceDto> getBalances(@RequestParam(value = "date", required = false) String dateString) {
         Date date = DateUtil.parse(dateString);
         return reportService.getBalances(date);
     }
 
     @RequestMapping(path = "/cash-flows", method = RequestMethod.GET)
-    @ResponseBody
     public List<CashFlowDto> getCashFlow(@RequestParam(value = "fromDate", required = false) String fromDateString,
                                         @RequestParam(value = "toDate", required = false) String toDateString) {
         Date fromDate = DateUtil.parse(fromDateString);
@@ -61,7 +58,6 @@ public class ReportController {
     }
 
     @RequestMapping(path = "/entries-with-category", method = RequestMethod.GET)
-    @ResponseBody
     public List<EntryDto> getEntries(@RequestParam(value = "categoryId") long categoryId,
                                      @RequestParam(value = "fromDate") String fromDateString,
                                      @RequestParam(value = "toDate") String toDateString) {
@@ -71,13 +67,11 @@ public class ReportController {
     }
 
     @RequestMapping(path = "/consitency/inconsistent-split-entries", method = RequestMethod.GET)
-    @ResponseBody
     public List<EntryDto> getInconsistentSplitEntries() {
         return entryService.getInconsistentSplitEntries();
     }
 
     @RequestMapping(path = "/consitency/entries-without-category", method = RequestMethod.GET)
-    @ResponseBody
     public List<EntryDto> getEntriesWithoutCategory() {
         return entryService.getEntriesWithoutCategory();
     }

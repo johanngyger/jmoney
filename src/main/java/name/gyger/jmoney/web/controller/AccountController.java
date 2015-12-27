@@ -20,12 +20,11 @@ import name.gyger.jmoney.dto.AccountDetailsDto;
 import name.gyger.jmoney.dto.AccountDto;
 import name.gyger.jmoney.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
-@Controller
+@RestController
 @RequestMapping("/rest/accounts")
 public class AccountController {
 
@@ -33,31 +32,26 @@ public class AccountController {
     private AccountService accountService;
 
     @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
     public Collection<AccountDto> getAccounts() {
         return accountService.getAccounts();
     }
 
     @RequestMapping(path = "/{accountId}", method = RequestMethod.GET)
-    @ResponseBody
     public AccountDetailsDto getAccountDetails(@PathVariable long accountId) {
         return accountService.getAccountDetails(accountId);
     }
 
     @RequestMapping(path = "/{accountId}", method = RequestMethod.PUT)
-    @ResponseBody
     public void updateAccount(@RequestBody AccountDetailsDto account, @PathVariable long accountId) {
         accountService.updateAccount(account);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
     public long createAccount(@RequestBody AccountDetailsDto account) {
         return accountService.createAccount(account);
     }
 
     @RequestMapping(path = "/{accountId}", method = RequestMethod.DELETE)
-    @ResponseBody
     public void deletePerson(@PathVariable long accountId) {
         accountService.deleteAccount(accountId);
     }
