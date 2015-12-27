@@ -22,34 +22,35 @@ import name.gyger.jmoney.dto.EntryDto;
 import name.gyger.jmoney.service.EntryService;
 import name.gyger.jmoney.service.ReportService;
 import name.gyger.jmoney.web.util.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 
 @Controller
+@RequestMapping("/rest/reports")
 public class ReportController {
 
-    @Inject
+    @Autowired
     private ReportService reportService;
 
-    @Inject
+    @Autowired
     private EntryService entryService;
 
 
-    @RequestMapping(value = "/reports/balances", method = RequestMethod.GET)
+    @RequestMapping(path = "/balances", method = RequestMethod.GET)
     @ResponseBody
     public List<BalanceDto> getBalances(@RequestParam(value = "date", required = false) String dateString) {
         Date date = DateUtil.parse(dateString);
         return reportService.getBalances(date);
     }
 
-    @RequestMapping(value = "/reports/cash-flows", method = RequestMethod.GET)
+    @RequestMapping(path = "/cash-flows", method = RequestMethod.GET)
     @ResponseBody
     public List<CashFlowDto> getCashFlow(@RequestParam(value = "fromDate", required = false) String fromDateString,
                                         @RequestParam(value = "toDate", required = false) String toDateString) {
@@ -59,7 +60,7 @@ public class ReportController {
         return reportService.getCashFlow(fromDate, toDate);
     }
 
-    @RequestMapping(value = "/reports/entries-with-category", method = RequestMethod.GET)
+    @RequestMapping(path = "/entries-with-category", method = RequestMethod.GET)
     @ResponseBody
     public List<EntryDto> getEntries(@RequestParam(value = "categoryId") long categoryId,
                                      @RequestParam(value = "fromDate") String fromDateString,
@@ -69,13 +70,13 @@ public class ReportController {
         return entryService.getEntriesForCategory(categoryId, from, to);
     }
 
-    @RequestMapping(value = "/reports/consitency/inconsistent-split-entries", method = RequestMethod.GET)
+    @RequestMapping(path = "/consitency/inconsistent-split-entries", method = RequestMethod.GET)
     @ResponseBody
     public List<EntryDto> getInconsistentSplitEntries() {
         return entryService.getInconsistentSplitEntries();
     }
 
-    @RequestMapping(value = "/reports/consitency/entries-without-category", method = RequestMethod.GET)
+    @RequestMapping(path = "/consitency/entries-without-category", method = RequestMethod.GET)
     @ResponseBody
     public List<EntryDto> getEntriesWithoutCategory() {
         return entryService.getEntriesWithoutCategory();

@@ -21,10 +21,10 @@ import name.gyger.jmoney.dto.CashFlowDto;
 import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Category;
 import name.gyger.jmoney.model.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -34,10 +34,10 @@ import java.util.*;
 @Transactional
 public class ReportService {
 
-    @Inject
+    @Autowired
     private SessionService sessionService;
 
-    @Inject
+    @Autowired
     private CategoryService categoryService;
 
     @PersistenceContext
@@ -169,7 +169,7 @@ public class ReportService {
         String name = createCategoryName(category, parentName);
 
         if (category.getType() == Category.Type.NORMAL) {
-            Long sum = (Long) entrySums.get(category.getId());
+            Long sum = entrySums.get(category.getId());
             createCategoryFlowDto(resultList, category.getId(), name, sum);
         }
 

@@ -22,10 +22,10 @@ import name.gyger.jmoney.dto.SubEntryDto;
 import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Category;
 import name.gyger.jmoney.model.Entry;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -36,7 +36,7 @@ import java.util.*;
 @Transactional
 public class EntryService {
 
-    @Inject
+    @Autowired
     private SessionService sessionService;
 
     @PersistenceContext

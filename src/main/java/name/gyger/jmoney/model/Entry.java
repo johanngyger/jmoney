@@ -16,7 +16,7 @@
 
 package name.gyger.jmoney.model;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -26,7 +26,7 @@ import java.util.List;
 @Entity
 public class Entry {
 
-    public static enum Status {
+    public enum Status {
         RECONCILING, CLEARED
     }
 

@@ -10,16 +10,16 @@ public interface Category extends Serializable, Comparable {
 	/**
 	 * @return the name of the category.
 	 */
-	public String getCategoryName();
+	String getCategoryName();
 
 	/**
 	 * @return the full qualified name of the category.
 	 */
-	public String getFullCategoryName();
+	String getFullCategoryName();
 
 	/**
 	 * @return the node that will be used to insert the category into the tree.
 	 */
-	public CategoryNode getCategoryNode();
+	CategoryNode getCategoryNode();
 
 }

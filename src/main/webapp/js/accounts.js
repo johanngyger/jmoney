@@ -28,13 +28,13 @@ function AccountController($scope, $http, $routeParams, $rootScope) {
                 $scope.error = true;
                 $scope.loadingAccounts = false;
             });
-    }
+    };
 
     load();
 
     $rootScope.$on('account', function (event) {
         load();
-    })
+    });
 
     $scope.$routeParams = $routeParams;
 }
@@ -62,7 +62,7 @@ function AccountDetailsController($scope, $http, $routeParams, $location, $rootS
                 $location.path('/accounts/' + data + '/entries');
             });
         }
-    }
+    };
 
     $scope.delete = function () {
         var answer = confirm('Konto wirklich löschen?');
@@ -101,7 +101,7 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
             }).error(function (data) {
                 $scope.loading = false;
             });
-    }
+    };
 
     $scope.filter = $routeParams.filter;
     $scope.load();
@@ -114,11 +114,11 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
         } else {
             return null;
         }
-    }
+    };
 
     $scope.prevPage = function () {
         return Math.max($scope.page - 1, 1);
-    }
+    };
 
     $scope.nextPage = function () {
         return Math.min($scope.page + 1, $scope.maxPage);
@@ -138,7 +138,7 @@ function EntryDetailsController($scope, $http, $routeParams, $filter, $location)
             var subEntry = $scope.entry.subEntries[i];
             $scope.subEntryTotal += subEntry.amount;
         }
-    }
+    };
 
     $scope.initAmount = function (entry) {
         if (entry.amount >= 0) {
@@ -146,7 +146,7 @@ function EntryDetailsController($scope, $http, $routeParams, $filter, $location)
         } else {
             entry.expense = -entry.amount / 100;
         }
-    }
+    };
 
     $scope.initSubEntries = function () {
         if (!$scope.entry.subEntries) {
@@ -160,7 +160,7 @@ function EntryDetailsController($scope, $http, $routeParams, $filter, $location)
         }
 
         $scope.updateSubEntryTotal();
-    }
+    };
 
     $scope.load = function () {
         $scope.accountId = $routeParams.accountId;
@@ -193,7 +193,7 @@ function EntryDetailsController($scope, $http, $routeParams, $filter, $location)
                 });
         }
 
-    }
+    };
 
     $scope.load();
 
@@ -218,7 +218,7 @@ function EntryDetailsController($scope, $http, $routeParams, $filter, $location)
                     $location.path('/accounts/' + $routeParams.accountId + '/entries');
                 });
         }
-    }
+    };
 
     $scope.delete = function () {
         if ($routeParams.accountId) {
@@ -227,7 +227,7 @@ function EntryDetailsController($scope, $http, $routeParams, $filter, $location)
                     $location.path('/accounts/' + $routeParams.accountId + '/entries');
                 });
         }
-    }
+    };
 
     $scope.updateIncome = function (entry) {
         $scope.updateAmount(entry);
@@ -235,7 +235,7 @@ function EntryDetailsController($scope, $http, $routeParams, $filter, $location)
             entry.amount = entry.income * 100;
             entry.expense = null;
         }
-    }
+    };
 
     $scope.updateExpense = function (entry) {
         $scope.updateAmount(entry);
@@ -243,27 +243,27 @@ function EntryDetailsController($scope, $http, $routeParams, $filter, $location)
             entry.amount = -entry.expense * 100;
             entry.income = null;
         }
-    }
+    };
 
     $scope.updateAmount = function (entry) {
         if (entry.income == null && entry.expense == null) {
             entry.amount = null;
         }
-    }
+    };
 
     $scope.addSubEntry = function () {
         $scope.entry.subEntries.push({description: '', categoryId: null, amount: 0});
-    }
+    };
 
     $scope.removeSubEntry = function (subEntry) {
         var index = $scope.entry.subEntries.indexOf(subEntry);
         $scope.entry.subEntries.splice(index, 1);
-    }
+    };
 
     $scope.updateSubEntryIncome = function (entry) {
         $scope.updateIncome(entry);
         $scope.updateSubEntryTotal();
-    }
+    };
 
     $scope.updateSubEntryExpense = function (entry) {
         $scope.updateExpense(entry);

@@ -23,7 +23,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Category {
 
-    public static enum Type {
+    public enum Type {
         NORMAL, SPLIT, TRANSFER, ACCOUNT, ROOT
     }
 

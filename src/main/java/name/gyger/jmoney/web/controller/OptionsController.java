@@ -19,6 +19,7 @@ package name.gyger.jmoney.web.controller;
 import name.gyger.jmoney.service.OptionsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,23 +27,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.inject.Inject;
 
 @Controller
+@RequestMapping("/rest/options")
 public class OptionsController {
 
     private static final Logger log = LoggerFactory.getLogger(OptionsController.class);
 
-    @Inject
+    @Autowired
     private OptionsService optionsService;
 
-    @RequestMapping(value = "/options/init", method = RequestMethod.PUT)
+    @RequestMapping(path = "/init", method = RequestMethod.PUT)
     @ResponseBody
     public void init() {
         optionsService.init();
     }
 
-    @RequestMapping(value = "/options/import", method = RequestMethod.POST)
+    @RequestMapping(path = "/import", method = RequestMethod.POST)
     public String importFile(@RequestParam("file") MultipartFile file) {
         try {
             optionsService.importFile(file.getInputStream());

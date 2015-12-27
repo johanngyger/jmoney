@@ -19,43 +19,44 @@ package name.gyger.jmoney.web.controller;
 import name.gyger.jmoney.dto.AccountDetailsDto;
 import name.gyger.jmoney.dto.AccountDto;
 import name.gyger.jmoney.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;
 import java.util.Collection;
 
 @Controller
+@RequestMapping("/rest/accounts")
 public class AccountController {
 
-    @Inject
+    @Autowired
     private AccountService accountService;
 
-    @RequestMapping(value = "/accounts", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Collection<AccountDto> getAccounts() {
         return accountService.getAccounts();
     }
 
-    @RequestMapping(value = "/accounts/{accountId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{accountId}", method = RequestMethod.GET)
     @ResponseBody
     public AccountDetailsDto getAccountDetails(@PathVariable long accountId) {
         return accountService.getAccountDetails(accountId);
     }
 
-    @RequestMapping(value = "/accounts/{accountId}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/{accountId}", method = RequestMethod.PUT)
     @ResponseBody
     public void updateAccount(@RequestBody AccountDetailsDto account, @PathVariable long accountId) {
         accountService.updateAccount(account);
     }
 
-    @RequestMapping(value = "/accounts", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public long createAccount(@RequestBody AccountDetailsDto account) {
         return accountService.createAccount(account);
     }
 
-    @RequestMapping(value = "/accounts/{accountId}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/{accountId}", method = RequestMethod.DELETE)
     @ResponseBody
     public void deletePerson(@PathVariable long accountId) {
         accountService.deleteAccount(accountId);

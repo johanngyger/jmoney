@@ -116,49 +116,49 @@ public class Account implements Category, Serializable, Constants {
 	 */
 	public String getBank() {
 		return bank;
-	};
+	}
 
 	/**
 	 * @return the account number of this account.
 	 */
 	public String getAccountNumber() {
 		return accountNumber;
-	};
+	}
 
 	/**
 	 * @return the initial balance of this account.
 	 */
 	public long getStartBalance() {
 		return startBalance;
-	};
+	}
 
 	/**
 	 * @return the minimal balance of this account.
 	 */
 	public Long getMinBalance() {
 		return minBalance;
-	};
+	}
 
 	/**
 	 * @return the abbrevation of this account.
 	 */
 	public String getAbbrevation() {
 		return abbrevation;
-	};
+	}
 
 	/**
 	 * @return the comment of this account.
 	 */
 	public String getComment() {
 		return comment;
-	};
+	}
 
 	/**
 	 * @return the entries of this account.
 	 */
 	public Vector getEntries() {
 		return entries;
-	};
+	}
 
 	public void addEntry(Entry entry) {
 		entries.addElement(entry);
