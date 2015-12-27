@@ -23,7 +23,7 @@ function BalancesController($scope, $http, $filter) {
                 $scope.error = true;
                 $scope.loading = false;
             });
-    };
+    }
 
     $scope.filter = "date";
     $scope.filterDate = null;
@@ -45,7 +45,7 @@ function CashFlowController($scope, $http, $filter) {
                 $scope.error = true;
                 $scope.loading = false;
             });
-    };
+    }
 
     $scope.periods = [
         {value: 'thisMonth', description: 'Dieser Monat'},

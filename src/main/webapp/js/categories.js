@@ -18,7 +18,7 @@ function CategoryTreeController($scope, $http, $routeParams, $rootScope) {
                 $scope.error = true;
                 $scope.loading = false;
             });
-    };
+    }
 
     load();
 
@@ -27,7 +27,7 @@ function CategoryTreeController($scope, $http, $routeParams, $rootScope) {
             .success(function (data) {
                 load();
             });
-    };
+    }
 
     $scope.add = function (parent) {
         var newCat = {name: '<Neue Kategorie>', children: [], parentId: parent.id};
@@ -35,11 +35,11 @@ function CategoryTreeController($scope, $http, $routeParams, $rootScope) {
             newCat.id = data;
         });
         parent.children.unshift(newCat);
-    };
+    }
 
     $scope.remove = function (node) {
         removeNode(node, $scope.tree.children);
-    };
+    }
 
     var removeNode = function (node, nodes) {
         for (var i = 0; i < nodes.length; i++) {
