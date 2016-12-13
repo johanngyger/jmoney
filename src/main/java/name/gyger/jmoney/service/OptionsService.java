@@ -275,6 +275,7 @@ public class OptionsService {
 
         for (Object o : oldSe.getEntries()) {
             net.sf.jmoney.model.Entry oldSubEntry = (net.sf.jmoney.model.Entry) o;
+            oldSubEntry.setDate(oldSe.getDate());  // fix for wrong date from old model
             mapEntryOrDoubleEntry(null, splitEntry, oldSubEntry);
         }
     }

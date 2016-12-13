@@ -16,6 +16,7 @@
 
 package name.gyger.jmoney.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -36,6 +37,8 @@ public class Account extends Category {
     private long startBalance;
     private Long minBalance;
     private String abbreviation;
+
+    @Column(length = 1000)
     private String comment;
 
     public Account() {
