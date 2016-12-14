@@ -76,15 +76,8 @@ public class CategoryService {
 
     public void saveCategoryTree(CategoryNodeDto dto) {
         long id = dto.getId();
-        Category c;
-        if (id != 0) {
-            c = em.find(Category.class, id);
-        } else {
-            c = new Category();
-            em.persist(c);
-        }
+        Category c = em.find(Category.class, id);
         dto.mapToModel(c);
-
 
         for (CategoryNodeDto childDto : dto.getChildren()) {
             saveCategoryTree(childDto);

@@ -1,9 +1,7 @@
 package name.gyger.jmoney.service;
 
-import name.gyger.jmoney.dto.AccountDetailsDto;
-import name.gyger.jmoney.dto.AccountDto;
 import name.gyger.jmoney.dto.CategoryDto;
-import name.gyger.jmoney.model.Account;
+import name.gyger.jmoney.dto.CategoryNodeDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,18 +31,44 @@ public class CategoryServiceTests {
     private EntityManager em;
 
     @Before
-    public void setup() {
+    public void setUp() {
         sessionService.initSession();
-        em.refresh(sessionService.getSession());
+        em.flush();
+        em.clear();
     }
 
     @Test
     public void testCategoryServices() {
-/*
-        em.refresh(categoryService.prefetchCategories());
         List<CategoryDto> categories = categoryService.getCategories();
+        int size = categories.size();
         assertThat(categories).isNotEmpty();
-*/
+
+        CategoryNodeDto categoryTree = categoryService.getCategoryTree();
+        assertThat(categoryTree).isNotNull();
+        assertThat(categoryTree.getName()).isEqualTo("[ROOT]");
+        assertThat(categoryTree.getChildren()).isNotEmpty();
+
+        categoryTree.setName("[ROOT2]");
+        categoryService.saveCategoryTree(categoryTree);
+        categoryTree = categoryService.getCategoryTree();
+        assertThat(categoryTree.getName()).isEqualTo("[ROOT2]");
+
+        CategoryDto splitCategory = categoryService.getSplitCategory();
+        assertThat(splitCategory.getName()).isEqualTo("[SPLITTBUCHUNG]");
+
+        CategoryNodeDto newCat = new CategoryNodeDto();
+        newCat.setName("NEW");
+        newCat.setParentId(categoryTree.getId());
+        long newCatId = categoryService.createCategory(newCat);
+        em.flush();
+        em.clear();
+        assertThat(categoryService.getCategories()).hasSize(size + 1);
+
+        categoryService.deleteCategory(newCatId);
+        em.flush();
+        em.clear();
+        assertThat(categoryService.getCategories()).hasSize(size);
     }
+
 
 }

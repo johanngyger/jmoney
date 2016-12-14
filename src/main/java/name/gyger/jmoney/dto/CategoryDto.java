@@ -21,7 +21,7 @@ import name.gyger.jmoney.model.Category;
 public class CategoryDto {
 
     private String name;
-    private String id;
+    private long id;
     private int level;
 
     public CategoryDto() {
@@ -29,7 +29,7 @@ public class CategoryDto {
 
     public CategoryDto(Category category) {
         name = category.getName();
-        id = "" + category.getId();
+        id = category.getId();
     }
 
     public String getName() {
@@ -49,11 +49,11 @@ public class CategoryDto {
         this.name = name;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

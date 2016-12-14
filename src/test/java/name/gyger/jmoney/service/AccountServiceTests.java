@@ -41,7 +41,8 @@ public class AccountServiceTests {
     @Before
     public void setup() {
         sessionService.initSession();
-        em.refresh(sessionService.getSession());
+        em.flush();
+        em.clear();
     }
 
     @Test
@@ -78,6 +79,10 @@ public class AccountServiceTests {
 
         accountDetailsDto.setName("A");
         accountService.createAccount(accountDetailsDto);
+        assertThat(accountService.getAccounts()).hasSize(1);
+
+        em.flush();
+        em.clear();
 
         accountDetailsDto.setName("B");
         accountService.createAccount(accountDetailsDto);
