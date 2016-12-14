@@ -17,6 +17,7 @@
 package name.gyger.jmoney.web.controller;
 
 import name.gyger.jmoney.service.OptionsService;
+import name.gyger.jmoney.service.SessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -35,14 +36,17 @@ public class OptionsController {
 
     private final OptionsService optionsService;
 
-    public OptionsController(OptionsService optionsService) {
+    private final SessionService sessionService;
+
+    public OptionsController(OptionsService optionsService, SessionService sessionService) {
         this.optionsService = optionsService;
+        this.sessionService = sessionService;
     }
 
     @RequestMapping(path = "/init", method = RequestMethod.PUT)
     @ResponseBody
     public void init() {
-        optionsService.init();
+        sessionService.initSession();
     }
 
     @RequestMapping(path = "/import", method = RequestMethod.POST)

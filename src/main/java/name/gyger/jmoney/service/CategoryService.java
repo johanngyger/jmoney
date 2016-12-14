@@ -42,12 +42,9 @@ public class CategoryService {
         this.sessionService = sessionService;
     }
 
-    public void prefetchCategories() {
-        em.createQuery("SELECT c FROM Category c LEFT JOIN FETCH c.children", Category.class).getResultList();
-    }
-
-    public Category getCategory(long categoryId) {
-        return em.find(Category.class, categoryId);
+    public List<Category> prefetchCategories() {
+        Query q = em.createQuery("SELECT c FROM Category c LEFT JOIN FETCH c.children", Category.class);
+        return (List<Category>) q.getResultList();
     }
 
     public List<CategoryDto> getCategories() {
@@ -120,4 +117,5 @@ public class CategoryService {
         Category splitCategory = s.getSplitCategory();
         return new CategoryDto(splitCategory);
     }
+
 }
