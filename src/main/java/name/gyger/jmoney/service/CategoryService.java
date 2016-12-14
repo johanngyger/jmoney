@@ -20,7 +20,6 @@ import name.gyger.jmoney.dto.CategoryDto;
 import name.gyger.jmoney.dto.CategoryNodeDto;
 import name.gyger.jmoney.model.Category;
 import name.gyger.jmoney.model.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,11 +33,14 @@ import java.util.List;
 @Transactional
 public class CategoryService {
 
-    @Autowired
-    private SessionService sessionService;
+    private final SessionService sessionService;
 
     @PersistenceContext
     private EntityManager em;
+
+    public CategoryService(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
     public void prefetchCategories() {
         em.createQuery("SELECT c FROM Category c LEFT JOIN FETCH c.children", Category.class).getResultList();

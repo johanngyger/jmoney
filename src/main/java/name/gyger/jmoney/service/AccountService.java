@@ -20,7 +20,6 @@ import name.gyger.jmoney.dto.AccountDetailsDto;
 import name.gyger.jmoney.dto.AccountDto;
 import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +35,11 @@ public class AccountService {
     @PersistenceContext
     private EntityManager em;
 
-    @Autowired
-    private SessionService sessionService;
+    private final SessionService sessionService;
+
+    public AccountService(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
     public Collection<AccountDto> getAccounts() {
         Session s = sessionService.getSession();

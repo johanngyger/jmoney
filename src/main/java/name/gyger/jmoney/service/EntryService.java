@@ -22,7 +22,6 @@ import name.gyger.jmoney.dto.SubEntryDto;
 import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Category;
 import name.gyger.jmoney.model.Entry;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,11 +35,14 @@ import java.util.*;
 @Transactional
 public class EntryService {
 
-    @Autowired
-    private SessionService sessionService;
+    private final SessionService sessionService;
 
     @PersistenceContext
     private EntityManager em;
+
+    public EntryService(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
     public long getEntryCount(long accountId) {
         Query q = em.createQuery("SELECT count(e) FROM Entry e WHERE e.account.id = :id");

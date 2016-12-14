@@ -19,7 +19,6 @@ package name.gyger.jmoney.web.controller;
 import name.gyger.jmoney.dto.CategoryDto;
 import name.gyger.jmoney.dto.CategoryNodeDto;
 import name.gyger.jmoney.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -28,8 +27,11 @@ import java.util.Collection;
 @RequestMapping("/rest")
 public class CategoryController {
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @RequestMapping(path = "/categories", method = RequestMethod.GET)
     public Collection<CategoryDto> getCategories() {

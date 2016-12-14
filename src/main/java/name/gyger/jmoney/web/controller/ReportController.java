@@ -22,7 +22,6 @@ import name.gyger.jmoney.dto.EntryDto;
 import name.gyger.jmoney.service.EntryService;
 import name.gyger.jmoney.service.ReportService;
 import name.gyger.jmoney.web.util.DateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,11 +34,14 @@ import java.util.List;
 @RequestMapping("/rest/reports")
 public class ReportController {
 
-    @Autowired
-    private ReportService reportService;
+    private final ReportService reportService;
 
-    @Autowired
-    private EntryService entryService;
+    private final EntryService entryService;
+
+    public ReportController(ReportService reportService, EntryService entryService) {
+        this.reportService = reportService;
+        this.entryService = entryService;
+    }
 
 
     @RequestMapping(path = "/balances", method = RequestMethod.GET)

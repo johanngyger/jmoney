@@ -24,8 +24,6 @@ import net.sf.jmoney.XMLReader;
 import net.sf.jmoney.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,8 +56,11 @@ public class OptionsService {
 
     private Map<net.sf.jmoney.model.DoubleEntry, Entry> oldToNewDoubleEntryMap = new HashMap<net.sf.jmoney.model.DoubleEntry, Entry>();
 
-    @Autowired
-    private SessionService sessionService;
+    private final SessionService sessionService;
+
+    public OptionsService(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
     public void init() {
         removeOldSession();

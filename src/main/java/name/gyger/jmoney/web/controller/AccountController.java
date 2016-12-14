@@ -19,7 +19,6 @@ package name.gyger.jmoney.web.controller;
 import name.gyger.jmoney.dto.AccountDetailsDto;
 import name.gyger.jmoney.dto.AccountDto;
 import name.gyger.jmoney.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -28,8 +27,11 @@ import java.util.Collection;
 @RequestMapping("/rest/accounts")
 public class AccountController {
 
-    @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
+
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<AccountDto> getAccounts() {

@@ -21,7 +21,6 @@ import name.gyger.jmoney.dto.CashFlowDto;
 import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Category;
 import name.gyger.jmoney.model.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,14 +33,17 @@ import java.util.*;
 @Transactional
 public class ReportService {
 
-    @Autowired
-    private SessionService sessionService;
+    private final SessionService sessionService;
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @PersistenceContext
     private EntityManager em;
+
+    public ReportService(SessionService sessionService, CategoryService categoryService) {
+        this.sessionService = sessionService;
+        this.categoryService = categoryService;
+    }
 
     public List<BalanceDto> getBalances(Date date) {
         Session session = sessionService.getSession();

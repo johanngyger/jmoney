@@ -21,7 +21,6 @@ import name.gyger.jmoney.dto.EntryDto;
 import name.gyger.jmoney.service.EntryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +31,11 @@ public class EntryController {
 
     private final Logger log = LoggerFactory.getLogger(EntryController.class);
 
-    @Autowired
-    private EntryService entryService;
+    private final EntryService entryService;
+
+    public EntryController(EntryService entryService) {
+        this.entryService = entryService;
+    }
 
     @RequestMapping(path = "/{accountId}/entries/count", method = RequestMethod.GET)
     public long getEntryCount(@PathVariable long accountId) {
