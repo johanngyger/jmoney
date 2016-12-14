@@ -114,6 +114,9 @@ public class EntryService {
         List<EntryDto> result = new ArrayList<EntryDto>();
         for (Entry entry : entries) {
             Long sum = splitEntrySums.get(entry.getId());
+            if (sum == null) {
+                sum = Long.valueOf(0);
+            }
             if (entry.getAmount() != sum) {
                 EntryDto dto = new EntryDto(entry);
                 result.add(dto);
