@@ -38,7 +38,7 @@ public class CategoryServiceTests {
     }
 
     @Test
-    public void testCategoryServices() {
+    public void testBasics() {
         List<CategoryDto> categories = categoryService.getCategories();
         int size = categories.size();
         assertThat(categories).isNotEmpty();

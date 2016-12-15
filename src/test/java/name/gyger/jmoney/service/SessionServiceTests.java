@@ -20,7 +20,7 @@ public class SessionServiceTests {
     SessionService sessionService;
 
     @Test
-    public void testSessionServices() {
+    public void testBasics() {
         assertThat(sessionService.isSessionAvailable()).isFalse();
 
         sessionService.initSession();

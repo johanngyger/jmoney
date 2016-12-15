@@ -46,7 +46,7 @@ public class AccountServiceTests {
     }
 
     @Test
-    public void testAccountServices() {
+    public void testBasics() {
         Collection<AccountDto> accounts = accountService.getAccounts();
         assertThat(accounts).isEmpty();
 
