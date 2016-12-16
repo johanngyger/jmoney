@@ -21,6 +21,7 @@ import name.gyger.jmoney.dto.CashFlowDto;
 import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Category;
 import name.gyger.jmoney.model.Session;
+import name.gyger.jmoney.util.ReportUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,7 +74,6 @@ public class ReportService {
     }
 
     private Map<Long, Long> getEntrySumsByAccountId(Date date) {
-        Map<Long, Long> result = new HashMap<Long, Long>();
 
         String queryString = "SELECT e.account.id, SUM(e.amount) FROM Entry e";
         if (date != null) {
@@ -87,19 +87,11 @@ public class ReportService {
         }
 
         List resultList = q.getResultList();
-        for (Object resultItem : resultList) {
-            Object[] resultItemArray = (Object[]) resultItem;
-            Long accountId = (Long) resultItemArray[0];
-            Long sum = (Long) resultItemArray[1];
-            result.put(accountId, sum);
-        }
-
+        Map<Long, Long> result = ReportUtil.mapResult(resultList);
         return result;
     }
 
     private Map<Long, Long> getEntrySumsByCategoryId(Date from, Date to) {
-        Map<Long, Long> result = new HashMap<Long, Long>();
-
         String queryString = "SELECT e.category.id, SUM(e.amount) FROM Entry e " +
                 " WHERE e.date > :from AND e.date <= :to" +
                 " GROUP BY e.category.id";
@@ -108,13 +100,7 @@ public class ReportService {
         q.setParameter("to", to);
 
         List resultList = q.getResultList();
-        for (Object resultItem : resultList) {
-            Object[] resultItemArray = (Object[]) resultItem;
-            Long accountId = (Long) resultItemArray[0];
-            Long sum = (Long) resultItemArray[1];
-            result.put(accountId, sum);
-        }
-
+        Map<Long, Long> result = ReportUtil.mapResult(resultList);
         return result;
     }
 

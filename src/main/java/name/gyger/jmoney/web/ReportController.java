@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package name.gyger.jmoney.web.controller;
+package name.gyger.jmoney.web;
 
 import name.gyger.jmoney.dto.BalanceDto;
 import name.gyger.jmoney.dto.CashFlowDto;
 import name.gyger.jmoney.dto.EntryDto;
 import name.gyger.jmoney.service.EntryService;
 import name.gyger.jmoney.service.ReportService;
-import name.gyger.jmoney.web.util.DateUtil;
+import name.gyger.jmoney.util.DateUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;

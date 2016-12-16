@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package name.gyger.jmoney.web.util;
+package name.gyger.jmoney.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

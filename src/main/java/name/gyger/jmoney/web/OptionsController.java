@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package name.gyger.jmoney.web.controller;
+package name.gyger.jmoney.web;
 
 import name.gyger.jmoney.service.OptionsService;
 import name.gyger.jmoney.service.SessionService;

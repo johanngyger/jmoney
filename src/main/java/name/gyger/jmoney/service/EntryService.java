@@ -22,6 +22,7 @@ import name.gyger.jmoney.dto.SubEntryDto;
 import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Category;
 import name.gyger.jmoney.model.Entry;
+import name.gyger.jmoney.util.ReportUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,19 +87,10 @@ public class EntryService {
     }
 
     private Map<Long, Long> getSplitEntrySums() {
-        Map<Long, Long> result = new HashMap<Long, Long>();
-
         String queryString = "SELECT e.splitEntry.id, SUM(e.amount) FROM Entry e GROUP BY e.splitEntry.id";
         Query q = em.createQuery(queryString);
-
         List resultList = q.getResultList();
-        for (Object resultItem : resultList) {
-            Object[] resultItemArray = (Object[]) resultItem;
-            Long accountId = (Long) resultItemArray[0];
-            Long sum = (Long) resultItemArray[1];
-            result.put(accountId, sum);
-        }
-
+        Map<Long, Long> result = ReportUtil.mapResult(resultList);
         return result;
     }
 
