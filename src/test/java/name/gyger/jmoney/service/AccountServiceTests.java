@@ -2,15 +2,10 @@ package name.gyger.jmoney.service;
 
 import name.gyger.jmoney.dto.AccountDetailsDto;
 import name.gyger.jmoney.dto.AccountDto;
-import name.gyger.jmoney.dto.CategoryDto;
 import name.gyger.jmoney.model.Account;
-import name.gyger.jmoney.model.Category;
-import name.gyger.jmoney.model.Session;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -18,9 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-
 import java.util.Collection;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

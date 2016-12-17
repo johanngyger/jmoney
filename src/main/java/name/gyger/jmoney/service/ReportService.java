@@ -18,8 +18,10 @@ package name.gyger.jmoney.service;
 
 import name.gyger.jmoney.dto.BalanceDto;
 import name.gyger.jmoney.dto.CashFlowDto;
+import name.gyger.jmoney.dto.EntryDto;
 import name.gyger.jmoney.model.Account;
 import name.gyger.jmoney.model.Category;
+import name.gyger.jmoney.model.Entry;
 import name.gyger.jmoney.model.Session;
 import name.gyger.jmoney.util.ReportUtil;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.*;
+import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -73,37 +79,6 @@ public class ReportService {
         return result;
     }
 
-    private Map<Long, Long> getEntrySumsByAccountId(Date date) {
-
-        String queryString = "SELECT e.account.id, SUM(e.amount) FROM Entry e";
-        if (date != null) {
-            queryString += " WHERE e.date <= :date";
-        }
-        queryString += " GROUP BY e.account.id";
-
-        Query q = em.createQuery(queryString);
-        if (date != null) {
-            q.setParameter("date", date);
-        }
-
-        List resultList = q.getResultList();
-        Map<Long, Long> result = ReportUtil.mapResult(resultList);
-        return result;
-    }
-
-    private Map<Long, Long> getEntrySumsByCategoryId(Date from, Date to) {
-        String queryString = "SELECT e.category.id, SUM(e.amount) FROM Entry e " +
-                " WHERE e.date > :from AND e.date <= :to" +
-                " GROUP BY e.category.id";
-        Query q = em.createQuery(queryString);
-        q.setParameter("from", from);
-        q.setParameter("to", to);
-
-        List resultList = q.getResultList();
-        Map<Long, Long> result = ReportUtil.mapResult(resultList);
-        return result;
-    }
-
     public List<CashFlowDto> getCashFlow(Date from, Date to) {
         Session session = sessionService.getSession();
         List<CashFlowDto> resultList = new ArrayList<CashFlowDto>();
@@ -142,6 +117,100 @@ public class ReportService {
         total.setTotal(true);
         resultList.add(total);
         return resultList;
+    }
+
+    public List<EntryDto> getInconsistentSplitEntries() {
+        Category splitCategory = sessionService.getSession().getSplitCategory();
+
+        TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = :categoryId" +
+                " ORDER BY CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC", Entry.class);
+        q.setParameter("categoryId", splitCategory.getId());
+
+        Map<Long, Long> splitEntrySums = getSplitEntrySums();
+        List<Entry> entries = q.getResultList();
+        List<EntryDto> result = new ArrayList<EntryDto>();
+        for (Entry entry : entries) {
+            Long sum = splitEntrySums.get(entry.getId());
+            if (sum == null) {
+                sum = Long.valueOf(0);
+            }
+            if (entry.getAmount() != sum) {
+                EntryDto dto = new EntryDto(entry);
+                result.add(dto);
+            }
+        }
+
+        return result;
+    }
+
+    public List<EntryDto> getEntriesWithoutCategory() {
+        TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = null AND e.splitEntry = null" +
+                " ORDER BY CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC", Entry.class);
+
+        List<Entry> entries = q.getResultList();
+        List<EntryDto> result = new ArrayList<EntryDto>();
+        for (Entry entry : entries) {
+            EntryDto dto = new EntryDto(entry);
+            result.add(dto);
+        }
+
+        return result;
+    }
+
+    public List<EntryDto> getEntriesForCategory(long categoryId, Date from, Date to) {
+        TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = :categoryId AND e.date >= :from AND e.date <= :to" +
+                " ORDER BY e.date DESC, e.creation DESC", Entry.class);
+        q.setParameter("categoryId", categoryId);
+        q.setParameter("from", from);
+        q.setParameter("to", to);
+
+        List<Entry> entries = q.getResultList();
+        List<EntryDto> result = new ArrayList<EntryDto>();
+        for (Entry entry : entries) {
+            EntryDto dto = new EntryDto(entry);
+            result.add(dto);
+        }
+
+        return result;
+    }
+
+    private Map<Long, Long> getEntrySumsByAccountId(Date date) {
+
+        String queryString = "SELECT e.account.id, SUM(e.amount) FROM Entry e";
+        if (date != null) {
+            queryString += " WHERE e.date <= :date";
+        }
+        queryString += " GROUP BY e.account.id";
+
+        Query q = em.createQuery(queryString);
+        if (date != null) {
+            q.setParameter("date", date);
+        }
+
+        List resultList = q.getResultList();
+        Map<Long, Long> result = ReportUtil.mapResult(resultList);
+        return result;
+    }
+
+    private Map<Long, Long> getEntrySumsByCategoryId(Date from, Date to) {
+        String queryString = "SELECT e.category.id, SUM(e.amount) FROM Entry e " +
+                " WHERE e.date >= :from AND e.date <= :to" +
+                " GROUP BY e.category.id";
+        Query q = em.createQuery(queryString);
+        q.setParameter("from", from);
+        q.setParameter("to", to);
+
+        List resultList = q.getResultList();
+        Map<Long, Long> result = ReportUtil.mapResult(resultList);
+        return result;
+    }
+
+    private Map<Long, Long> getSplitEntrySums() {
+        String queryString = "SELECT e.splitEntry.id, SUM(e.amount) FROM Entry e GROUP BY e.splitEntry.id";
+        Query q = em.createQuery(queryString);
+        List resultList = q.getResultList();
+        Map<Long, Long> result = ReportUtil.mapResult(resultList);
+        return result;
     }
 
     private long toZeroIfNull(Long value) {

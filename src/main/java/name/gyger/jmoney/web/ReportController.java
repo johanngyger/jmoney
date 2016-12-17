@@ -36,11 +36,8 @@ public class ReportController {
 
     private final ReportService reportService;
 
-    private final EntryService entryService;
-
     public ReportController(ReportService reportService, EntryService entryService) {
         this.reportService = reportService;
-        this.entryService = entryService;
     }
 
 
@@ -65,17 +62,17 @@ public class ReportController {
                                      @RequestParam(value = "toDate") String toDateString) {
         Date from = DateUtil.parse(fromDateString);
         Date to = DateUtil.parse(toDateString);
-        return entryService.getEntriesForCategory(categoryId, from, to);
+        return reportService.getEntriesForCategory(categoryId, from, to);
     }
 
     @RequestMapping(path = "/consitency/inconsistent-split-entries", method = RequestMethod.GET)
     public List<EntryDto> getInconsistentSplitEntries() {
-        return entryService.getInconsistentSplitEntries();
+        return reportService.getInconsistentSplitEntries();
     }
 
     @RequestMapping(path = "/consitency/entries-without-category", method = RequestMethod.GET)
     public List<EntryDto> getEntriesWithoutCategory() {
-        return entryService.getEntriesWithoutCategory();
+        return reportService.getEntriesWithoutCategory();
     }
 
 }

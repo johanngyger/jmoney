@@ -25,13 +25,13 @@ public class DateUtil {
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public static Date parse(String dateString) {
+        if (dateString == null) return null;
+
         Date result = null;
-        if (dateString != null) {
-            try {
-                result = sdf.parse(dateString);
-            } catch (ParseException e) {
-                // ignore
-            }
+        try {
+            result = sdf.parse(dateString);
+        } catch (ParseException e) {
+            throw new RuntimeException("Should not happen", e);
         }
         return result;
     }

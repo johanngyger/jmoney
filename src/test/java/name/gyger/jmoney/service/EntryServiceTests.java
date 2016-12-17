@@ -1,7 +1,9 @@
 package name.gyger.jmoney.service;
 
-import name.gyger.jmoney.dto.*;
-import name.gyger.jmoney.util.DateUtil;
+import name.gyger.jmoney.dto.CategoryDto;
+import name.gyger.jmoney.dto.EntryDetailsDto;
+import name.gyger.jmoney.dto.EntryDto;
+import name.gyger.jmoney.dto.SubEntryDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,8 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -47,16 +47,9 @@ public class EntryServiceTests {
         em.clear();
     }
 
-    private long createAccount(String name) {
-        Collection<AccountDto> accounts = accountService.getAccounts();
-        AccountDetailsDto accountDetailsDto = new AccountDetailsDto();
-        accountDetailsDto.setName(name);
-        return accountService.createAccount(accountDetailsDto);
-    }
-
     @Test
     public void testBasics() {
-        long accountId = createAccount("my account");
+        long accountId = DtoFactory.createAccount("my account", accountService);
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(0);
 
         IntStream.range(0, 10).forEach(i -> {
@@ -67,34 +60,14 @@ public class EntryServiceTests {
         List<EntryDto> entries = entryService.getEntries(accountId, null, null);
         assertThat(entries).hasSize(10);
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(10);
-        assertThat(entryService.getEntriesWithoutCategory()).hasSize(10);
 
         entryService.deleteEntry(entries.get(9).getId());
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(9);
-        assertThat(entryService.getEntriesWithoutCategory()).hasSize(9);
-
-        CategoryNodeDto newCat = new CategoryNodeDto();
-        newCat.setName("NEW");
-        newCat.setParentId(categoryService.getCategoryTree().getId());
-        long newCatId = categoryService.createCategory(newCat);
-        Date d = DateUtil.parse("2000-10-07");
-        entries = entryService.getEntries(accountId, null, null);
-        entries.forEach(e -> {
-            EntryDetailsDto entry = entryService.getEntry(e.getId());
-            entry.setCategoryId(newCatId);
-            entry.setDate(d);
-            entryService.updateEntry(entry);
-        });
-
-        assertThat(entryService.getEntriesWithoutCategory()).hasSize(0);
-        Date from = DateUtil.parse("2000-01-01");
-        Date to = DateUtil.parse("2001-01-01");
-        assertThat(entryService.getEntriesForCategory(newCatId, from, to)).hasSize(9);
     }
 
     @Test
     public void testSplitEntries() {
-        long accountId = createAccount("my account");
+        long accountId = DtoFactory.createAccount("my account", accountService);
         CategoryDto split = categoryService.getSplitCategory();
 
         EntryDetailsDto entryDto = new EntryDetailsDto();
@@ -124,26 +97,12 @@ public class EntryServiceTests {
         entryDto = entryService.getEntry(entries.get(0).getId());
         subEntries = entryDto.getSubEntries();
         assertThat(subEntries).hasSize(7);
-        assertThat(entryService.getInconsistentSplitEntries()).hasSize(1);
-    }
-
-    @Test
-    public void testEmptyInconsistentSplitEntry() {
-        long accountId = createAccount("my account");
-        CategoryDto split = categoryService.getSplitCategory();
-
-        EntryDetailsDto entryDto = new EntryDetailsDto();
-        entryDto.setCategoryId(split.getId());
-        entryDto.setAccountId(accountId);
-        entryDto.setAmount(12715);
-        long entryId = entryService.createEntry(entryDto);
-        assertThat(entryService.getInconsistentSplitEntries()).hasSize(1);
     }
 
     @Test
     public void testDoubleEntries() {
-        long accIdA = createAccount("A");
-        long accIdB = createAccount("B");
+        long accIdA = DtoFactory.createAccount("A", accountService);
+        long accIdB = DtoFactory.createAccount("B", accountService);
 
         EntryDetailsDto entryDto = new EntryDetailsDto();
         entryDto.setAccountId(accIdA);
