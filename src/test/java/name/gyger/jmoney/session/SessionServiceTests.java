@@ -22,8 +22,6 @@ public class SessionServiceTests {
 
     @Test
     public void testBasics() {
-        assertThat(sessionService.isSessionAvailable()).isFalse();
-
         sessionService.initSession();
         assertThat(sessionService.isSessionAvailable()).isTrue();
 

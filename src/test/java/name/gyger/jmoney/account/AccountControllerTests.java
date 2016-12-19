@@ -30,7 +30,7 @@ public class AccountControllerTests {
 
     @Before
     public void setUp() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         mockMvc.perform(put("/rest/options/init"));
     }
 

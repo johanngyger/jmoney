@@ -45,11 +45,15 @@ public class CategoryService {
         return (List<Category>) q.getResultList();
     }
 
-    public List<CategoryDto> getCategories() {
+    public Category getRootCategory() {
         Session s = sessionService.getSession();
         prefetchCategories();
-        List<CategoryDto> categories = new ArrayList<CategoryDto>();
-        Category rootCategory = s.getRootCategory();
+        return s.getRootCategory();
+    }
+
+    public List<CategoryDto> getCategories() {
+        Category rootCategory = getRootCategory();
+        List<CategoryDto> categories = new ArrayList<>();
         if (rootCategory != null) {
             addChildCategories(categories, rootCategory, 0);
         }
@@ -66,10 +70,7 @@ public class CategoryService {
     }
 
     public CategoryNodeDto getCategoryTree() {
-        Session s = sessionService.getSession();
-        prefetchCategories();
-        Category rootCategory = s.getRootCategory();
-        return new CategoryNodeDto(rootCategory);
+        return new CategoryNodeDto(getRootCategory());
     }
 
     public void saveCategoryTree(CategoryNodeDto dto) {

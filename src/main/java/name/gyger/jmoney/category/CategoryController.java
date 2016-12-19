@@ -43,6 +43,13 @@ public class CategoryController {
         return categoryService.getSplitCategory();
     }
 
+    @RequestMapping(path = "/root-category", method = RequestMethod.GET)
+    public Category getRootCategory() {
+        Category rootCategory = categoryService.getRootCategory();
+        rootCategory.setChildren(null);
+        return rootCategory;
+    }
+
     @RequestMapping(path = "/categories", method = RequestMethod.POST)
     public long createCategory(@RequestBody CategoryNodeDto dto) {
         return categoryService.createCategory(dto);
