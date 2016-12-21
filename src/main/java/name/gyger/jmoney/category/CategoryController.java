@@ -16,9 +16,6 @@
 
 package name.gyger.jmoney.category;
 
-import name.gyger.jmoney.category.CategoryDto;
-import name.gyger.jmoney.category.CategoryNodeDto;
-import name.gyger.jmoney.category.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;

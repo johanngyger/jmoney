@@ -32,6 +32,7 @@ dependencies {
     }
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5")
     compile("org.apache.commons:commons-lang3:3.4")
     runtime('com.h2database:h2')
     testCompile('org.springframework.boot:spring-boot-starter-test')

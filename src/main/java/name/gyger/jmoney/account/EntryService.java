@@ -25,7 +25,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,11 +35,14 @@ public class EntryService {
 
     private final SessionService sessionService;
 
+    private final AccountService accountService;
+
     @PersistenceContext
     private EntityManager em;
 
-    public EntryService(SessionService sessionService) {
+    public EntryService(SessionService sessionService, AccountService accountService) {
         this.sessionService = sessionService;
+        this.accountService = accountService;
     }
 
     public long getEntryCount(long accountId) {
@@ -46,62 +51,56 @@ public class EntryService {
         return (Long) q.getSingleResult();
     }
 
-    public List<EntryDto> getEntries(long accountId, Integer page, String filter) {
+    public List<Entry> getEntries(long accountId, Integer page, String filter) {
         TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e LEFT JOIN FETCH e.category WHERE e.account.id = :id" +
                 " ORDER BY CASE WHEN e.date IS NULL THEN 1 ELSE 0 END, e.date, e.creation", Entry.class);
         q.setParameter("id", accountId);
 
-        List<Entry> entries = q.getResultList();
-        List<EntryDto> result = new ArrayList<EntryDto>();
-        EntryDto previousEntryDto = null;
-        for (Entry entry : entries) {
-            if (entry.contains(filter)) {
-                EntryDto entryDto = new EntryDto(entry);
-                result.add(entryDto);
-                if (previousEntryDto == null) {
-                    Account a = entry.getAccount();
-                    entryDto.setBalance(entry.getAmount() + a.getStartBalance());
-                } else {
-                    entryDto.setBalance(entry.getAmount() + previousEntryDto.getBalance());
-                }
-                previousEntryDto = entryDto;
-            }
-        }
+        final long[] balance = {accountService.getAccount(accountId).getStartBalance()};
+        List<Entry> entries = q.getResultList().stream()
+                .filter(e -> e.contains(filter))
+                .map(e -> {
+                    balance[0] += e.getAmount();
+                    e.setBalance(balance[0]);
+                    return e;
+                })
+                .collect(Collectors.toList());
 
-        Collections.reverse(result);
+        Collections.reverse(entries);
 
         if (page == null) {
             page = 1;
         }
-        int count = result.size();
+        int count = entries.size();
         int from = Math.min((page - 1) * 10, count);
         int to = Math.min((page - 1) * 10 + 10, count);
-        result = result.subList(from, to);
+        entries = entries.subList(from, to);
 
-        return result;
+        return entries;
     }
 
-    public EntryDetailsDto getEntry(long id) {
-        Entry e = em.find(Entry.class, id);
-        return new EntryDetailsDto(e);
+    public Entry getEntry(long id) {
+        return em.find(Entry.class, id);
     }
 
-    public long createEntry(EntryDetailsDto dto) {
-        Entry e = new Entry();
-        em.persist(e);
-        updateEntryInternal(dto, e);
-        e.setStatus(Entry.Status.CLEARED);
-        return e.getId();
+    public long createEntry(Entry entry) {
+        em.persist(entry);
+        updateEntryInternal(entry);
+        entry.setStatus(Entry.Status.CLEARED);
+        return entry.getId();
     }
 
-    public void updateEntry(EntryDetailsDto dto) {
-        Entry e = em.find(Entry.class, dto.getId());
-        updateEntryInternal(dto, e);
+    public void updateEntry(Entry entry) {
+        Entry e = em.merge(entry);
+        updateEntryInternal(e);
     }
 
-    private void updateEntryInternal(EntryDetailsDto dto, Entry e) {
-        Account a = em.find(Account.class, dto.getAccountId());
-        Category c = em.find(Category.class, dto.getCategoryId());
+    private void updateEntryInternal(Entry e) {
+        Account a = em.find(Account.class, e.getAccountId());
+        e.setAccount(a);
+
+        Category c = em.find(Category.class, e.getCategoryId());
+        e.setCategory(c);
 
         if (c instanceof Account) {
             Account otherAccount = (Account) c;
@@ -126,14 +125,10 @@ public class EntryService {
             }
         }
 
-        removeSubEntries(e);
-        if (c != null && c.getType() == Category.Type.SPLIT) {
-            createSubEntries(dto, e);
-        }
-
-        dto.mapToModel(e);
-        e.setCategory(c);
-        e.setAccount(a);
+//        removeSubEntries(e);
+//        if (c != null && c.getType() == Category.Type.SPLIT) {
+//            createSubEntries(e);
+//        }
     }
 
     private void removeSubEntries(Entry e) {
@@ -145,18 +140,14 @@ public class EntryService {
         }
     }
 
-    private void createSubEntries(EntryDetailsDto dto, Entry e) {
-        List<SubEntryDto> subEntryDtos = dto.getSubEntries();
-        if (subEntryDtos != null) {
-            for (SubEntryDto subEntryDto : subEntryDtos) {
-                Entry subEntry = new Entry();
-                em.persist(subEntry);
-                subEntryDto.mapToModel(subEntry);
-
-                Category subCat = em.find(Category.class, subEntryDto.getCategoryId());
-                subEntry.setCategory(subCat);
-                subEntry.setSplitEntry(e);
-            }
+    private void createSubEntries(Entry e) {
+        List<Entry> subEntries = e.getSubEntries();
+        if (subEntries != null) { return; }
+        for (Entry subEntry : subEntries) {
+            em.persist(subEntry);
+            Category subCat = em.find(Category.class, subEntry.getCategoryId());
+            subEntry.setCategory(subCat);
+            subEntry.setSplitEntry(e);
         }
     }
 

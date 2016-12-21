@@ -27,6 +27,22 @@ import java.util.List;
 @Entity
 public class Entry {
 
+    public long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(long accountId) {
+        this.accountId = accountId;
+    }
+
+    public long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(long categoryId) {
+        this.categoryId = categoryId;
+    }
+
     public enum Status {
         RECONCILING, CLEARED
     }
@@ -44,7 +60,7 @@ public class Entry {
     @ManyToOne(fetch = FetchType.LAZY)
     private Entry splitEntry;
 
-    @OneToMany(mappedBy = "splitEntry", orphanRemoval = true)
+    @OneToMany(mappedBy = "splitEntry")
     private List<Entry> subEntries;
 
     /**
@@ -62,6 +78,15 @@ public class Entry {
     private String description;
     private long amount;
     private String memo;
+
+    @Transient
+    private long balance;
+
+    @Transient
+    private long accountId;
+
+    @Transient
+    private long categoryId;
 
     public long getId() {
         return id;
@@ -177,6 +202,14 @@ public class Entry {
         return StringUtils.contains(StringUtils.defaultString(description), filter)
                 || StringUtils.contains(StringUtils.defaultString(categoryName), filter)
                 || StringUtils.contains(StringUtils.defaultString(memo), filter);
+    }
+
+    public long getBalance() {
+        return balance;
+    }
+
+    public void setBalance(long balance) {
+        this.balance = balance;
     }
 
 }

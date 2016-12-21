@@ -16,11 +16,11 @@
 
 package name.gyger.jmoney.report;
 
-import name.gyger.jmoney.category.CategoryService;
-import name.gyger.jmoney.account.EntryDto;
 import name.gyger.jmoney.account.Account;
-import name.gyger.jmoney.category.Category;
 import name.gyger.jmoney.account.Entry;
+import name.gyger.jmoney.account.EntryDto;
+import name.gyger.jmoney.category.Category;
+import name.gyger.jmoney.category.CategoryService;
 import name.gyger.jmoney.session.Session;
 import name.gyger.jmoney.session.SessionService;
 import org.springframework.stereotype.Service;
@@ -118,7 +118,7 @@ public class ReportService {
         return resultList;
     }
 
-    public List<EntryDto> getInconsistentSplitEntries() {
+    public List<Entry> getInconsistentSplitEntries() {
         Category splitCategory = sessionService.getSession().getSplitCategory();
 
         TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = :categoryId" +
@@ -127,50 +127,35 @@ public class ReportService {
 
         Map<Long, Long> splitEntrySums = getSplitEntrySums();
         List<Entry> entries = q.getResultList();
-        List<EntryDto> result = new ArrayList<EntryDto>();
+        List<Entry> result = new ArrayList<Entry>();
         for (Entry entry : entries) {
             Long sum = splitEntrySums.get(entry.getId());
             if (sum == null) {
                 sum = Long.valueOf(0);
             }
             if (entry.getAmount() != sum) {
-                EntryDto dto = new EntryDto(entry);
-                result.add(dto);
+                result.add(entry);
             }
         }
 
         return result;
     }
 
-    public List<EntryDto> getEntriesWithoutCategory() {
+    public List<Entry> getEntriesWithoutCategory() {
         TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = null AND e.splitEntry = null" +
                 " ORDER BY CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC", Entry.class);
-
         List<Entry> entries = q.getResultList();
-        List<EntryDto> result = new ArrayList<EntryDto>();
-        for (Entry entry : entries) {
-            EntryDto dto = new EntryDto(entry);
-            result.add(dto);
-        }
-
-        return result;
+        return entries;
     }
 
-    public List<EntryDto> getEntriesForCategory(long categoryId, Date from, Date to) {
+    public List<Entry> getEntriesForCategory(long categoryId, Date from, Date to) {
         TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = :categoryId AND e.date >= :from AND e.date <= :to" +
                 " ORDER BY e.date DESC, e.creation DESC", Entry.class);
         q.setParameter("categoryId", categoryId);
         q.setParameter("from", from);
         q.setParameter("to", to);
-
         List<Entry> entries = q.getResultList();
-        List<EntryDto> result = new ArrayList<EntryDto>();
-        for (Entry entry : entries) {
-            EntryDto dto = new EntryDto(entry);
-            result.add(dto);
-        }
-
-        return result;
+        return entries;
     }
 
     private Map<Long, Long> getEntrySumsByAccountId(Date date) {

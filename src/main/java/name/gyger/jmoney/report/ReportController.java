@@ -16,6 +16,7 @@
 
 package name.gyger.jmoney.report;
 
+import name.gyger.jmoney.account.Entry;
 import name.gyger.jmoney.account.EntryDto;
 import name.gyger.jmoney.account.EntryService;
 import name.gyger.jmoney.util.DateUtil;
@@ -54,21 +55,21 @@ public class ReportController {
     }
 
     @RequestMapping(path = "/entries-with-category", method = RequestMethod.GET)
-    public List<EntryDto> getEntries(@RequestParam(value = "categoryId") long categoryId,
-                                     @RequestParam(value = "fromDate") String fromDateString,
-                                     @RequestParam(value = "toDate") String toDateString) {
+    public List<Entry> getEntries(@RequestParam(value = "categoryId") long categoryId,
+                                  @RequestParam(value = "fromDate") String fromDateString,
+                                  @RequestParam(value = "toDate") String toDateString) {
         Date from = DateUtil.parse(fromDateString);
         Date to = DateUtil.parse(toDateString);
         return reportService.getEntriesForCategory(categoryId, from, to);
     }
 
     @RequestMapping(path = "/consitency/inconsistent-split-entries", method = RequestMethod.GET)
-    public List<EntryDto> getInconsistentSplitEntries() {
+    public List<Entry> getInconsistentSplitEntries() {
         return reportService.getInconsistentSplitEntries();
     }
 
     @RequestMapping(path = "/consitency/entries-without-category", method = RequestMethod.GET)
-    public List<EntryDto> getEntriesWithoutCategory() {
+    public List<Entry> getEntriesWithoutCategory() {
         return reportService.getEntriesWithoutCategory();
     }
 

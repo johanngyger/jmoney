@@ -1,14 +1,10 @@
 package name.gyger.jmoney.account;
 
 import name.gyger.jmoney.DtoFactory;
-import name.gyger.jmoney.account.AccountService;
 import name.gyger.jmoney.category.CategoryDto;
 import name.gyger.jmoney.category.CategoryService;
-import name.gyger.jmoney.account.EntryDetailsDto;
-import name.gyger.jmoney.account.EntryDto;
-import name.gyger.jmoney.account.SubEntryDto;
-import name.gyger.jmoney.account.EntryService;
 import name.gyger.jmoney.session.SessionService;
+import name.gyger.jmoney.util.DateUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,17 +50,20 @@ public class EntryServiceTests {
 
     @Test
     public void testBasics() {
-        long accountId = DtoFactory.createAccount("my account", accountService);
+        long accountId = DtoFactory.createAccount("my account", 1000, accountService);
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(0);
 
         IntStream.range(0, 10).forEach(i -> {
-            EntryDetailsDto entryDto = new EntryDetailsDto();
-            entryDto.setAccountId(accountId);
-            entryService.createEntry(entryDto);
+            Entry entry = new Entry();
+            entry.setAccountId(accountId);
+            entry.setAmount(i);
+            entry.setDate(DateUtil.parse("2016-01-0" + i));
+            entryService.createEntry(entry);
         });
-        List<EntryDto> entries = entryService.getEntries(accountId, null, null);
+        List<Entry> entries = entryService.getEntries(accountId, null, null);
         assertThat(entries).hasSize(10);
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(10);
+        assertThat(entries.get(0).getBalance()).isEqualTo(1045);
 
         entryService.deleteEntry(entries.get(9).getId());
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(9);
@@ -72,53 +71,53 @@ public class EntryServiceTests {
 
     @Test
     public void testSplitEntries() {
-        long accountId = DtoFactory.createAccount("my account", accountService);
+        long accountId = DtoFactory.createAccount("my account", 1000, accountService);
         CategoryDto split = categoryService.getSplitCategory();
 
-        EntryDetailsDto entryDto = new EntryDetailsDto();
-        entryDto.setCategoryId(split.getId());
-        entryDto.setAccountId(accountId);
-        entryDto.setAmount(11121224);
-        List<SubEntryDto> subEntries = IntStream.range(0, 7).mapToObj(i -> {
-            SubEntryDto sed = new SubEntryDto();
-            sed.setAmount(i);
-            return sed;
+        Entry entry = new Entry();
+        entry.setCategoryId(split.getId());
+        entry.setAccountId(accountId);
+        entry.setAmount(11121224);
+        List<Entry> subEntries = IntStream.range(0, 7).mapToObj(i -> {
+            Entry subEntry = new Entry();
+            subEntry.setAmount(i);
+            return subEntry;
         }).collect(Collectors.toList());
-        entryDto.setSubEntries(subEntries);
-        long entryId = entryService.createEntry(entryDto);
+        entry.setSubEntries(subEntries);
+        long entryId = entryService.createEntry(entry);
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(1);
         em.clear();
         em.flush();
-        List<EntryDto> entries = entryService.getEntries(accountId, null, null);
+        List<Entry> entries = entryService.getEntries(accountId, null, null);
         assertThat(entries).hasSize(1);
 
-        entryDto = entryService.getEntry(entryId);
-        entryService.updateEntry(entryDto);
+        entry = entryService.getEntry(entryId);
+        entryService.updateEntry(entry);
         em.clear();
         em.flush();
         entries = entryService.getEntries(accountId, null, null);
         assertThat(entries).hasSize(1);
 
-        entryDto = entryService.getEntry(entries.get(0).getId());
-        subEntries = entryDto.getSubEntries();
+        entry = entryService.getEntry(entries.get(0).getId());
+        subEntries = entry.getSubEntries();
         assertThat(subEntries).hasSize(7);
     }
 
     @Test
     public void testDoubleEntries() {
-        long accIdA = DtoFactory.createAccount("A", accountService);
-        long accIdB = DtoFactory.createAccount("B", accountService);
+        long accIdA = DtoFactory.createAccount("A", 0, accountService);
+        long accIdB = DtoFactory.createAccount("B", 0, accountService);
 
-        EntryDetailsDto entryDto = new EntryDetailsDto();
-        entryDto.setAccountId(accIdA);
-        entryDto.setCategoryId(accIdB);
-        long entryId = entryService.createEntry(entryDto);
+        Entry entry = new Entry();
+        entry.setAccountId(accIdA);
+        entry.setCategoryId(accIdB);
+        long entryId = entryService.createEntry(entry);
         assertThat(entryService.getEntryCount(accIdA)).isEqualTo(1);
         assertThat(entryService.getEntryCount(accIdB)).isEqualTo(1);
 
-        entryDto = entryService.getEntry(entryId);
-        entryDto.setCategoryId(0);
-        entryService.updateEntry(entryDto);
+        entry = entryService.getEntry(entryId);
+        entry.setCategoryId(0);
+        entryService.updateEntry(entry);
         assertThat(entryService.getEntryCount(accIdA)).isEqualTo(1);
         assertThat(entryService.getEntryCount(accIdB)).isEqualTo(0);
     }

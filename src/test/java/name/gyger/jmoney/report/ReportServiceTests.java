@@ -2,10 +2,10 @@ package name.gyger.jmoney.report;
 
 import name.gyger.jmoney.DtoFactory;
 import name.gyger.jmoney.account.AccountService;
+import name.gyger.jmoney.account.Entry;
 import name.gyger.jmoney.category.CategoryDto;
 import name.gyger.jmoney.category.CategoryNodeDto;
 import name.gyger.jmoney.category.CategoryService;
-import name.gyger.jmoney.account.EntryDetailsDto;
 import name.gyger.jmoney.account.EntryService;
 import name.gyger.jmoney.session.SessionService;
 import name.gyger.jmoney.util.DateUtil;
@@ -56,20 +56,20 @@ public class ReportServiceTests {
 
     @Test
     public void testBalances() {
-        long accA = DtoFactory.createAccount("A", accountService);
-        long accB = DtoFactory.createAccount("B", accountService);
+        long accA = DtoFactory.createAccount("A", 0, accountService);
+        long accB = DtoFactory.createAccount("B", 0, accountService);
 
         Date date = DateUtil.parse("2000-01-01");
 
-        EntryDetailsDto entryDto = new EntryDetailsDto();
-        entryDto.setAccountId(accA);
-        entryDto.setDate(date);
-        entryDto.setAmount(15);
-        DtoFactory.createEntries(entryDto, 10, entryService);
+        Entry entry = new Entry();
+        entry.setAccountId(accA);
+        entry.setDate(date);
+        entry.setAmount(15);
+        DtoFactory.createEntries(entry, 10, entryService);
 
-        entryDto.setAccountId(accB);
-        entryDto.setAmount(-5);
-        DtoFactory.createEntries(entryDto, 10, entryService);
+        entry.setAccountId(accB);
+        entry.setAmount(-5);
+        DtoFactory.createEntries(entry, 10, entryService);
 
         List<BalanceDto> balances = reportService.getBalances(date);
         assertThat(balances).hasSize(3);
@@ -80,27 +80,27 @@ public class ReportServiceTests {
 
     @Test
     public void testCashFlow() {
-        long accId = DtoFactory.createAccount("A", accountService);
+        long accId = DtoFactory.createAccount("A", 0, accountService);
 
         long catA = DtoFactory.createTopLevelCategory("A", categoryService);
         long catB = DtoFactory.createTopLevelCategory("A", categoryService);
         long catC = DtoFactory.createTopLevelCategory("A", categoryService);
 
         Date date = DateUtil.parse("2000-10-07");
-        EntryDetailsDto entryDto = new EntryDetailsDto();
-        entryDto.setAccountId(accId);
-        entryDto.setDate(date);
-        entryDto.setAmount(7);
-        entryDto.setCategoryId(catA);
-        DtoFactory.createEntries(entryDto, 8, entryService);
+        Entry entry = new Entry();
+        entry.setAccountId(accId);
+        entry.setDate(date);
+        entry.setAmount(7);
+        entry.setCategoryId(catA);
+        DtoFactory.createEntries(entry, 8, entryService);
 
-        entryDto.setAmount(-9);
-        entryDto.setCategoryId(catB);
-        DtoFactory.createEntries(entryDto, 10, entryService);
+        entry.setAmount(-9);
+        entry.setCategoryId(catB);
+        DtoFactory.createEntries(entry, 10, entryService);
 
-        entryDto.setAmount(11);
-        entryDto.setCategoryId(catC);
-        DtoFactory.createEntries(entryDto, 12, entryService);
+        entry.setAmount(11);
+        entry.setCategoryId(catC);
+        DtoFactory.createEntries(entry, 12, entryService);
 
         em.flush();
         em.clear();
@@ -117,21 +117,21 @@ public class ReportServiceTests {
 
     @Test
     public void testEmptyInconsistentSplitEntry() {
-        long accountId = DtoFactory.createAccount("my account", accountService);
+        long accountId = DtoFactory.createAccount("my account", 0, accountService);
         CategoryDto split = categoryService.getSplitCategory();
 
-        EntryDetailsDto entryDto = new EntryDetailsDto();
-        entryDto.setCategoryId(split.getId());
-        entryDto.setAccountId(accountId);
-        entryDto.setAmount(12715);
-        entryService.createEntry(entryDto);
+        Entry entry = new Entry();
+        entry.setCategoryId(split.getId());
+        entry.setAccountId(accountId);
+        entry.setAmount(12715);
+        entryService.createEntry(entry);
         assertThat(reportService.getInconsistentSplitEntries()).hasSize(1);
     }
 
     @Test
     public void testEntriesWithoutCategory() {
-        long accountId = DtoFactory.createAccount("my account", accountService);
-        EntryDetailsDto entryDto = new EntryDetailsDto();
+        long accountId = DtoFactory.createAccount("my account", 0, accountService);
+        Entry entryDto = new Entry();
         entryDto.setAccountId(accountId);
         DtoFactory.createEntries(entryDto, 37, entryService);
         assertThat(reportService.getEntriesWithoutCategory()).hasSize(37);
@@ -144,13 +144,13 @@ public class ReportServiceTests {
         newCat.setParentId(categoryService.getCategoryTree().getId());
         long newCatId = categoryService.createCategory(newCat);
 
-        long accountId = DtoFactory.createAccount("my account", accountService);
+        long accountId = DtoFactory.createAccount("my account", 0, accountService);
         Date date = DateUtil.parse("2000-10-07");
-        EntryDetailsDto entryDto = new EntryDetailsDto();
-        entryDto.setAccountId(accountId);
-        entryDto.setDate(date);
-        entryDto.setCategoryId(newCatId);
-        DtoFactory.createEntries(entryDto, 7, entryService);
+        Entry entry = new Entry();
+        entry.setAccountId(accountId);
+        entry.setDate(date);
+        entry.setCategoryId(newCatId);
+        DtoFactory.createEntries(entry, 7, entryService);
 
         assertThat(reportService.getEntriesForCategory(newCatId, date, date)).hasSize(7);
     }

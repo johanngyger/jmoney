@@ -17,8 +17,8 @@
 package name.gyger.jmoney.options;
 
 import name.gyger.jmoney.account.Account;
-import name.gyger.jmoney.category.Category;
 import name.gyger.jmoney.account.Entry;
+import name.gyger.jmoney.category.Category;
 import name.gyger.jmoney.session.Session;
 import name.gyger.jmoney.session.SessionService;
 import net.sf.jmoney.XMLReader;

@@ -40,25 +40,26 @@ public class EntryController {
     }
 
     @RequestMapping(path = "/{accountId}/entries", method = RequestMethod.GET)
-    public List<EntryDto> getEntries(@PathVariable long accountId,
+    public List<Entry> getEntries(@PathVariable long accountId,
                                      @RequestParam(value = "page", required = false) Integer page,
                                      @RequestParam(value = "filter", required = false) String filter) {
         return entryService.getEntries(accountId, page, filter);
     }
 
     @RequestMapping(path = "/{accountId}/entries/{entryId}", method = RequestMethod.GET)
-    public EntryDetailsDto getEntry(@PathVariable long accountId, @PathVariable long entryId) {
+    public Entry getEntry(@PathVariable long accountId, @PathVariable long entryId) {
         return entryService.getEntry(entryId);
     }
 
     @RequestMapping(path = "/{accountId}/entries", method = RequestMethod.POST)
-    public long createEntry(@RequestBody EntryDetailsDto entry, @PathVariable long accountId) {
+    public long createEntry(@RequestBody Entry entry, @PathVariable long accountId) {
         entry.setAccountId(accountId);
         return entryService.createEntry(entry);
     }
 
     @RequestMapping(path = "/{accountId}/entries/{entryId}", method = RequestMethod.PUT)
-    public void updateEntry(@PathVariable long accountId, @PathVariable long entryId, @RequestBody EntryDetailsDto entry) {
+    public void updateEntry(@PathVariable long accountId, @PathVariable long entryId, @RequestBody Entry entry) {
+        entry.setAccountId(accountId);
         entryService.updateEntry(entry);
     }
 
