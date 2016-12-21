@@ -1,6 +1,6 @@
 package name.gyger.jmoney;
 
-import name.gyger.jmoney.account.AccountDetailsDto;
+import name.gyger.jmoney.account.Account;
 import name.gyger.jmoney.account.AccountService;
 import name.gyger.jmoney.account.Entry;
 import name.gyger.jmoney.account.EntryService;
@@ -18,10 +18,10 @@ public class EntityFactory {
     }
 
     public static long createAccount(String name, long startBalance, AccountService accountService) {
-        AccountDetailsDto accountDetailsDto = new AccountDetailsDto();
-        accountDetailsDto.setName(name);
-        accountDetailsDto.setStartBalance(startBalance);
-        return accountService.createAccount(accountDetailsDto);
+        Account account = new Account();
+        account.setName(name);
+        account.setStartBalance(startBalance);
+        return accountService.createAccount(account);
     }
 
     public static long createTopLevelCategory(String name, CategoryService categoryService) {

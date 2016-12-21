@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.Collection;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,10 +38,10 @@ public class AccountServiceTests {
 
     @Test
     public void testBasics() {
-        Collection<AccountDto> accounts = accountService.getAccounts();
+        List<Account> accounts = accountService.getAccounts();
         assertThat(accounts).isEmpty();
 
-        AccountDetailsDto accountDetailsDto = new AccountDetailsDto();
+        Account accountDetailsDto = new Account();
         accountDetailsDto.setName("my account");
         long id = accountService.createAccount(accountDetailsDto);
 
@@ -49,13 +49,12 @@ public class AccountServiceTests {
         assertThat(account.getId()).isEqualTo(id);
         assertThat(account.getName()).isEqualTo("my account");
 
-        accountDetailsDto = accountService.getAccountDetails(id);
+        account = accountService.getAccount(id);
         assertThat(accountDetailsDto.getId()).isEqualTo(id);
         assertThat(accountDetailsDto.getName()).isEqualTo("my account");
 
         account.setName("my other account");
-        accountDetailsDto = new AccountDetailsDto(account);
-        accountService.updateAccount(accountDetailsDto);
+        accountService.updateAccount(account);
 
         account = accountService.getAccount(id);
         assertThat(account.getName()).isEqualTo("my other account");
@@ -66,19 +65,27 @@ public class AccountServiceTests {
 
     @Test
     public void testMultipleAccounts() {
-        AccountDetailsDto accountDetailsDto = new AccountDetailsDto();
+        Account accountDetailsDto;
 
+        accountDetailsDto = new Account();
         accountDetailsDto.setName("A");
-        accountService.createAccount(accountDetailsDto);
+        long acctA = accountService.createAccount(accountDetailsDto);
+        assertThat(accountService.getAccount(acctA)).isNotNull();
+        assertThat(overallAccountCount()).isEqualTo(1);
         assertThat(accountService.getAccounts()).hasSize(1);
 
+        accountDetailsDto = new Account();
+        accountDetailsDto.setName("B");
+        long acctB = accountService.createAccount(accountDetailsDto);
         em.flush();
         em.clear();
-
-        accountDetailsDto.setName("B");
-        accountService.createAccount(accountDetailsDto);
-
+        assertThat(accountService.getAccount(acctB)).isNotNull();
+        assertThat(overallAccountCount()).isEqualTo(2);
         assertThat(accountService.getAccounts()).hasSize(2);
+    }
+
+    private Long overallAccountCount() {
+        return (Long) em.createQuery("SELECT count(*) FROM Account").getSingleResult();
     }
 
 }

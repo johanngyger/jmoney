@@ -31,28 +31,28 @@ public class AccountController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<AccountDto> getAccounts() {
+    public Collection<Account> getAccounts() {
         return accountService.getAccounts();
     }
 
     @RequestMapping(path = "/{accountId}", method = RequestMethod.GET)
-    public AccountDetailsDto getAccountDetails(@PathVariable long accountId) {
-        return accountService.getAccountDetails(accountId);
+    public Account getAccount(@PathVariable long accountId) {
+        return accountService.getAccount(accountId);
     }
 
     @RequestMapping(path = "/{accountId}", method = RequestMethod.PUT)
-    public void updateAccount(@RequestBody AccountDetailsDto account, @PathVariable long accountId) {
+    public void updateAccount(@RequestBody Account account, @PathVariable long accountId) {
         account.setId(accountId);
         accountService.updateAccount(account);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public long createAccount(@RequestBody AccountDetailsDto account) {
+    public long createAccount(@RequestBody Account account) {
         return accountService.createAccount(account);
     }
 
     @RequestMapping(path = "/{accountId}", method = RequestMethod.DELETE)
-    public void deletePerson(@PathVariable long accountId) {
+    public void deleteAccount(@PathVariable long accountId) {
         accountService.deleteAccount(accountId);
     }
 

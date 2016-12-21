@@ -23,8 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 @Service
 @Transactional
@@ -39,48 +38,34 @@ public class AccountService {
         this.sessionService = sessionService;
     }
 
-    public Collection<AccountDto> getAccounts() {
-        Session s = sessionService.getSession();
-        Collection<Account> accounts = s.getAccounts();
-        Collection<AccountDto> result = new ArrayList<AccountDto>();
-
-        for (Account next : accounts) {
-            AccountDto nextDto = new AccountDto(next);
-            result.add(nextDto);
-        }
-
-        return result;
+    public List<Account> getAccounts() {
+        List<Account> accounts = sessionService.getSession().getAccounts();
+        accounts.forEach(a -> {
+            em.detach(a);
+            a.setSession(null);
+        });
+        return accounts;
     }
 
     public Account getAccount(long accountId) {
         return em.find(Account.class, accountId);
     }
 
-    public AccountDetailsDto getAccountDetails(long accountId) {
-        Account a = em.find(Account.class, accountId);
-        return new AccountDetailsDto(a);
-    }
-
-    public long createAccount(AccountDetailsDto dto) {
-        Account a = new Account();
-        dto.mapToModel(a);
-
+    public long createAccount(Account a) {
         Session s = sessionService.getSession();
         a.setSession(s);
         a.setParent(s.getTransferCategory());
-
         em.persist(a);
-
         return a.getId();
     }
 
-    public void updateAccount(AccountDetailsDto dto) {
-        Account a = em.find(Account.class, dto.getId());
-        dto.mapToModel(a);
+    public void updateAccount(Account account) {
+        em.merge(account);
     }
 
     public void deleteAccount(long accountId) {
         Account a = em.find(Account.class, accountId);
         em.remove(a);
     }
+
 }

@@ -19,16 +19,13 @@ package name.gyger.jmoney.account;
 import name.gyger.jmoney.category.Category;
 import name.gyger.jmoney.session.Session;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 public class Account extends Category {
 
-    @OneToMany(mappedBy = "account", orphanRemoval = true)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Entry> entries;
 
     @ManyToOne

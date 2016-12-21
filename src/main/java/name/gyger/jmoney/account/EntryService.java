@@ -17,7 +17,6 @@
 package name.gyger.jmoney.account;
 
 import name.gyger.jmoney.category.Category;
-import name.gyger.jmoney.session.SessionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +72,8 @@ public class EntryService {
         int to = Math.min((page - 1) * 10 + 10, count);
         entries = entries.subList(from, to);
 
+        entries.forEach(e -> em.detach(e));
+
         return entries;
     }
 
@@ -89,6 +90,8 @@ public class EntryService {
             entry.setCategoryId(category.getId());
         }
 
+        em.detach(entry);
+
         return entry;
     }
 
@@ -102,8 +105,8 @@ public class EntryService {
     }
 
     public void updateEntry(Entry entry) {
-        Entry e = em.merge(entry);
-        updateEntryInternal(e);
+        updateEntryInternal(entry);
+        em.merge(entry);
     }
 
     private void updateEntryInternal(Entry e) {
@@ -112,6 +115,11 @@ public class EntryService {
 
         Category c = em.find(Category.class, e.getCategoryId());
         e.setCategory(c);
+
+        removeOldSubEntries(e);
+        if (c != null && c.getType() == Category.Type.SPLIT) {
+            createSubEntries(e);
+        }
 
         if (c instanceof Account) {
             Account otherAccount = (Account) c;
@@ -134,11 +142,6 @@ public class EntryService {
                 other.setOther(null);
                 em.remove(other);
             }
-        }
-
-        removeOldSubEntries(e);
-        if (c != null && c.getType() == Category.Type.SPLIT) {
-            createSubEntries(e);
         }
     }
 

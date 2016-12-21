@@ -34,7 +34,7 @@ public class Category {
     @ManyToOne
     private Category parent;
 
-    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     @OrderBy("name")
     private List<Category> children;
 

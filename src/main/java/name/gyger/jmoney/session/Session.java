@@ -29,10 +29,10 @@ public class Session {
     @GeneratedValue
     private long id;
 
-    @OneToMany(mappedBy = "session", orphanRemoval = true)
+    @OneToMany(mappedBy = "session", cascade = CascadeType.REMOVE)
     private List<Account> accounts;
 
-    @OneToOne(orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Category rootCategory;
 
     @OneToOne

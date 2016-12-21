@@ -105,33 +105,29 @@ public class EntryServiceTests {
         em.flush();
         em.clear();
         entry = entryService.getEntry(entryId);
+        assertThat(overallEntryCount()).isEqualTo(8);
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(1);
         assertThat(entryService.getEntries(accountId, null, null)).hasSize(1);
         assertThat(entry.getSubEntries()).hasSize(7);
-        assertThat(overallEntryCount()).isEqualTo(8);
 
         entry.getSubEntries().remove(0);
         entryService.updateEntry(entry);
         em.flush();
         em.clear();
         entry = entryService.getEntry(entryId);
+        assertThat(overallEntryCount()).isEqualTo(7);
         assertThat(entryService.getEntries(accountId, null, null)).hasSize(1);
         assertThat(entry.getSubEntries()).hasSize(6);
-        assertThat(overallEntryCount()).isEqualTo(7);
 
         entryService.deleteEntry(entry.getId());
         em.flush();
         em.clear();
-        assertThat(entryService.getEntries(accountId, null, null)).isEmpty();
         assertThat(overallEntryCount()).isZero();
-    }
-
-    private Long overallEntryCount() {
-        return (Long) em.createQuery("SELECT count(*) FROM Entry").getSingleResult();
+        assertThat(entryService.getEntries(accountId, null, null)).isEmpty();
     }
 
     @Test
-    public void testDoubleEntries() {
+    public void testDoubleEntryCreateDelete() {
         long accIdA = EntityFactory.createAccount("A", 0, accountService);
         long accIdB = EntityFactory.createAccount("B", 0, accountService);
 
@@ -151,21 +147,35 @@ public class EntryServiceTests {
         assertThat(entryService.getEntryCount(accIdA)).isZero();
         assertThat(entryService.getEntryCount(accIdB)).isZero();
         assertThat(overallEntryCount()).isZero();
+    }
 
-        entry = new Entry();
+    @Test
+    public void testDoubleEntryCreateUpdate() {
+        long accIdA = EntityFactory.createAccount("A", 0, accountService);
+        long accIdB = EntityFactory.createAccount("B", 0, accountService);
+
+        Entry entry = new Entry();
         entry.setAccountId(accIdA);
         entry.setCategoryId(accIdB);
-        entryId = entryService.createEntry(entry);
+        long entryId = entryService.createEntry(entry);
         em.flush();
         em.clear();
+        assertThat(entryService.getEntryCount(accIdA)).isEqualTo(1);
+        assertThat(entryService.getEntryCount(accIdB)).isEqualTo(1);
+        assertThat(overallEntryCount()).isEqualTo(2);
+
         entry = entryService.getEntry(entryId);
         entry.setCategoryId(0);
         entryService.updateEntry(entry);
         em.flush();
         em.clear();
+        assertThat(overallEntryCount()).isEqualTo(1);
         assertThat(entryService.getEntryCount(accIdA)).isEqualTo(1);
         assertThat(entryService.getEntryCount(accIdB)).isEqualTo(0);
-        assertThat(overallEntryCount()).isEqualTo(1);
+    }
+
+    private Long overallEntryCount() {
+        return (Long) em.createQuery("SELECT count(*) FROM Entry").getSingleResult();
     }
 
 }

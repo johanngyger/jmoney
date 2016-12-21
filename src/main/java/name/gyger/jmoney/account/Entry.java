@@ -45,7 +45,7 @@ public class Entry {
     @ManyToOne(fetch = FetchType.LAZY)
     private Entry splitEntry;
 
-    @OneToMany(mappedBy = "splitEntry", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "splitEntry", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Entry> subEntries;
 
     /**

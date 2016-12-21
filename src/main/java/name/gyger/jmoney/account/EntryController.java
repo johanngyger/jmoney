@@ -59,6 +59,7 @@ public class EntryController {
 
     @RequestMapping(path = "/{accountId}/entries/{entryId}", method = RequestMethod.PUT)
     public void updateEntry(@PathVariable long accountId, @PathVariable long entryId, @RequestBody Entry entry) {
+        entry.setId(entryId);
         entry.setAccountId(accountId);
         entryService.updateEntry(entry);
     }
