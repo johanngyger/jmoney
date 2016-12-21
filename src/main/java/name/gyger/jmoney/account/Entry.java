@@ -20,28 +20,13 @@ import name.gyger.jmoney.category.Category;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 public class Entry {
-
-    public long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(long accountId) {
-        this.accountId = accountId;
-    }
-
-    public long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(long categoryId) {
-        this.categoryId = categoryId;
-    }
 
     public enum Status {
         RECONCILING, CLEARED
@@ -60,7 +45,7 @@ public class Entry {
     @ManyToOne(fetch = FetchType.LAZY)
     private Entry splitEntry;
 
-    @OneToMany(mappedBy = "splitEntry")
+    @OneToMany(mappedBy = "splitEntry", cascade = CascadeType.REMOVE)
     private List<Entry> subEntries;
 
     /**
@@ -177,7 +162,7 @@ public class Entry {
     }
 
     public List<Entry> getSubEntries() {
-        return subEntries;
+        return subEntries == null ? new ArrayList<>() : subEntries;
     }
 
     public void setSubEntries(List<Entry> subEntries) {
@@ -210,6 +195,22 @@ public class Entry {
 
     public void setBalance(long balance) {
         this.balance = balance;
+    }
+
+    public long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(long accountId) {
+        this.accountId = accountId;
+    }
+
+    public long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(long categoryId) {
+        this.categoryId = categoryId;
     }
 
 }

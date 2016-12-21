@@ -17,7 +17,6 @@
 package name.gyger.jmoney.report;
 
 import name.gyger.jmoney.account.Entry;
-import name.gyger.jmoney.account.EntryDto;
 import name.gyger.jmoney.account.EntryService;
 import name.gyger.jmoney.util.DateUtil;
 import org.springframework.web.bind.annotation.RequestMapping;

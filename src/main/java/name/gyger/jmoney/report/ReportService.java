@@ -18,7 +18,6 @@ package name.gyger.jmoney.report;
 
 import name.gyger.jmoney.account.Account;
 import name.gyger.jmoney.account.Entry;
-import name.gyger.jmoney.account.EntryDto;
 import name.gyger.jmoney.category.Category;
 import name.gyger.jmoney.category.CategoryService;
 import name.gyger.jmoney.session.Session;

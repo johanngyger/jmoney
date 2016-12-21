@@ -1,12 +1,15 @@
 package name.gyger.jmoney;
 
-import name.gyger.jmoney.account.*;
+import name.gyger.jmoney.account.AccountDetailsDto;
+import name.gyger.jmoney.account.AccountService;
+import name.gyger.jmoney.account.Entry;
+import name.gyger.jmoney.account.EntryService;
 import name.gyger.jmoney.category.CategoryNodeDto;
 import name.gyger.jmoney.category.CategoryService;
 
 import java.util.stream.IntStream;
 
-public class DtoFactory {
+public class EntityFactory {
 
     public static void createEntries(Entry entry, int count, EntryService entryService) {
         IntStream.range(0, count).forEach(i -> {

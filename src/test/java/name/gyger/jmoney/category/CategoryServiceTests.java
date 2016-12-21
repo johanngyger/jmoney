@@ -1,8 +1,5 @@
 package name.gyger.jmoney.category;
 
-import name.gyger.jmoney.category.CategoryDto;
-import name.gyger.jmoney.category.CategoryNodeDto;
-import name.gyger.jmoney.category.CategoryService;
 import name.gyger.jmoney.session.SessionService;
 import org.junit.Before;
 import org.junit.Test;

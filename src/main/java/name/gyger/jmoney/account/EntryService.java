@@ -33,15 +33,12 @@ import java.util.stream.Collectors;
 @Transactional
 public class EntryService {
 
-    private final SessionService sessionService;
-
     private final AccountService accountService;
 
     @PersistenceContext
     private EntityManager em;
 
-    public EntryService(SessionService sessionService, AccountService accountService) {
-        this.sessionService = sessionService;
+    public EntryService(AccountService accountService) {
         this.accountService = accountService;
     }
 
@@ -80,13 +77,27 @@ public class EntryService {
     }
 
     public Entry getEntry(long id) {
-        return em.find(Entry.class, id);
+        Entry entry = em.find(Entry.class, id);
+
+        Account account = entry.getAccount();
+        if (account != null) {
+            entry.setAccountId(account.getId());
+        }
+
+        Category category = entry.getCategory();
+        if (category != null) {
+            entry.setCategoryId(category.getId());
+        }
+
+        return entry;
     }
 
     public long createEntry(Entry entry) {
+        em.detach(entry);
+        entry.setId(0);
         em.persist(entry);
         updateEntryInternal(entry);
-        entry.setStatus(Entry.Status.CLEARED);
+        entry.setStatus(Entry.Status.CLEARED); // TODO: What is this?
         return entry.getId();
     }
 
@@ -125,24 +136,21 @@ public class EntryService {
             }
         }
 
-//        removeSubEntries(e);
-//        if (c != null && c.getType() == Category.Type.SPLIT) {
-//            createSubEntries(e);
-//        }
+        removeOldSubEntries(e);
+        if (c != null && c.getType() == Category.Type.SPLIT) {
+            createSubEntries(e);
+        }
     }
 
-    private void removeSubEntries(Entry e) {
-        List<Entry> subEntries = e.getSubEntries();
-        if (subEntries != null) {
-            for (Entry subEntry : subEntries) {
-                em.remove(subEntry);
-            }
-        }
+    private void removeOldSubEntries(Entry e) {
+        TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e WHERE e.splitEntry.id = :id", Entry.class);
+        q.setParameter("id", e.getId());
+        List<Entry> subEntries = q.getResultList();
+        subEntries.forEach(subEntry -> em.remove(subEntry));
     }
 
     private void createSubEntries(Entry e) {
         List<Entry> subEntries = e.getSubEntries();
-        if (subEntries != null) { return; }
         for (Entry subEntry : subEntries) {
             em.persist(subEntry);
             Category subCat = em.find(Category.class, subEntry.getCategoryId());
