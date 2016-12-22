@@ -34,13 +34,19 @@ public class Category {
     @ManyToOne
     private Category parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "parent", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @OrderBy("name")
     private List<Category> children;
 
     private String name;
 
     private Type type = Type.NORMAL;
+
+    @Transient
+    private long parentId;
+
+    @Transient
+    private int level;
 
     public Category() {
     }
@@ -88,6 +94,22 @@ public class Category {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
 }

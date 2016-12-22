@@ -4,7 +4,7 @@ import name.gyger.jmoney.account.Account;
 import name.gyger.jmoney.account.AccountService;
 import name.gyger.jmoney.account.Entry;
 import name.gyger.jmoney.account.EntryService;
-import name.gyger.jmoney.category.CategoryNodeDto;
+import name.gyger.jmoney.category.Category;
 import name.gyger.jmoney.category.CategoryService;
 
 import java.util.stream.IntStream;
@@ -25,9 +25,9 @@ public class EntityFactory {
     }
 
     public static long createTopLevelCategory(String name, CategoryService categoryService) {
-        CategoryNodeDto catA = new CategoryNodeDto();
+        Category catA = new Category();
         catA.setName(name);
-        catA.setParentId(categoryService.getCategoryTree().getId());
+        catA.setParentId(categoryService.getRootCategory().getId());
         return categoryService.createCategory(catA);
     }
 

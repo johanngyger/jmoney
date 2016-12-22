@@ -51,48 +51,49 @@ public class CategoryService {
         return s.getRootCategory();
     }
 
-    public List<CategoryDto> getCategories() {
+    public List<Category> getCategories() {
         Category rootCategory = getRootCategory();
-        List<CategoryDto> categories = new ArrayList<>();
+        List<Category> categories = new ArrayList<>();
         if (rootCategory != null) {
             addChildCategories(categories, rootCategory, 0);
         }
+        categories.forEach(c -> {
+            em.detach(c);
+            Category parent = c.getParent();
+            if (parent != null) c.setParentId(parent.getId());
+        });
         return categories;
     }
 
-    private void addChildCategories(List<CategoryDto> categories, Category parentCategory, int level) {
+    private void addChildCategories(List<Category> categories, Category parentCategory, int level) {
         for (Category childCategory : parentCategory.getChildren()) {
-            CategoryDto categoryDto = new CategoryDto(childCategory);
-            categoryDto.setLevel(level);
-            categories.add(categoryDto);
+            childCategory.setLevel(level);
+            categories.add(childCategory);
             addChildCategories(categories, childCategory, level + 1);
         }
     }
 
-    public CategoryNodeDto getCategoryTree() {
-        return new CategoryNodeDto(getRootCategory());
+    public Category getCategoryTree() {
+        Category root = getRootCategory();
+        resolveChildCats(root);
+        return root;
     }
 
-    public void saveCategoryTree(CategoryNodeDto dto) {
-        long id = dto.getId();
-        Category c = em.find(Category.class, id);
-        dto.mapToModel(c);
-
-        for (CategoryNodeDto childDto : dto.getChildren()) {
-            saveCategoryTree(childDto);
-        }
+    private void resolveChildCats(Category node) {
+        Category parent = node.getParent();
+        if (parent != null) node.setParentId(parent.getId());
+        node.getChildren().forEach(c -> resolveChildCats(c));
     }
 
-    public long createCategory(CategoryNodeDto dto) {
-        Category c = new Category();
-        dto.mapToModel(c);
+    public void saveCategoryTree(Category category) {
+        em.merge(category);
+    }
 
-        Category parent = em.find(Category.class, dto.getParentId());
-        c.setParent(parent);
-
-        em.persist(c);
-
-        return c.getId();
+    public long createCategory(Category category) {
+        Category parent = em.find(Category.class, category.getParentId());
+        category.setParent(parent);
+        em.persist(category);
+        return category.getId();
     }
 
     public void deleteCategory(long categoryId) {
@@ -104,10 +105,8 @@ public class CategoryService {
         em.remove(category);
     }
 
-    public CategoryDto getSplitCategory() {
-        Session s = sessionService.getSession();
-        Category splitCategory = s.getSplitCategory();
-        return new CategoryDto(splitCategory);
+    public Category getSplitCategory() {
+        return sessionService.getSession().getSplitCategory();
     }
 
 }

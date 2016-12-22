@@ -38,26 +38,13 @@ public class CategoryServiceTests {
 
     @Test
     public void testBasics() {
-        List<CategoryDto> categories = categoryService.getCategories();
+        List<Category> categories = categoryService.getCategories();
         int size = categories.size();
         assertThat(categories).isNotEmpty();
 
-        CategoryNodeDto categoryTree = categoryService.getCategoryTree();
-        assertThat(categoryTree).isNotNull();
-        assertThat(categoryTree.getName()).isEqualTo("[ROOT]");
-        assertThat(categoryTree.getChildren()).isNotEmpty();
-
-        categoryTree.setName("[ROOT2]");
-        categoryService.saveCategoryTree(categoryTree);
-        categoryTree = categoryService.getCategoryTree();
-        assertThat(categoryTree.getName()).isEqualTo("[ROOT2]");
-
-        CategoryDto splitCategory = categoryService.getSplitCategory();
-        assertThat(splitCategory.getName()).isEqualTo("[SPLITTBUCHUNG]");
-
-        CategoryNodeDto newCat = new CategoryNodeDto();
+        Category newCat = new Category();
         newCat.setName("NEW");
-        newCat.setParentId(categoryTree.getId());
+        newCat.setParentId(categoryService.getRootCategory().getId());
         long newCatId = categoryService.createCategory(newCat);
         em.flush();
         em.clear();
@@ -69,5 +56,23 @@ public class CategoryServiceTests {
         assertThat(categoryService.getCategories()).hasSize(size);
     }
 
+    @Test
+    public void testGetSplitCategory() {
+        Category splitCategory = categoryService.getSplitCategory();
+        assertThat(splitCategory.getName()).isEqualTo("[SPLITTBUCHUNG]");
+    }
+
+    @Test
+    public void testCategoryTree() {
+        Category categoryTree = categoryService.getCategoryTree();
+        assertThat(categoryTree).isNotNull();
+        assertThat(categoryTree.getName()).isEqualTo("[ROOT]");
+        assertThat(categoryTree.getChildren()).isNotEmpty();
+
+        categoryTree.setName("[ROOT2]");
+        categoryService.saveCategoryTree(categoryTree);
+        categoryTree = categoryService.getCategoryTree();
+        assertThat(categoryTree.getName()).isEqualTo("[ROOT2]");
+    }
 
 }

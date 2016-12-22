@@ -1,8 +1,7 @@
 package name.gyger.jmoney.account;
 
 import name.gyger.jmoney.EntityFactory;
-import name.gyger.jmoney.category.CategoryDto;
-import name.gyger.jmoney.category.CategoryNodeDto;
+import name.gyger.jmoney.category.Category;
 import name.gyger.jmoney.category.CategoryService;
 import name.gyger.jmoney.session.SessionService;
 import name.gyger.jmoney.util.DateUtil;
@@ -55,9 +54,9 @@ public class EntryServiceTests {
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(0);
         assertThat(overallEntryCount()).isEqualTo(0);
 
-        CategoryNodeDto myCat = new CategoryNodeDto();
+        Category myCat = new Category();
         myCat.setName("My cat");
-        myCat.setParentId(categoryService.getCategoryTree().getId());
+        myCat.setParentId(categoryService.getRootCategory().getId());
         long myCatId = categoryService.createCategory(myCat);
 
         IntStream.range(0, 10).forEach(i -> {
@@ -89,7 +88,7 @@ public class EntryServiceTests {
     @Test
     public void testSplitEntry() {
         long accountId = EntityFactory.createAccount("my account", 1000, accountService);
-        CategoryDto split = categoryService.getSplitCategory();
+        Category split = categoryService.getSplitCategory();
 
         Entry entry = new Entry();
         entry.setCategoryId(split.getId());

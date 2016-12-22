@@ -4,8 +4,7 @@ import name.gyger.jmoney.EntityFactory;
 import name.gyger.jmoney.account.AccountService;
 import name.gyger.jmoney.account.Entry;
 import name.gyger.jmoney.account.EntryService;
-import name.gyger.jmoney.category.CategoryDto;
-import name.gyger.jmoney.category.CategoryNodeDto;
+import name.gyger.jmoney.category.Category;
 import name.gyger.jmoney.category.CategoryService;
 import name.gyger.jmoney.session.SessionService;
 import name.gyger.jmoney.util.DateUtil;
@@ -118,7 +117,7 @@ public class ReportServiceTests {
     @Test
     public void testEmptyInconsistentSplitEntry() {
         long accountId = EntityFactory.createAccount("my account", 0, accountService);
-        CategoryDto split = categoryService.getSplitCategory();
+        Category split = categoryService.getSplitCategory();
 
         Entry entry = new Entry();
         entry.setCategoryId(split.getId());
@@ -139,9 +138,9 @@ public class ReportServiceTests {
 
     @Test
     public void testEntriesForCategory() {
-        CategoryNodeDto newCat = new CategoryNodeDto();
+        Category newCat = new Category();
         newCat.setName("NEW");
-        newCat.setParentId(categoryService.getCategoryTree().getId());
+        newCat.setParentId(categoryService.getRootCategory().getId());
         long newCatId = categoryService.createCategory(newCat);
 
         long accountId = EntityFactory.createAccount("my account", 0, accountService);

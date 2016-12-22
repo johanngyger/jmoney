@@ -18,7 +18,7 @@ package name.gyger.jmoney.category;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/rest")
@@ -31,12 +31,17 @@ public class CategoryController {
     }
 
     @RequestMapping(path = "/categories", method = RequestMethod.GET)
-    public Collection<CategoryDto> getCategories() {
-        return categoryService.getCategories();
+    public List<Category> getCategories() {
+        List<Category> categories = categoryService.getCategories();
+        categories.forEach(c -> {
+            c.setParent(null);
+            c.setChildren(null);
+        });
+        return categories;
     }
 
     @RequestMapping(path = "/split-category", method = RequestMethod.GET)
-    public CategoryDto getSplitCategory() {
+    public Category getSplitCategory() {
         return categoryService.getSplitCategory();
     }
 
@@ -48,8 +53,8 @@ public class CategoryController {
     }
 
     @RequestMapping(path = "/categories", method = RequestMethod.POST)
-    public long createCategory(@RequestBody CategoryNodeDto dto) {
-        return categoryService.createCategory(dto);
+    public long createCategory(@RequestBody Category category) {
+        return categoryService.createCategory(category);
     }
 
     @RequestMapping(path = "/categories/{categoryId}", method = RequestMethod.DELETE)
@@ -58,13 +63,20 @@ public class CategoryController {
     }
 
     @RequestMapping(path = "/category-tree", method = RequestMethod.GET)
-    public CategoryNodeDto getCategoryTree() {
-        return categoryService.getCategoryTree();
+    public Category getCategoryTree() {
+        Category rootCategory = categoryService.getRootCategory();
+        cleanupCategories(rootCategory);
+        return rootCategory;
+    }
+
+    private void cleanupCategories(Category cat) {
+        cat.setParent(null);
+        cat.getChildren().forEach(c -> cleanupCategories(c));
     }
 
     @RequestMapping(path = "/category-tree", method = RequestMethod.PUT)
-    public void saveCategoryTree(@RequestBody CategoryNodeDto dto) {
-        categoryService.saveCategoryTree(dto);
+    public void saveCategoryTree(@RequestBody Category rootCat) {
+        categoryService.saveCategoryTree(rootCat);
     }
 
 }
