@@ -109,4 +109,8 @@ public class CategoryService {
         return sessionService.getSession().getSplitCategory();
     }
 
+    public Category getTransferCategory() {
+        return sessionService.getSession().getTransferCategory();
+    }
+
 }

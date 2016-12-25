@@ -85,6 +85,8 @@ public class CategoryControllerTests {
         String categoryTree = mockMvc.perform(get("/rest/category-tree"))
                 .andExpect(content().json("{'name':'[ROOT]'}"))
                 .andExpect(status().isOk())
+                .andExpect(content().string(not(containsString("SPLITTBUCHUNG"))))
+                .andExpect(content().string(not(containsString("UMBUCHUNG"))))
                 .andReturn().getResponse().getContentAsString();
 
         mockMvc.perform(put("/rest/category-tree")

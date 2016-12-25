@@ -63,6 +63,12 @@ public class CategoryServiceTests {
     }
 
     @Test
+    public void testGetTransferCategory() {
+        Category splitCategory = categoryService.getTransferCategory();
+        assertThat(splitCategory.getName()).isEqualTo("[UMBUCHUNG]");
+    }
+
+    @Test
     public void testCategoryTree() {
         Category categoryTree = categoryService.getCategoryTree();
         assertThat(categoryTree).isNotNull();
