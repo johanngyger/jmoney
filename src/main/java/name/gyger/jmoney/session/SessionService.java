@@ -17,6 +17,8 @@
 package name.gyger.jmoney.session;
 
 import name.gyger.jmoney.category.CategoryInitializer;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,13 @@ public class SessionService {
         Session session = new Session();
         categoryInitializer.initCategories(session);
         em.persist(session);
+    }
+
+    @EventListener
+    public void handleContextRefresh(ContextRefreshedEvent event) {
+        if (!isSessionAvailable()) {
+            initSession();
+        }
     }
 
     public void removeOldSession() {
