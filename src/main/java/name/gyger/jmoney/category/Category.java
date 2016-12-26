@@ -16,6 +16,8 @@
 
 package name.gyger.jmoney.category;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -32,6 +34,7 @@ public class Category {
     private long id;
 
     @ManyToOne
+    @JsonIgnore
     private Category parent;
 
     @OneToMany(mappedBy = "parent", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
@@ -46,6 +49,7 @@ public class Category {
     private long parentId;
 
     @Transient
+    @JsonIgnore
     private int level;
 
     public Category() {
@@ -86,6 +90,11 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNameIndented() {
+        // TODO correct indentation
+        return "L" + getLevel() + ": " + getName();
     }
 
     public Type getType() {

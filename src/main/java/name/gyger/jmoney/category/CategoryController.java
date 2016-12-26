@@ -64,7 +64,7 @@ public class CategoryController {
 
     @RequestMapping(path = "/category-tree", method = RequestMethod.GET)
     public Category getCategoryTree() {
-        Category rootCategory = categoryService.getRootCategory();
+        Category rootCategory = categoryService.getCategoryTree();
         rootCategory.getChildren().remove(categoryService.getSplitCategory());
         rootCategory.getChildren().remove(categoryService.getTransferCategory());
         cleanupCategories(rootCategory);

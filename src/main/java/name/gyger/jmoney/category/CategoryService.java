@@ -75,18 +75,26 @@ public class CategoryService {
 
     public Category getCategoryTree() {
         Category root = getRootCategory();
-        resolveChildCats(root);
+        resolveChildCats(root, 0);
         return root;
     }
 
-    private void resolveChildCats(Category node) {
+    private void resolveChildCats(Category node, int level) {
         Category parent = node.getParent();
+        node.setLevel(level);
         if (parent != null) node.setParentId(parent.getId());
-        node.getChildren().forEach(c -> resolveChildCats(c));
+        node.getChildren().forEach(c -> resolveChildCats(c, level + 1));
     }
 
     public void saveCategoryTree(Category category) {
+        resolveParents(category);
         em.merge(category);
+    }
+
+    private void resolveParents(Category node) {
+        Category parent = em.find(Category.class, node.getParentId());
+        node.setParent(parent);
+        node.getChildren().forEach(c -> resolveParents(c));
     }
 
     public long createCategory(Category category) {

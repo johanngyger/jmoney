@@ -81,7 +81,7 @@ public class CategoryControllerTests {
     }
 
     @Test
-    public void testGetCategoryTree() throws Exception {
+    public void testCategoryTree() throws Exception {
         String categoryTree = mockMvc.perform(get("/rest/category-tree"))
                 .andExpect(content().json("{'name':'[ROOT]'}"))
                 .andExpect(status().isOk())
@@ -93,6 +93,9 @@ public class CategoryControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(categoryTree))
                 .andExpect(status().isOk());
+
+        mockMvc.perform(get("/rest/category-tree"))
+                .andExpect(content().string(equalTo(categoryTree)));
     }
 
 }
