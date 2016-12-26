@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,7 +36,7 @@ public class AccountControllerTests {
     @Test
     public void testGetEmptyAccounts() throws Exception {
         mockMvc.perform(get("/rest/accounts"))
-                .andExpect(content().string("[]"))
+                .andExpect(content().json("[]"))
                 .andExpect(status().isOk());
     }
 
@@ -52,7 +51,7 @@ public class AccountControllerTests {
 
         mockMvc.perform(get("/rest/accounts"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("\"name\":\"Account 1\"")));
+                .andExpect(content().json("[{'name':'Account 1'}]"));
 
         mockMvc.perform(put("/rest/accounts/" + accountId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -61,7 +60,7 @@ public class AccountControllerTests {
 
         mockMvc.perform(get("/rest/accounts/" + accountId))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("\"name\":\"Account 1b\"")));
+                .andExpect(content().json("{'name':'Account 1b'}"));
 
         mockMvc.perform(delete("/rest/accounts/" + accountId))
                 .andExpect(status().isOk());
