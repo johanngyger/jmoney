@@ -39,14 +39,14 @@ public class ReportController {
 
 
     @RequestMapping(path = "/balances", method = RequestMethod.GET)
-    public List<BalanceDto> getBalances(@RequestParam(value = "date", required = false) String dateString) {
+    public List<Balance> getBalances(@RequestParam(value = "date", required = false) String dateString) {
         Date date = DateUtil.parse(dateString);
         return reportService.getBalances(date);
     }
 
     @RequestMapping(path = "/cash-flows", method = RequestMethod.GET)
-    public List<CashFlowDto> getCashFlow(@RequestParam(value = "fromDate", required = false) String fromDateString,
-                                        @RequestParam(value = "toDate", required = false) String toDateString) {
+    public List<CashFlow> getCashFlow(@RequestParam(value = "fromDate", required = false) String fromDateString,
+                                      @RequestParam(value = "toDate", required = false) String toDateString) {
         Date fromDate = DateUtil.parse(fromDateString);
         Date toDate = DateUtil.parse(toDateString);
 

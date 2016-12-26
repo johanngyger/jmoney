@@ -9,4 +9,5 @@ public class JMoneyApplication {
     public static void main(String[] args) {
         SpringApplication.run(JMoneyApplication.class, args);
     }
+
 }

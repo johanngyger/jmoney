@@ -29,10 +29,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -50,9 +47,9 @@ public class ReportService {
         this.categoryService = categoryService;
     }
 
-    public List<BalanceDto> getBalances(Date date) {
+    public List<Balance> getBalances(Date date) {
         Session session = sessionService.getSession();
-        List<BalanceDto> result = new ArrayList<BalanceDto>();
+        List<Balance> result = new ArrayList<Balance>();
 
         Map<Long, Long> entrySums = getEntrySumsByAccountId(date);
 
@@ -66,20 +63,19 @@ public class ReportService {
             balance += account.getStartBalance();
             totalBalance += balance;
 
-            BalanceDto dto = new BalanceDto(account.getName(), balance);
+            Balance dto = new Balance(account.getName(), balance, false);
             result.add(dto);
         }
 
-        BalanceDto totalBalanceDto = new BalanceDto("Gesamt", totalBalance);
-        totalBalanceDto.setTotal(true);
+        Balance totalBalanceDto = new Balance("Gesamt", totalBalance, true);
         result.add(totalBalanceDto);
 
         return result;
     }
 
-    public List<CashFlowDto> getCashFlow(Date from, Date to) {
+    public List<CashFlow> getCashFlow(Date from, Date to) {
         Session session = sessionService.getSession();
-        List<CashFlowDto> resultList = new ArrayList<CashFlowDto>();
+        List<CashFlow> resultList = new ArrayList<CashFlow>();
 
         categoryService.prefetchCategories();
         Category root = session.getRootCategory();
@@ -90,19 +86,18 @@ public class ReportService {
         long totalExpense = 0;
 
         for (Category child : root.getChildren()) {
-            List<CashFlowDto> subList = new ArrayList<CashFlowDto>();
+            List<CashFlow> subList = new ArrayList<CashFlow>();
             calculateCashFlowForCategory(subList, entrySums, child, null, from, to);
 
             long income = 0;
             long expense = 0;
-            for (CashFlowDto cashFlow : subList) {
+            for (CashFlow cashFlow : subList) {
                 income += toZeroIfNull(cashFlow.getIncome());
                 expense += toZeroIfNull(cashFlow.getExpense());
             }
 
             if (income != 0 || expense != 0) {
-                CashFlowDto childDto = new CashFlowDto(null, child.getName() + " (Gesamt)", income, expense, income - expense);
-                childDto.setTotal(true);
+                CashFlow childDto = new CashFlow(null, child.getName() + " (Gesamt)", income, expense, income - expense, true);
                 subList.add(childDto);
             }
 
@@ -111,8 +106,7 @@ public class ReportService {
             resultList.addAll(subList);
         }
 
-        CashFlowDto total = new CashFlowDto(null, "Gesamttotal", totalIncome, totalExpense, totalIncome - totalExpense);
-        total.setTotal(true);
+        CashFlow total = new CashFlow(null, "Gesamttotal", totalIncome, totalExpense, totalIncome - totalExpense, true);
         resultList.add(total);
         return resultList;
     }
@@ -171,7 +165,7 @@ public class ReportService {
         }
 
         List resultList = q.getResultList();
-        Map<Long, Long> result = ReportUtil.mapResult(resultList);
+        Map<Long, Long> result = mapResult(resultList);
         return result;
     }
 
@@ -184,7 +178,7 @@ public class ReportService {
         q.setParameter("to", to);
 
         List resultList = q.getResultList();
-        Map<Long, Long> result = ReportUtil.mapResult(resultList);
+        Map<Long, Long> result = mapResult(resultList);
         return result;
     }
 
@@ -192,7 +186,7 @@ public class ReportService {
         String queryString = "SELECT e.splitEntry.id, SUM(e.amount) FROM Entry e GROUP BY e.splitEntry.id";
         Query q = em.createQuery(queryString);
         List resultList = q.getResultList();
-        Map<Long, Long> result = ReportUtil.mapResult(resultList);
+        Map<Long, Long> result = mapResult(resultList);
         return result;
     }
 
@@ -204,7 +198,7 @@ public class ReportService {
         }
     }
 
-    private void calculateCashFlowForCategory(List<CashFlowDto> resultList, Map<Long, Long> entrySums,
+    private void calculateCashFlowForCategory(List<CashFlow> resultList, Map<Long, Long> entrySums,
                                               Category category, String parentName, Date from, Date to) {
         String name = createCategoryName(category, parentName);
 
@@ -218,7 +212,7 @@ public class ReportService {
         }
     }
 
-    private void createCategoryFlowDto(List<CashFlowDto> resultList, Long id, String name, Long sum) {
+    private void createCategoryFlowDto(List<CashFlow> resultList, Long id, String name, Long sum) {
         if (sum != null) {
             Long income = null;
             Long expense = null;
@@ -229,7 +223,7 @@ public class ReportService {
                 expense = -sum;
             }
 
-            CashFlowDto dto = new CashFlowDto(id, name, income, expense, null);
+            CashFlow dto = new CashFlow(id, name, income, expense, null, false);
             resultList.add(dto);
         }
     }
@@ -240,6 +234,19 @@ public class ReportService {
             name = parentName + ":" + name;
         }
         return name;
+    }
+
+    public static Map<Long, Long> mapResult(List queryResultList) {
+        Map<Long, Long> result = new HashMap<Long, Long>();
+
+        for (Object resultItem : queryResultList) {
+            Object[] resultItemArray = (Object[]) resultItem;
+            Long accountId = (Long) resultItemArray[0];
+            Long sum = (Long) resultItemArray[1];
+            result.put(accountId, sum);
+        }
+
+        return result;
     }
 
 }

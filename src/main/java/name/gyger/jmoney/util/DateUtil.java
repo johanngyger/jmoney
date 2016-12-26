@@ -31,7 +31,7 @@ public class DateUtil {
         try {
             result = sdf.parse(dateString);
         } catch (ParseException e) {
-            throw new RuntimeException("Should not happen", e);
+            throw new IllegalArgumentException(dateString, e);
         }
         return result;
     }

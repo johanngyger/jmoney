@@ -16,42 +16,28 @@
 
 package name.gyger.jmoney.report;
 
-public class BalanceDto {
+public class Balance {
 
     private String accountName;
     private long balance;
     private boolean total;
 
-    public BalanceDto() {
-    }
-
-    public BalanceDto(String accountName, long balance) {
+    public Balance(String accountName, long balance, boolean total) {
         this.accountName = accountName;
         this.balance = balance;
+        this.total = total;
     }
 
     public String getAccountName() {
         return accountName;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
     public long getBalance() {
         return balance;
     }
 
-    public void setBalance(long balance) {
-        this.balance = balance;
-    }
-
     public boolean isTotal() {
         return total;
-    }
-
-    public void setTotal(boolean total) {
-        this.total = total;
     }
 
 }

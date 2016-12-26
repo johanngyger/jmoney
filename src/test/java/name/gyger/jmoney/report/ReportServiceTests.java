@@ -55,26 +55,38 @@ public class ReportServiceTests {
 
     @Test
     public void testBalances() {
-        long accA = EntityFactory.createAccount("A", 0, accountService);
-        long accB = EntityFactory.createAccount("B", 0, accountService);
+        long accountA = EntityFactory.createAccount("A", 0, accountService);
+        long accountB = EntityFactory.createAccount("B", 0, accountService);
 
         Date date = DateUtil.parse("2000-01-01");
 
         Entry entry = new Entry();
-        entry.setAccountId(accA);
+        entry.setAccountId(accountA);
         entry.setDate(date);
         entry.setAmount(15);
         EntityFactory.createEntries(entry, 10, entryService);
 
-        entry.setAccountId(accB);
+        entry.setAccountId(accountB);
         entry.setAmount(-5);
         EntityFactory.createEntries(entry, 10, entryService);
 
-        List<BalanceDto> balances = reportService.getBalances(date);
+        List<Balance> balances = reportService.getBalances(date);
         assertThat(balances).hasSize(3);
-        assertThat(balances.get(0).getBalance()).isEqualTo(150);
-        assertThat(balances.get(1).getBalance()).isEqualTo(-50);
-        assertThat(balances.get(2).getBalance()).isEqualTo(100);
+
+        Balance balanceA = balances.get(0);
+        assertThat(balanceA.getBalance()).isEqualTo(150);
+        assertThat(balanceA.isTotal()).isFalse();
+        assertThat(balanceA.getAccountName()).isEqualTo("A");
+
+        Balance balanceB = balances.get(1);
+        assertThat(balanceB.getBalance()).isEqualTo(-50);
+        assertThat(balanceB.isTotal()).isFalse();
+        assertThat(balanceB.getAccountName()).isEqualTo("B");
+
+        Balance balanceTotal = balances.get(2);
+        assertThat(balanceTotal.getBalance()).isEqualTo(100);
+        assertThat(balanceTotal.isTotal()).isTrue();
+        assertThat(balanceTotal.getAccountName()).isEqualTo("Gesamt");
     }
 
     @Test
@@ -82,8 +94,8 @@ public class ReportServiceTests {
         long accId = EntityFactory.createAccount("A", 0, accountService);
 
         long catA = EntityFactory.createTopLevelCategory("A", categoryService);
-        long catB = EntityFactory.createTopLevelCategory("A", categoryService);
-        long catC = EntityFactory.createTopLevelCategory("A", categoryService);
+        long catB = EntityFactory.createTopLevelCategory("B", categoryService);
+        long catC = EntityFactory.createTopLevelCategory("C", categoryService);
 
         Date date = DateUtil.parse("2000-10-07");
         Entry entry = new Entry();
@@ -106,12 +118,32 @@ public class ReportServiceTests {
 
         Date from = DateUtil.parse("2000-01-01");
         Date to = DateUtil.parse("2001-01-01");
-        List<CashFlowDto> cashFlow = reportService.getCashFlow(from, to);
+        List<CashFlow> cashFlow = reportService.getCashFlow(from, to);
         assertThat(cashFlow).hasSize(7);
-        assertThat(cashFlow.get(0).getIncome()).isEqualTo(56);
-        assertThat(cashFlow.get(2).getExpense()).isEqualTo(90);
-        assertThat(cashFlow.get(4).getIncome()).isEqualTo(132);
-        assertThat(cashFlow.get(6).getIncome()).isEqualTo(188);
+
+        CashFlow cashFlowA = cashFlow.get(0);
+        assertThat(cashFlowA.getIncome()).isEqualTo(56);
+        assertThat(cashFlowA.getExpense()).isNull();
+        assertThat(cashFlowA.getDifference()).isNull();
+        assertThat(cashFlowA.isTotal()).isFalse();
+
+        CashFlow cashFlowB = cashFlow.get(2);
+        assertThat(cashFlowB.getIncome()).isNull();
+        assertThat(cashFlowB.getExpense()).isEqualTo(90);
+        assertThat(cashFlowB.getDifference()).isNull();
+        assertThat(cashFlowB.isTotal()).isFalse();
+
+        CashFlow cashFlowC = cashFlow.get(4);
+        assertThat(cashFlowC.getIncome()).isEqualTo(132);
+        assertThat(cashFlowC.getExpense()).isNull();
+        assertThat(cashFlowC.getDifference()).isNull();
+        assertThat(cashFlowC.isTotal()).isFalse();
+
+        CashFlow cashFlowTotal = cashFlow.get(6);
+        assertThat(cashFlowTotal.getIncome()).isEqualTo(188);
+        assertThat(cashFlowTotal.getExpense()).isEqualTo(90);
+        assertThat(cashFlowTotal.getDifference()).isEqualTo(98);
+        assertThat(cashFlowTotal.isTotal()).isTrue();
     }
 
     @Test
