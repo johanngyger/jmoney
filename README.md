@@ -15,4 +15,5 @@ Then fire up a browser at <http://localhost:8080>.
 
 ## Running on Heroku
 
-A demo instance is availabla at <https://jmoney-demo.herokuapp.com>.
+* A demo instance is available at <https://jmoney-demo.herokuapp.com>.
+* You can also deploy your own instance: [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
