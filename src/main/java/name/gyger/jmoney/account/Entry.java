@@ -16,6 +16,7 @@
 
 package name.gyger.jmoney.account;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import name.gyger.jmoney.category.Category;
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,9 +37,11 @@ public class Entry {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Account account;
 
+    @JsonIgnore
     @ManyToOne
     private Category category;
 
@@ -211,6 +214,10 @@ public class Entry {
 
     public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return category.getName();
     }
 
 }

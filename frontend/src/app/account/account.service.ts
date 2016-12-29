@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
-
 import 'rxjs/add/operator/toPromise';
-
 import { Account } from './account';
 
 @Injectable()
 export class AccountService {
-  private accountsUrl = '/rest/accounts';  // URL to web api
+  private accountsUrl = '/rest/accounts/';  // URL to web api
 
   constructor(private http: Http) { }
 
@@ -19,7 +17,7 @@ export class AccountService {
       .catch(this.handleError);
   }
 
-  getAccount(id: number): Promise<Account[]> {
+  getAccount(id: number): Promise<Account> {
     const url = `${this.accountsUrl}/${id}`;
     return this.http.get(url)
       .toPromise()

@@ -1,16 +1,13 @@
-<div id="content" class="clear">
-  <div id="sub">
-    <ul>
-      <li *ngFor="let account of accounts">
-        <div class="dropdown">
-          <a href="#/accounts/{{account.id}}/entries" class="ui-corner-all">{{account.name}}</a>
-        </div>
-      </li>
-      <li>
-        <a href="#/accounts/" class="ui-corner-all"><i class="icon-plus-sign"></i> Neues Konto</a>
-      </li>
-    </ul>
-  </div>
-
-  <!--<account-details></account-details>-->
+<div id="sub">
+  <ul>
+    <li *ngFor="let account of accounts">
+      <div class="dropdown">
+        <a [routerLink]="['/accounts', account.id, 'entries']" class="ui-corner-all">{{account.name}}</a>
+      </div>
+    </li>
+    <li>
+      <a href="#/accounts/" class="ui-corner-all"><i class="icon-plus-sign"></i> Neues Konto</a>
+    </li>
+  </ul>
 </div>
+

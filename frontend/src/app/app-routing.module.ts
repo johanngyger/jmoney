@@ -4,12 +4,17 @@ import {AccountsComponent} from "./account/accounts.component";
 import {CategoriesComponent} from "./category/categories.component";
 import {OptionsComponent} from "./options/options.component";
 import {ReportsComponent} from "./report/reports.component";
+import {EntriesComponent} from "./account/entries.component";
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: '/accounts',
     pathMatch: 'full'
+  },
+  {
+    path: 'accounts/:accountId/entries',
+    component: EntriesComponent
   },
   {
     path: 'accounts',
