@@ -217,6 +217,7 @@ public class Entry {
     }
 
     public String getCategoryName() {
+        if (category == null) return null;
         return category.getName();
     }
 
