@@ -8,7 +8,6 @@ import {AppRoutingModule} from "./app-routing.module";
 import {AccountsComponent} from "./account/accounts.component";
 import {CategoriesComponent} from "./category/categories.component";
 import {OptionsComponent} from "./options/options.component";
-import {ReportsComponent} from "./report/reports.component";
 import {AccountService} from "./account/account.service";
 import {EntriesComponent} from "./account/entries.component";
 import {EntryService} from "./account/entry.service";
@@ -21,7 +20,6 @@ import {AccountDetailComponent} from "./account/account-detail.component";
     AccountDetailComponent,
     EntriesComponent,
     CategoriesComponent,
-    ReportsComponent,
     OptionsComponent,
   ],
   imports: [

@@ -3,7 +3,6 @@ import {Routes, RouterModule} from "@angular/router";
 import {AccountsComponent} from "./account/accounts.component";
 import {CategoriesComponent} from "./category/categories.component";
 import {OptionsComponent} from "./options/options.component";
-import {ReportsComponent} from "./report/reports.component";
 import {EntriesComponent} from "./account/entries.component";
 import {AccountDetailComponent} from "./account/account-detail.component";
 
@@ -31,7 +30,7 @@ const routes: Routes = [
   },
   {
     path: 'reports',
-    component: ReportsComponent
+    loadChildren: 'app/reports/reports.module#ReportModule'
   },
   {
     path: 'options',

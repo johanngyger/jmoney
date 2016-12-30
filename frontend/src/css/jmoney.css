@@ -283,7 +283,7 @@ div#sub img {
     overflow: hidden;
 }
 
-div#sub .selected {
+div#sub .active {
     font-weight: bold;
 }
 

@@ -1,0 +1,21 @@
+<label for="filter">Filter:</label>
+<select id="filter" [(ngModel)]="filter">
+  <option value="date">Date</option>
+  <option value="all">All entries</option>
+  <option value="balanced">Balanced entries</option>
+</select>
+
+<label for="date">Date:</label>
+<input id="date" title="Date" [(ngModel)]="filterDate" type="date">
+
+<button type="submit" (click)="fetchBalances()">Generate</button>
+
+<hr>
+
+<div *ngIf="balances">
+  <div class="report-entry" *ngFor="let balance of balances" [ngClass]="{'report-total': balance.total}">
+    <div class="pull-right">{{balance.balance / 100 | number:'1.2-2'}}</div>
+    <div style>{{balance.accountName}}</div>
+  </div>
+</div>
+

@@ -1,0 +1,42 @@
+<div class="subnav">
+  <label for="period">Period:</label>
+  <select id="period" name="period" [(ngModel)]="period" (change)="onPeriodChange()">
+    <option *ngFor="let period of periods" [ngValue]="period.value">{{period.description}}</option>
+  </select>
+
+  <label for="toDate">From:</label>
+  <input id="fromDate" name="fromDate" title="Datum von" placeholder="Datum von" [(ngModel)]="fromDate" type="date">
+
+  <label for="toDate">To:</label>
+  <input id="toDate" name="toDate" title="Datum bis" placeholder="Datum bis" [(ngModel)]="toDate" type="date">
+
+  <button type="submit" (click)="fetchCashFlow()">Generate</button>
+</div>
+
+<table *ngIf="cashFlows">
+  <thead>
+  <tr>
+    <th scope="col" class="thSpace">Category</th>
+    <th scope="col" class="amount thSpace">Income</th>
+    <th scope="col" class="amount thSpace">Expense</th>
+    <th scope="col" class="amount">Difference</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let cashFlow of cashFlows" [ngClass]="{'report-total': cashFlow.total}">
+    <td class="thSpace">
+      <a *ngIf="cashFlow.categoryId != null" ng-click="getEntriesForCategory(cashFlow.categoryId)">{{cashFlow.categoryName}}</a>
+      <span *ngIf="!cashFlow.categoryId">{{cashFlow.categoryName}}</span>
+    </td>
+    <td class="amount thSpace">
+      <span *ngIf="cashFlow.income != null">{{cashFlow.income / 100 | number:'1.2-2'}}</span>
+    </td>
+    <td class="amount thSpace">
+      <span *ngIf="cashFlow.expense != null">{{cashFlow.expense / 100 | number:'1.2-2'}}</span>
+    </td>
+    <td class="amount">
+      <span *ngIf="cashFlow.difference != null">{{cashFlow.difference / 100 | number:'1.2-2'}}</span>
+    </td>
+  </tr>
+  </tbody>
+</table>
