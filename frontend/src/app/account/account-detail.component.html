@@ -1,0 +1,84 @@
+<jmoney-accounts></jmoney-accounts>
+
+<div id="main" *ngIf="account">
+  <div class="subnav">
+    <a [routerLink]="['/accounts', account.id, 'entries']">
+      <i class="icon-circle-arrow-left"></i> Zurück
+    </a>
+    <a class="ui-corner-all" ng-click="delete()" ng-show="account.id">
+      <i class="icon-trash"></i> Konto löschen
+    </a>
+  </div>
+
+  <hr>
+
+  <form id="formAccount" class="form-horizontal">
+    <div class="control-group">
+      <label class="control-label" for="name">Name</label>
+      <div class="controls">
+        <input type="text" id="name" name="name" [(ngModel)]="account.name">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="bank">Bank</label>
+
+      <div class="controls">
+        <input type="text" id="bank" name="bank" [(ngModel)]="account.bank">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="currency">Währung</label>
+      <div class="controls">
+        <input type="text" id="currency" name="currency" [(ngModel)]="account.currency">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="bank">Kontonummer</label>
+      <div class="controls">
+        <input type="text" id="accountNumber" name="accountNumber" [(ngModel)]="account.accountNumber">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="startBalance">Angfangssaldo</label>
+      <div class="controls">
+        <input type="text" id="startBalance" name="startBalance" [(ngModel)]="account.startBalance100">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="minBalance">Mindestsaldo</label>
+      <div class="controls">
+        <input type="text" id="minBalance" name="minBalance" [(ngModel)]="account.minBalance100">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="bank">Abkürzung</label>
+      <div class="controls">
+        <input type="text" id="abbreviation" name="abbreviation" [(ngModel)]="account.abbreviation">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="comment">Kommentar</label>
+      <div class="controls">
+        <textarea rows="3" id="comment" name="comment" [(ngModel)]="account.comment"></textarea>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" ng-click="save()">Speichern</button>
+      </div>
+    </div>
+  </form>
+
+  <hr>
+
+  <!--DEBUG:-->
+  <!--<pre>account={{account}}</pre>-->
+</div>

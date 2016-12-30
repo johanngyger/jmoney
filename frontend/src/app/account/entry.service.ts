@@ -9,10 +9,14 @@ export class EntryService {
 
   getEntries(accountId: number): Promise<Entry[]> {
     return this.http
-      .get('/rest/accounts/' + accountId + '/entries/')
+      .get(this.getEntriesPath(accountId))
       .toPromise()
       .then(response => response.json() as Entry[])
       .catch(this.handleError);
+  }
+
+  private getEntriesPath(accountId: number): string {
+    return '/rest/accounts/' + accountId + '/entries/';
   }
 
   private handleError(error: any): Promise<any> {

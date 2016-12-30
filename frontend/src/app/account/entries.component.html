@@ -1,27 +1,27 @@
 <jmoney-accounts></jmoney-accounts>
 
-<div id="main">
+<div id="main" *ngIf="accountId && entries">
   <div class="subnav">
-    <a href="#/accounts/{{accountId}}/entries/new" class="ui-corner-all"><i class="icon-plus-sign"></i> Neue Buchung</a>
+    <a href="#/accounts/{{accountId}}/entries/new" class="ui-corner-all"><i class="icon-plus-sign"></i> New entry</a>
     <input id="filter" name="filter" title="Fitler" placeholder="Filter" ng-model="filter">
     <button type="submit" ng-click="load()">Filtern</button>
-    <a href="#/accounts/{{accountId}}"><i class="icon-wrench"></i> Kontoeinstellungen</a>
+    <a [routerLink]="['/accounts', accountId]"><i class="icon-wrench"></i> Account details</a>
   </div>
 
   <table class="entryTable">
     <thead>
     <tr>
-      <th scope="col">Datum<br>Valuta</th>
-      <th scope="col">Beschreibung<br>Kategorie<br>Memo</th>
+      <th scope="col">Date<br>Valuta</th>
+      <th scope="col">Description<br>Category<br>Memo</th>
       <th scope="col">Status</th>
       <th scope="col">
-        <div class="amount">Einnahmen</div>
+        <div class="amount">Income</div>
       </th>
       <th scope="col">
-        <div class="amount">Ausgaben</div>
+        <div class="amount">Expence</div>
       </th>
       <th scope="col">
-        <div class="amount">Saldo</div>
+        <div class="amount">Balance</div>
       </th>
     </tr>
     </thead>

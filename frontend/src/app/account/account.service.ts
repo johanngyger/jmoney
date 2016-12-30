@@ -5,20 +5,20 @@ import { Account } from './account';
 
 @Injectable()
 export class AccountService {
-  private accountsUrl = '/rest/accounts/';  // URL to web api
+  private accountsPath = '/rest/accounts';
 
   constructor(private http: Http) { }
 
   getAccounts(): Promise<Account[]> {
     return this.http
-      .get(this.accountsUrl)
+      .get(this.accountsPath)
       .toPromise()
       .then(response => response.json() as Account[])
       .catch(this.handleError);
   }
 
   getAccount(id: number): Promise<Account> {
-    const url = `${this.accountsUrl}/${id}`;
+    const url = `${this.accountsPath}/${id}`;
     return this.http.get(url)
       .toPromise()
       .then(response => response.json() as Account)

@@ -5,6 +5,7 @@ import {CategoriesComponent} from "./category/categories.component";
 import {OptionsComponent} from "./options/options.component";
 import {ReportsComponent} from "./report/reports.component";
 import {EntriesComponent} from "./account/entries.component";
+import {AccountDetailComponent} from "./account/account-detail.component";
 
 const routes: Routes = [
   {
@@ -15,6 +16,10 @@ const routes: Routes = [
   {
     path: 'accounts/:accountId/entries',
     component: EntriesComponent
+  },
+  {
+    path: 'accounts/:accountId',
+    component: AccountDetailComponent
   },
   {
     path: 'accounts',

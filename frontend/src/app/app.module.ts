@@ -12,11 +12,13 @@ import {ReportsComponent} from "./report/reports.component";
 import {AccountService} from "./account/account.service";
 import {EntriesComponent} from "./account/entries.component";
 import {EntryService} from "./account/entry.service";
+import {AccountDetailComponent} from "./account/account-detail.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     AccountsComponent,
+    AccountDetailComponent,
     EntriesComponent,
     CategoriesComponent,
     ReportsComponent,

@@ -8,15 +8,18 @@ import {EntryService} from "./entry.service";
   templateUrl: './entries.component.html'
 })
 export class EntriesComponent implements OnInit {
-  entries: Entry[];
+  private entries: Entry[];
+  private accountId: number;
 
   constructor(private entryService: EntryService,
               private route: ActivatedRoute,) {
   }
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => this.accountId = params['accountId']);
+
     this.route.params
-      .switchMap((params: Params) => this.entryService.getEntries(+params['accountId']))
+      .switchMap(params => this.entryService.getEntries(+params['accountId']))
       .subscribe(entries => this.entries = entries);
   }
 
