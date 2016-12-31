@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import {CommonModule, DatePipe} from "@angular/common";
+import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ReportsRoutingModule} from "./reports-routing.module";
 import {ReportsComponent} from "./reports.component";
@@ -20,10 +20,7 @@ import {ConsistencyComponent} from "./consistency.component";
     CashFlowComponent,
     ConsistencyComponent
   ],
-  providers: [
-    ReportsService,
-    DatePipe
-  ]
+  providers: [ReportsService]
 })
-export class ReportModule {
+export class ReportsModule {
 }

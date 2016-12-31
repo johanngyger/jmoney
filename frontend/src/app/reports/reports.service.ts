@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {DatePipe} from "@angular/common";
 import {URLSearchParams, Http} from "@angular/http";
 import "rxjs/add/operator/toPromise";
 import {Balance} from "./balance";
@@ -10,7 +9,7 @@ import {Entry} from "../account/entry";
 export class ReportsService {
   private accountsPath = '/rest/accounts';
 
-  constructor(private http: Http, private datePipe: DatePipe) {
+  constructor(private http: Http) {
   }
 
   getBalances(date: string): Promise<Balance[]> {
