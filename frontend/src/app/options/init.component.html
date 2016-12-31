@@ -1,0 +1,13 @@
+<div class="alert alert-success" *ngIf="status === 'success'">
+  Initialization was successful.
+</div>
+<div class="alert alert-error" *ngIf="status === 'error'">
+  Initialization failed.
+</div>
+
+
+<p>Attention: this will reset all the data!</p>
+
+<hr>
+
+<button type="submit" (click)="init()">Initialize</button>
