@@ -6,14 +6,23 @@ import {OptionsService} from "./options.service";
 })
 export class InitComponent {
   status: string;
+  loading: boolean;
 
   constructor(private optionsService: OptionsService) {
   }
 
   init(): void {
+    this.loading = true;
+
     this.optionsService.init()
-      .then(response => this.status = 'success')
-      .catch(response => this.status = 'error');
+      .then(response => {
+        this.status = 'success';
+        this.loading = false;
+      })
+      .catch(response => {
+        this.status = 'error';
+        this.loading = false;
+      });
   }
 
 }

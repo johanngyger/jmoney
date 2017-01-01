@@ -6,11 +6,13 @@ import {OptionsComponent} from "./options.component";
 import {InitComponent} from "./init.component";
 import {ImportComponent} from "./import.component";
 import {OptionsService} from "./options.service";
+import {NgUploaderModule} from 'ngx-uploader';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    NgUploaderModule,
     OptionsRoutingModule
   ],
   declarations: [

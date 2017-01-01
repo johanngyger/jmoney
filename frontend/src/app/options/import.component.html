@@ -1,0 +1,31 @@
+<div class="alert alert-success" *ngIf="status === 'success'">
+  Import was successful.
+</div>
+<div class="alert alert-error" *ngIf="status === 'error'">
+  Import failed.
+</div>
+
+
+<p>Import of an old JMoney file (version 0.4.4, see
+  <a href="http://jmoney.sourceforge.net/old" target="_blank">http://jmoney.sourceforge.net/old</a>)
+</p>
+
+<hr>
+
+<input type="file" ngFileSelect [options]="options" (onUpload)="handleUpload($event)"
+       (beforeUpload)="beforeUpload($event)">
+<img src=" img/loader.gif" *ngIf="loading">
+
+<!--
+<form method="post" action="/rest/options/import" enctype="multipart/form-data">
+  <p>
+    Step 1:
+    <input id="file" name="file" title="JMoney file (.jmx)" placeholder="JMoney file (.jmx)" type="file">
+  </p>
+  <p>
+    Step 2:
+    <button type="submit" click="upload()">Upload file</button>
+    <img src="img/loader.gif" *ngIf="loading">
+  </p>
+</form>
+-->

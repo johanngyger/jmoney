@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/rest/options")
@@ -59,5 +60,10 @@ public class OptionsController {
         }
     }
 
+    @RequestMapping(path = "/import2", method = RequestMethod.POST)
+    @ResponseBody
+    public void importFile2(@RequestParam("file") MultipartFile file) throws IOException {
+        optionsService.importFile(file.getInputStream());
+    }
 
 }
