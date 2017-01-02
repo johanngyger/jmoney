@@ -6,7 +6,6 @@ import {HttpModule} from "@angular/http";
 import {AppComponent} from "./app.component";
 import {AppRoutingModule} from "./app-routing.module";
 import {AccountsComponent} from "./account/accounts.component";
-import {CategoriesComponent} from "./category/categories.component";
 import {AccountService} from "./account/account.service";
 import {EntriesComponent} from "./account/entries.component";
 import {EntryService} from "./account/entry.service";
@@ -17,8 +16,7 @@ import {AccountDetailComponent} from "./account/account-detail.component";
     AppComponent,
     AccountsComponent,
     AccountDetailComponent,
-    EntriesComponent,
-    CategoriesComponent,
+    EntriesComponent
   ],
   imports: [
     BrowserModule,

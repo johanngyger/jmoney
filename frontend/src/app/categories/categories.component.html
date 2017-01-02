@@ -1,0 +1,20 @@
+<div id="main">
+  <div ng-include="'templates/alerts.html'"></div>
+
+  <a (click)="add(tree)"><i class="icon-plus-sign"></i> Neue Hauptkategorie</a>
+  <hr>
+
+  <div class="button-bar">
+    <button type="submit" (click)="save()">Speichern</button>
+  </div>
+
+  <img src="img/loader.gif" *ngIf="loading">
+
+  <div *ngIf="categoryTree">
+    <jmoney-category-tree [categories]="categoryTree.children"></jmoney-category-tree>
+  </div>
+
+  <div class="button-bar">
+    <button type="submit" (click)="save()">Speichern</button>
+  </div>
+</div>

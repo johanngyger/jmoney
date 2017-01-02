@@ -1,7 +1,6 @@
 import {NgModule} from "@angular/core";
 import {Routes, RouterModule} from "@angular/router";
 import {AccountsComponent} from "./account/accounts.component";
-import {CategoriesComponent} from "./category/categories.component";
 import {EntriesComponent} from "./account/entries.component";
 import {AccountDetailComponent} from "./account/account-detail.component";
 
@@ -25,7 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'categories',
-    component: CategoriesComponent
+    loadChildren: 'app/categories/categories.module#CategoriesModule'
   },
   {
     path: 'reports',

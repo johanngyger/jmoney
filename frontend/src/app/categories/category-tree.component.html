@@ -1,0 +1,9 @@
+<ul>
+  <li *ngFor="let category of categories">
+    <input class="input-large" [(ngModel)]="category.name"/>
+    <a title="Add sub-category" (click)="add(category)"><i class="icon-plus-sign"></i></a>
+    <a title="Remove category" (click)="remove(category)"><i class="icon-minus-sign"></i></a>
+
+    <jmoney-category-tree [categories]="category.children"></jmoney-category-tree>
+  </li>
+</ul>
