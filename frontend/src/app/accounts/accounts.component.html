@@ -2,7 +2,7 @@
   <ul>
     <li *ngFor="let account of accounts">
       <div class="dropdown">
-        <a [routerLink]="['/accounts', account.id, 'entries']" class="ui-corner-all">{{account.name}}</a>
+        <a [routerLink]="['/accounts', account.id, 'entries']" routerLinkActive="active" class="ui-corner-all">{{account.name}}</a>
       </div>
     </li>
     <li>
@@ -11,3 +11,6 @@
   </ul>
 </div>
 
+<div id="main">
+  <router-outlet></router-outlet>
+</div>

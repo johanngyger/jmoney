@@ -1,8 +1,5 @@
 import {NgModule} from "@angular/core";
 import {Routes, RouterModule} from "@angular/router";
-import {AccountsComponent} from "./account/accounts.component";
-import {EntriesComponent} from "./account/entries.component";
-import {AccountDetailComponent} from "./account/account-detail.component";
 
 const routes: Routes = [
   {
@@ -11,16 +8,8 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'accounts/:accountId/entries',
-    component: EntriesComponent
-  },
-  {
-    path: 'accounts/:accountId',
-    component: AccountDetailComponent
-  },
-  {
     path: 'accounts',
-    component: AccountsComponent
+    loadChildren: 'app/accounts/accounts.module#AccountsModule'
   },
   {
     path: 'categories',

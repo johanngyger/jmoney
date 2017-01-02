@@ -1,6 +1,4 @@
-<jmoney-accounts></jmoney-accounts>
-
-<div id="main" *ngIf="accountId && entries">
+<div *ngIf="accountId && entries">
   <div class="subnav">
     <a href="#/accounts/{{accountId}}/entries/new" class="ui-corner-all"><i class="icon-plus-sign"></i> New entry</a>
     <input id="filter" name="filter" title="Fitler" placeholder="Filter" ng-model="filter">

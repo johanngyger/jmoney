@@ -1,6 +1,4 @@
-<jmoney-accounts></jmoney-accounts>
-
-<div id="main" *ngIf="account">
+<div *ngIf="account">
   <div class="subnav">
     <a [routerLink]="['/accounts', account.id, 'entries']">
       <i class="icon-circle-arrow-left"></i> Zurück
