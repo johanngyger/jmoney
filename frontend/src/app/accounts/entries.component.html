@@ -1,8 +1,10 @@
 <div *ngIf="accountId && entries">
   <div class="subnav">
     <a href="#/accounts/{{accountId}}/entries/new" class="ui-corner-all"><i class="icon-plus-sign"></i> New entry</a>
-    <input id="filter" name="filter" title="Fitler" placeholder="Filter" ng-model="filter">
-    <button type="submit" ng-click="load()">Filtern</button>
+    <input id="filter" name="filter" title="Filter" placeholder="Filter" [(ngModel)]="filter">
+    <button type="submit" [routerLink]="['/accounts', accountId, 'entries']" [queryParams]="{filter: filter}"
+            (click)="load(1)">Filter
+    </button>
     <a [routerLink]="['/accounts', accountId]"><i class="icon-wrench"></i> Account details</a>
   </div>
 
@@ -56,4 +58,36 @@
     </tr>
     </tbody>
   </table>
+
+  <div id="paging">
+    <ul>
+      <li>
+        <a [routerLink]="['/accounts', accountId, 'entries']" [queryParams]="{page: '1', filter: filter}"
+           (click)="load(1)">
+          <i class="icon-fast-backward"></i>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/accounts', accountId, 'entries']" [queryParams]="{page: prevPage(), filter: filter}"
+           (click)="load(prevPage())">
+          <i class="icon-backward"></i>
+        </a>
+      </li>
+      <li class="text-padding">
+        {{page}}/{{maxPage}}
+      </li>
+      <li>
+        <a [routerLink]="['/accounts', accountId, 'entries']" [queryParams]="{page: nextPage(), filter: filter}"
+           (click)="load(nextPage())">
+          <i class="icon-forward"></i>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/accounts', accountId, 'entries']" [queryParams]="{page: maxPage, filter: filter}"
+           (click)="load(maxPage)">
+          <i class="icon-fast-forward"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
 </div>
