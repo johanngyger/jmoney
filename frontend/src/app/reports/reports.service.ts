@@ -3,7 +3,7 @@ import {URLSearchParams, Http} from "@angular/http";
 import "rxjs/add/operator/toPromise";
 import {Balance} from "./balance";
 import {CashFlow} from "./cash-flow";
-import {Entry} from "../account/entry";
+import {Entry} from "../accounts/entry";
 
 @Injectable()
 export class ReportsService {
