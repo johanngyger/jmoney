@@ -1,32 +1,51 @@
-import { Injectable } from '@angular/core';
-import { Headers, Http, Response } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
-import { Account } from './account';
+import {Injectable} from "@angular/core";
+import {Http} from "@angular/http";
+import "rxjs/add/operator/toPromise";
+import {Subject} from "rxjs/Subject";
+import {Account} from "./account";
 
 @Injectable()
 export class AccountService {
   private accountsPath = '/rest/accounts';
+  accountChange = new Subject<number>();
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+  }
 
   getAccounts(): Promise<Account[]> {
     return this.http
       .get(this.accountsPath)
       .toPromise()
-      .then(response => response.json() as Account[])
-      .catch(this.handleError);
+      .then(response => response.json() as Account[]);
   }
 
   getAccount(id: number): Promise<Account> {
     const url = `${this.accountsPath}/${id}`;
     return this.http.get(url)
       .toPromise()
-      .then(response => response.json() as Account)
-      .catch(this.handleError);
+      .then(response => response.json() as Account);
   }
 
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
+  createAccount(account: Account): Promise<number> {
+    return this.http.post('rest/accounts', account)
+      .toPromise()
+      .then(response => response.json() as number)
+      .then(accountId => {
+        this.accountChange.next(accountId);
+        return accountId;
+      });
   }
+
+  updateAccount(account: Account): Promise<any> {
+    return this.http.put('rest/accounts/' + account.id, account)
+      .toPromise()
+      .then(() => this.accountChange.next(account.id));
+  }
+
+  deleteAccount(accountId): Promise<any> {
+    return this.http.delete('rest/accounts/' + accountId)
+      .toPromise()
+      .then(() => this.accountChange.next(accountId));
+  }
+
 }

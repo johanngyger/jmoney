@@ -11,6 +11,7 @@ const routes: Routes = [
     children: [{
       path: '',
       children: [
+        {path: 'new', component: AccountDetailComponent},
         {path: ':accountId/entries', component: EntriesComponent},
         {path: ':accountId', component: AccountDetailComponent}
       ]

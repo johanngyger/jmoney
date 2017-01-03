@@ -1,8 +1,7 @@
 import "rxjs/add/operator/switchMap";
 import {Component, OnInit} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
 import {ReportsService} from "./reports.service";
-import {Entry} from "../account/entry";
+import {Entry} from "../accounts/entry";
 
 @Component({
   templateUrl: './consistency.component.html'

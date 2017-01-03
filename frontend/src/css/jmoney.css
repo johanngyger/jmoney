@@ -357,3 +357,5 @@ div#colors div {
 .button-bar {
     margin: 10px 0;
 }
+
+a.kinda-link:hover { cursor: pointer; }

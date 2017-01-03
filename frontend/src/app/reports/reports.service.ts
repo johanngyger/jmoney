@@ -21,8 +21,7 @@ export class ReportsService {
     return this.http
       .get('/rest/reports/balances', {search: params})
       .toPromise()
-      .then(response => response.json() as Balance[])
-      .catch(this.handleError);
+      .then(response => response.json() as Balance[]);
   }
 
   getCashFlow(fromDate: string, toDate: string): Promise<CashFlow[]> {
@@ -33,28 +32,20 @@ export class ReportsService {
     return this.http
       .get('/rest/reports/cash-flows', {search: params})
       .toPromise()
-      .then(response => response.json() as CashFlow[])
-      .catch(this.handleError);
+      .then(response => response.json() as CashFlow[]);
   }
 
   getInconsistentSplitEntries(): Promise<Entry[]> {
     return this.http
       .get('rest/reports/consitency/inconsistent-split-entries')
       .toPromise()
-      .then(response => response.json() as Balance[])
-      .catch(this.handleError);
+      .then(response => response.json() as Balance[]);
   }
 
   getEntriesWithoutCategory(): Promise<Entry[]> {
     return this.http
       .get('rest/reports/consitency/entries-without-category')
       .toPromise()
-      .then(response => response.json() as Balance[])
-      .catch(this.handleError);
-  }
-
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
+      .then(response => response.json() as Balance[]);
   }
 }

@@ -15,8 +15,7 @@ export class EntryService {
     return this.http
       .get(this.getEntriesPath(accountId), {search: params})
       .toPromise()
-      .then(response => response.json() as Entry[])
-      .catch(this.handleError);
+      .then(response => response.json() as Entry[]);
   }
 
   getEntryCount(accountId: number, filter: string, page: number) {
@@ -28,10 +27,5 @@ export class EntryService {
 
   private getEntriesPath(accountId: number): string {
     return '/rest/accounts/' + accountId + '/entries/';
-  }
-
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
   }
 }

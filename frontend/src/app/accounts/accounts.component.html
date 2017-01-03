@@ -2,11 +2,12 @@
   <ul>
     <li *ngFor="let account of accounts">
       <div class="dropdown">
-        <a [routerLink]="['/accounts', account.id, 'entries']" routerLinkActive="active" class="ui-corner-all">{{account.name}}</a>
+        <a [routerLink]="['/accounts', account.id, 'entries']" (click)="onSelected(account.id)"
+           class="ui-corner-all" [class.active]="accountId == account.id">{{account.name}}</a>
       </div>
     </li>
     <li>
-      <a href="#/accounts/" class="ui-corner-all"><i class="icon-plus-sign"></i> Neues Konto</a>
+      <a [routerLink]="['/accounts/new']"><i class="icon-plus-sign"></i> Neues Konto</a>
     </li>
   </ul>
 </div>
