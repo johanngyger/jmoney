@@ -45,6 +45,7 @@ public class Entry {
     @ManyToOne
     private Category category;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Entry splitEntry;
 
