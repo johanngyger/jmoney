@@ -14,7 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -79,5 +80,55 @@ public class EntryControllerTests {
                 .andExpect(content().string("0"));
     }
 
+    @Test
+    public void testSplitEntry() throws Exception {
+        String accountId = mockMvc.perform(post("/rest/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"Account 1\"}"))
+                .andReturn().getResponse().getContentAsString();
 
+        String splitCatJson = mockMvc.perform(get("/rest/split-category"))
+                .andReturn().getResponse().getContentAsString();
+        JSONObject splitCat = new JSONObject(splitCatJson);
+
+        JSONObject entry = new JSONObject();
+        entry.put("categoryId", splitCat.get("id"));
+        String entryId = mockMvc.perform(post("/rest/accounts/{accountId}/entries", accountId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(entry.toString()))
+                .andReturn().getResponse().getContentAsString();
+
+        entry.put("id", entryId);
+        JSONArray splitEntries = new JSONArray();
+        splitEntries.put(new JSONObject("{\"description\": \"s1\"}"));
+        entry.put("subEntries", splitEntries);
+        mockMvc.perform(put("/rest/accounts/{accountId}/entries/{entryId}", accountId, entryId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(entry.toString()))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/rest/accounts/{accountId}/entries/{entryId}", accountId, entryId))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("s1")));
+
+        splitEntries.put(new JSONObject("{\"description\": \"s2\"}"));
+        mockMvc.perform(put("/rest/accounts/{accountId}/entries/{entryId}", accountId, entryId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(entry.toString()))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/rest/accounts/{accountId}/entries/{entryId}", accountId, entryId))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("s1")))
+                .andExpect(content().string(containsString("s2")));
+
+        splitEntries.remove(0);
+        mockMvc.perform(put("/rest/accounts/{accountId}/entries/{entryId}", accountId, entryId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(entry.toString()))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/rest/accounts/{accountId}/entries/{entryId}", accountId, entryId))
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(containsString("s1"))))
+                .andExpect(content().string(containsString("s2")));
+    }
 }

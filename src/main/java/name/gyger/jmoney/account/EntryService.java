@@ -151,15 +151,19 @@ public class EntryService {
     private void removeOldSubEntries(Entry e) {
         TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e WHERE e.splitEntry.id = :id", Entry.class);
         q.setParameter("id", e.getId());
-        List<Entry> subEntries = q.getResultList();
-        subEntries.forEach(subEntry -> em.remove(subEntry));
+        List<Entry> oldSubEntries = q.getResultList();
+        List<Entry> newSubEntries = e.getSubEntries();
+        oldSubEntries.forEach(subEntry -> {
+            if (!newSubEntries.contains(subEntry)) {
+                em.remove(subEntry);
+            }
+        });
     }
 
     private void createSubEntries(Entry e) {
         List<Entry> subEntries = e.getSubEntries();
         for (Entry subEntry : subEntries) {
-            // TODo: subEntry.setId(0) for REST calls.
-            em.persist(subEntry);
+            subEntry = em.merge(subEntry);
             Category subCat = em.find(Category.class, subEntry.getCategoryId());
             subEntry.setCategory(subCat);
             subEntry.setSplitEntry(e);
