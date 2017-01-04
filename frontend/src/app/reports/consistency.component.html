@@ -1,3 +1,7 @@
+<div class="alert alert-error" *ngIf="error">
+  An error occured.
+</div>
+
 <h2>Inconsistent split entries</h2>
 
 <jmoney-entries-table [entries]="splitEntries"></jmoney-entries-table>

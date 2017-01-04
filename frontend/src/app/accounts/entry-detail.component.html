@@ -23,13 +23,6 @@
           <select name="status" size="0" [(ngModel)]="entry.status">
             <option *ngFor="let status of entryStates" [ngValue]="status.id">{{status.label}}</option>
           </select>
-
-          <!--
-                    <select name="status"  [(ngModel)]="entry.status"
-                            ng-options="s.id as s.label for s in entryStates">
-                      <option value=""></option>
-                    </select>
-          -->
         </td>
         <td>
           <input name="income" type="number" placeholder="Income" step="0.01" class="amount full-width"

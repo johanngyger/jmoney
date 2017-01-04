@@ -10,6 +10,7 @@ export class BalancesComponent implements OnInit {
   filter = 'date';
   filterDate: string;
   balances: Balance[];
+  private error: boolean;
 
   constructor(private reportsService: ReportsService) {
   }
@@ -20,6 +21,7 @@ export class BalancesComponent implements OnInit {
 
   fetchBalances(): void {
     this.reportsService.getBalances(this.filterDate)
-      .then(balances => this.balances = balances);
+      .then(balances => this.balances = balances)
+      .catch(reason => this.error = true);
   }
 }

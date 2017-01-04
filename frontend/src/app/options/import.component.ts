@@ -17,7 +17,7 @@ export class ImportComponent {
   }
 
   handleUpload(data): void {
-    if (data.status == 500) {
+    if (data.status != 200) {
       this.status = 'error';
       this.loading = false;
     } else if (data.status == 200) {

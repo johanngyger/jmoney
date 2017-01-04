@@ -8,6 +8,7 @@ import {Category} from "./category";
 export class CategoriesComponent implements OnInit {
   categoryTree: Category;
   loading: boolean;
+  error: boolean;
 
   constructor(private categoryService: CategoryService) {
   }
@@ -23,11 +24,17 @@ export class CategoriesComponent implements OnInit {
         this.categoryTree = categoryTree;
         this.loading = false;
       })
+      .catch(reason => {
+          this.error = true;
+          this.loading = false;
+        }
+      )
   }
 
   save(): void {
     this.categoryService.saveCategoryTree(this.categoryTree)
-      .then(result => this.fetch());
+      .then(result => this.fetch())
+      .catch(reason => this.error = true);
     this.categoryTree = null;
   }
 }

@@ -9,15 +9,18 @@ import {Entry} from "../accounts/entry";
 export class ConsistencyComponent implements OnInit {
   splitEntries: Entry[];
   entriesWithoutCategory: Entry[];
+  private error: boolean;
 
   constructor(private reportsService: ReportsService) {
   }
 
   ngOnInit(): void {
     this.reportsService.getInconsistentSplitEntries()
-      .then(entries => this.splitEntries = entries);
+      .then(entries => this.splitEntries = entries)
+      .catch(reason => this.error = true);
 
     this.reportsService.getEntriesWithoutCategory()
-      .then(entries => this.entriesWithoutCategory = entries);
+      .then(entries => this.entriesWithoutCategory = entries)
+      .catch(reason => this.error = true);
   }
 }

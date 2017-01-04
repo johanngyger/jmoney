@@ -1,3 +1,7 @@
+<div class="alert alert-error" *ngIf="error">
+  An error occured.
+</div>
+
 <div class="subnav">
   <label for="period">Period:</label>
   <select id="period" name="period" [(ngModel)]="period" (change)="onPeriodChange()">

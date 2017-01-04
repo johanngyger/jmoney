@@ -18,6 +18,7 @@ export class CashFlowComponent implements OnInit {
   period = 'thisMonth';
   fromDate: string;
   toDate: string;
+  private error: boolean;
 
   constructor(private reportsService: ReportsService) {
   }
@@ -29,6 +30,7 @@ export class CashFlowComponent implements OnInit {
   fetchCashFlow(): void {
     this.reportsService.getCashFlow(this.fromDate, this.toDate)
       .then(cashFlows => this.cashFlows = cashFlows)
+      .catch(reason => this.error = true);
   }
 
   onPeriodChange(): void {

@@ -13,5 +13,8 @@
 </div>
 
 <div id="main">
+  <div class="alert alert-error" *ngIf="error">
+    An error occured.
+  </div>
   <router-outlet></router-outlet>
 </div>
