@@ -57,9 +57,9 @@ export class EntriesComponent implements OnInit {
 
   getStatusText(status): string {
     if (status === "RECONCILING") {
-      return "A";
+      return "R";
     } else if (status === "CLEARED") {
-      return "V";
+      return "C";
     } else {
       return null;
     }

@@ -5,7 +5,6 @@ import {AccountService} from "./account.service";
 import {Account} from "./account";
 
 @Component({
-  selector: 'jmoney-accounts',
   templateUrl: './accounts.component.html'
 })
 export class AccountsComponent implements OnInit, OnDestroy {

@@ -21,6 +21,13 @@ export class CategoryService {
       .toPromise()
   }
 
+  getCategories(): Promise<Category[]> {
+    return this.http
+      .get('/rest/categories')
+      .toPromise()
+      .then(response => response.json() as Category[])
+  }
+
   createCategory(parentId: number): Promise<Category> {
     let newCat = new Category();
     newCat.name = '<New category>';
@@ -38,5 +45,13 @@ export class CategoryService {
     return this.http
       .delete('/rest/categories/' + id)
       .toPromise();
+  }
+
+  getSplitCategory(): Promise<Category> {
+    return this.http
+      .get('/rest/split-category')
+      .toPromise()
+      .then(result => result.json() as Category)
+
   }
 }

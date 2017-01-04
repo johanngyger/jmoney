@@ -1,0 +1,52 @@
+<div *ngIf="entries">
+  <table class="entryTable">
+    <thead>
+    <tr>
+      <th scope="col">Date<br>Valuta</th>
+      <th scope="col">Description<br>Category<br>Memo</th>
+      <th scope="col">Status</th>
+      <th scope="col">
+        <div class="amount">Income</div>
+      </th>
+      <th scope="col">
+        <div class="amount">Expense</div>
+      </th>
+      <th scope="col">
+        <div class="amount">Balance</div>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let entry of entries">
+      <td class="entryTableDate">
+        <a [routerLink]="['/accounts', entry.accountId, 'entries', entry.id]">
+          {{entry.date | date:'dd.MM.yyyy'}}
+          <br>
+          {{entry.valuta | date:'dd.MM.yyyy'}}
+        </a>
+      </td>
+      <td class="entryTableDesc">
+        <a [routerLink]="['/accounts', entry.accountId, 'entries', entry.id]">{{entry.description}}<br>{{entry.categoryName}}<br>{{entry.memo}}</a>
+      </td>
+      <td class="entryTableStatus">
+        <a [routerLink]="['/accounts', entry.accountId, 'entries', entry.id]">{{getStatusText(entry.status)}}</a>
+      </td>
+      <td class="entryTableAmount">
+        <a [routerLink]="['/accounts', entry.accountId, 'entries', entry.id]" *ngIf="entry.amount >= 0">
+          {{entry.amount / 100 | number:'1.2-2'}}
+        </a>
+      </td>
+      <td class="entryTableAmount">
+        <a [routerLink]="['/accounts', entry.accountId, 'entries', entry.id]" *ngIf="entry.amount < 0">
+          {{-entry.amount / 100 | number:'1.2-2'}}
+        </a>
+      </td>
+      <td class="entryTableAmount">
+        <a [routerLink]="['/accounts', entry.accountId, 'entries', entry.id]">
+          {{entry.balance / 100 | number:'1.2-2'}}
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,105 @@
+<div class="subnav">
+  <a [routerLink]="['/accounts', accountId, 'entries']">
+    <i class="icon-circle-arrow-left"></i> Back
+  </a>
+  <a class="ui-corner-all kinda-link" (click)="delete()">
+    <i class="icon-trash"></i> Delete entry
+  </a>
+</div>
+
+<form *ngIf="entry">
+  <div id="entryForm" class="ui-corner-all">
+    <table>
+      <tbody>
+      <tr>
+        <td>
+          <input name="date" type="date" title="Date" class="full-width" [(ngModel)]="entry.date">
+        </td>
+        <td>
+          <input name="description" type="text" placeholder="Description" class="input-xxlarge"
+                 [(ngModel)]="entry.description">
+        </td>
+        <td>
+          <select name="status" size="0" [(ngModel)]="entry.status">
+            <option *ngFor="let status of entryStates" [ngValue]="status.id">{{status.label}}</option>
+          </select>
+
+          <!--
+                    <select name="status"  [(ngModel)]="entry.status"
+                            ng-options="s.id as s.label for s in entryStates">
+                      <option value=""></option>
+                    </select>
+          -->
+        </td>
+        <td>
+          <input name="income" type="number" placeholder="Income" step="0.01" class="amount full-width"
+                 [(ngModel)]="entry.income" (blur)="updateIncome(entry)"/>
+        </td>
+        <td class="last">
+          <input name="expense" type="number" placeholder="Expense" step="0.01" class="amount full-width"
+                 [(ngModel)]="entry.expense" (blur)="updateExpense(entry)"/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input name="valuta" type="date" [(ngModel)]="entry.valuta" class="full-width" placeholder="Valuta">
+        </td>
+        <td>
+          <select name="category" class="input-xxlarge" [(ngModel)]="entry.categoryId">
+            <option *ngFor="let category of categories" [ngValue]="category.id">{{category.nameIndented}}</option>
+          </select>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <!--<label for="memo">Memo</label>-->
+          <input name="memo" type="text" placeholder="Memo" class="input-xxlarge" [(ngModel)]="entry.memo">
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="splitCategory && (entry.categoryId == splitCategory.id)">
+    <hr>
+    <div class="subnav">
+      <a (click)="addSubEntry()" class="kinda-link"><i class="icon-plus-sign"></i> Add sub-entry</a>
+    </div>
+
+    <p *ngFor="let subEntry of entry.subEntries">
+      <input class="input-xlarge" type="text" placeholder="Description"
+             [(ngModel)]="subEntry.description" [ngModelOptions]="{standalone: true}">
+
+      <select class="input-xlarge" [(ngModel)]="subEntry.categoryId" [ngModelOptions]="{standalone: true}">
+        <option *ngFor="let category of categories" [ngValue]="category.id">{{category.nameIndented}}</option>
+      </select>
+
+      <input type="number" step="0.01" class="amount" placeholder="Income"
+             [(ngModel)]="subEntry.income" [ngModelOptions]="{standalone: true}" (blur)="updateIncome(subEntry)"/>
+
+      <input type="number" step="0.01" class="amount" placeholder="Expense"
+             [(ngModel)]="subEntry.expense" [ngModelOptions]="{standalone: true}" (blur)="updateExpense(subEntry)"/>
+
+      <a title="Remove sub-Entry" class="kinda-link" (click)="removeSubEntry(subEntry)"><i class="icon-minus-sign"></i></a>
+    </p>
+
+    <p>
+      Total: {{subEntriesTotal() / 100 | number:'1.2-2'}}
+    </p>
+
+    <p class="error-inline" *ngIf="subEntriesTotal() != entry.amount">
+      Sum of sub-entries does not match with amount of entry.
+    </p>
+
+    <hr>
+  </div>
+
+  <input type="submit" value="Save" (click)="save()">
+</form>

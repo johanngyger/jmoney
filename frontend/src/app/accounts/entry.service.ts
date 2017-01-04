@@ -25,6 +25,32 @@ export class EntryService {
       .then(response => response.json() as number);
   }
 
+  getEntry(accountId: number, entryId: number): Promise<Entry> {
+    return this.http
+      .get(this.getEntriesPath(accountId) + entryId)
+      .toPromise()
+      .then(response => response.json() as Entry);
+  }
+
+  createEntry(accountId: number, entry: Entry): Promise<number> {
+    return this.http
+      .post('rest/accounts/' + accountId + '/entries/', entry)
+      .toPromise()
+      .then(response => response.json() as number);
+  }
+
+  updateEntry(accountId: number, entry: Entry): Promise<any> {
+    return this.http
+      .put('rest/accounts/' + accountId + '/entries/' + entry.id, entry)
+      .toPromise();
+  }
+
+  deleteEntry(accountId: number, entryId): Promise<any> {
+    return this.http
+      .delete('rest/accounts/' + accountId + '/entries/' + entryId)
+      .toPromise();
+  }
+
   private getEntriesPath(accountId: number): string {
     return '/rest/accounts/' + accountId + '/entries/';
   }

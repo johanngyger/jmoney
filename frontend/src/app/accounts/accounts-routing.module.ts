@@ -3,6 +3,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {AccountsComponent} from "./accounts.component";
 import {AccountDetailComponent} from "./account-detail.component";
 import {EntriesComponent} from "./entries.component";
+import {EntryDetailComponent} from "./entry-detail.component";
 
 const routes: Routes = [
   {
@@ -11,8 +12,10 @@ const routes: Routes = [
     children: [{
       path: '',
       children: [
-        {path: 'new', component: AccountDetailComponent},
+        {path: ':accountId/entries/new', component: EntryDetailComponent},
+        {path: ':accountId/entries/:entryId', component: EntryDetailComponent},
         {path: ':accountId/entries', component: EntriesComponent},
+        {path: 'new', component: AccountDetailComponent},
         {path: ':accountId', component: AccountDetailComponent}
       ]
     }]

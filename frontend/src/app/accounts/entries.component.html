@@ -1,6 +1,7 @@
 <div *ngIf="accountId && entries">
   <div class="subnav">
-    <a href="#/accounts/{{accountId}}/entries/new" class="ui-corner-all"><i class="icon-plus-sign"></i> New entry</a>
+    <a [routerLink]="['/accounts', accountId, 'entries', 'new']" class="ui-corner-all"><i class="icon-plus-sign"></i>
+      New entry</a>
     <input id="filter" name="filter" title="Filter" placeholder="Filter" [(ngModel)]="filter">
     <button type="submit" [routerLink]="['/accounts', accountId, 'entries']" [queryParams]="{filter: filter}"
             (click)="load(1)">Filter
@@ -8,56 +9,7 @@
     <a [routerLink]="['/accounts', accountId]"><i class="icon-wrench"></i> Account details</a>
   </div>
 
-  <table class="entryTable">
-    <thead>
-    <tr>
-      <th scope="col">Date<br>Valuta</th>
-      <th scope="col">Description<br>Category<br>Memo</th>
-      <th scope="col">Status</th>
-      <th scope="col">
-        <div class="amount">Income</div>
-      </th>
-      <th scope="col">
-        <div class="amount">Expence</div>
-      </th>
-      <th scope="col">
-        <div class="amount">Balance</div>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let e of entries" ng-class="{selected: e.id==entry.id}">
-      <td class="entryTableDate">
-        <a href="#/accounts/{{accountId}}/entries/{{e.id}}?page={{page}}">
-          {{e.date | date:'dd.MM.yyyy'}}
-          <br>
-          {{e.valuta | date:'dd.MM.yyyy'}}
-        </a>
-      </td>
-      <td class="entryTableDesc">
-        <a href="#/accounts/{{accountId}}/entries/{{e.id}}">{{e.description}}<br>{{e.categoryName}}<br>{{e.memo}}</a>
-      </td>
-      <td class="entryTableStatus">
-        <a href="#/accounts/{{accountId}}/entries/{{e.id}}">{{getStatusText(e.status)}}</a>
-      </td>
-      <td class="entryTableAmount">
-        <a href="#/accounts/{{accountId}}/entries/{{e.id}}" *ngIf="e.amount >= 0">
-          {{e.amount / 100 | number:'1.2-2'}}
-        </a>
-      </td>
-      <td class="entryTableAmount">
-        <a href="#/accounts/{{accountId}}/entries/{{e.id}}" *ngIf="e.amount < 0">
-          {{-e.amount / 100 | number:'1.2-2'}}
-        </a>
-      </td>
-      <td class="entryTableAmount">
-        <a href="#/accounts/{{accountId}}/entries/{{e.id}}">
-          {{e.balance / 100 | number:'1.2-2'}}
-        </a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <jmoney-entries-table [entries]="entries"></jmoney-entries-table>
 
   <div id="paging">
     <ul>

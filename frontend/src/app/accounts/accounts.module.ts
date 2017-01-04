@@ -7,21 +7,27 @@ import {AccountsRoutingModule} from "./accounts-routing.module";
 import {AccountsComponent} from "./accounts.component";
 import {AccountDetailComponent} from "./account-detail.component";
 import {EntriesComponent} from "./entries.component";
+import {EntryDetailComponent} from "./entry-detail.component";
+import {CategoryService} from "../categories/category.service";
+import {EntriesTableModule} from "./entries-table/entries-table.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    AccountsRoutingModule
+    AccountsRoutingModule,
+    EntriesTableModule
   ],
   declarations: [
     AccountsComponent,
     AccountDetailComponent,
-    EntriesComponent
+    EntriesComponent,
+    EntryDetailComponent
   ],
   providers: [
     AccountService,
-    EntryService
+    EntryService,
+    CategoryService
   ]
 })
 export class AccountsModule {

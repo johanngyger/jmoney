@@ -72,7 +72,10 @@ public class EntryService {
         int to = Math.min((page - 1) * 10 + 10, count);
         entries = entries.subList(from, to);
 
-        entries.forEach(e -> em.detach(e));
+        entries.forEach(e -> {
+            e.setAccountId(e.getAccount().getId());
+            em.detach(e);
+        });
 
         return entries;
     }
@@ -155,6 +158,7 @@ public class EntryService {
     private void createSubEntries(Entry e) {
         List<Entry> subEntries = e.getSubEntries();
         for (Entry subEntry : subEntries) {
+            // TODo: subEntry.setId(0) for REST calls.
             em.persist(subEntry);
             Category subCat = em.find(Category.class, subEntry.getCategoryId());
             subEntry.setCategory(subCat);

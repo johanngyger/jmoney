@@ -7,12 +7,14 @@ import {BalancesComponent} from "./balances.component";
 import {ReportsService} from "./reports.service";
 import {CashFlowComponent} from "./cash-flow.component";
 import {ConsistencyComponent} from "./consistency.component";
+import {EntriesTableModule} from "../accounts/entries-table/entries-table.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReportsRoutingModule
+    ReportsRoutingModule,
+    EntriesTableModule
   ],
   declarations: [
     ReportsComponent,

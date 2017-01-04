@@ -129,6 +129,7 @@ public class ReportService {
             if (entry.getAmount() != sum) {
                 result.add(entry);
             }
+            entry.setAccountId(entry.getAccount().getId());
         }
 
         return result;
@@ -138,6 +139,7 @@ public class ReportService {
         TypedQuery<Entry> q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = null AND e.splitEntry = null" +
                 " ORDER BY CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC", Entry.class);
         List<Entry> entries = q.getResultList();
+        entries.forEach(entry -> entry.setAccountId(entry.getAccount().getId()));
         return entries;
     }
 
