@@ -1,6 +1,6 @@
-import {Component, OnInit} from "@angular/core";
-import {CategoryService} from "./category.service";
-import {Category} from "./category";
+import {Component, OnInit} from '@angular/core';
+import {CategoryService} from './category.service';
+import {Category} from './category';
 
 @Component({
   templateUrl: './categories.component.html'
@@ -24,17 +24,22 @@ export class CategoriesComponent implements OnInit {
         this.categoryTree = categoryTree;
         this.loading = false;
       })
-      .catch(reason => {
+      .catch(() => {
           this.error = true;
           this.loading = false;
         }
-      )
+      );
+  }
+
+  add(): void {
+    this.categoryService.createCategory(this.categoryTree.id)
+      .then(newCat => this.categoryTree.children.unshift(newCat));
   }
 
   save(): void {
     this.categoryService.saveCategoryTree(this.categoryTree)
       .then(result => this.fetch())
-      .catch(reason => this.error = true);
+      .catch(() => this.error = true);
     this.categoryTree = null;
   }
 }

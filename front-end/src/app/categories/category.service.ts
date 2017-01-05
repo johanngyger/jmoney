@@ -1,7 +1,7 @@
-import {Injectable} from "@angular/core";
-import {Http} from "@angular/http";
-import "rxjs/add/operator/toPromise";
-import {Category} from "./category";
+import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
+import 'rxjs/add/operator/toPromise';
+import {Category} from './category';
 
 @Injectable()
 export class CategoryService {
@@ -12,20 +12,20 @@ export class CategoryService {
     return this.http
       .get('/rest/category-tree')
       .toPromise()
-      .then(response => response.json() as Category)
+      .then(response => response.json() as Category);
   }
 
   saveCategoryTree(rootCategory: Category): Promise<any> {
     return this.http
       .put('/rest/category-tree', rootCategory)
-      .toPromise()
+      .toPromise();
   }
 
   getCategories(): Promise<Category[]> {
     return this.http
       .get('/rest/categories')
       .toPromise()
-      .then(response => response.json() as Category[])
+      .then(response => response.json() as Category[]);
   }
 
   createCategory(parentId: number): Promise<Category> {
@@ -51,7 +51,7 @@ export class CategoryService {
     return this.http
       .get('/rest/split-category')
       .toPromise()
-      .then(result => result.json() as Category)
+      .then(result => result.json() as Category);
 
   }
 }

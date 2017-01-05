@@ -1,13 +1,13 @@
-import {Injectable} from "@angular/core";
-import {URLSearchParams, Http} from "@angular/http";
-import "rxjs/add/operator/toPromise";
-import {Balance} from "./balance";
-import {CashFlow} from "./cash-flow";
-import {Entry} from "../accounts/entry";
+import {Injectable} from '@angular/core';
+import {URLSearchParams, Http} from '@angular/http';
+import 'rxjs/add/operator/toPromise';
+import {Balance} from './balance';
+import {CashFlow} from './cash-flow';
+import {Entry} from '../accounts/entry';
 
 @Injectable()
 export class ReportsService {
-  private accountsPath = '/rest/accounts';
+  accountsPath = '/rest/accounts';
 
   constructor(private http: Http) {
   }

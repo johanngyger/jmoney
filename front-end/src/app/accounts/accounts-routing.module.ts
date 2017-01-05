@@ -1,9 +1,9 @@
-import {NgModule} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import {AccountsComponent} from "./accounts.component";
-import {AccountDetailComponent} from "./account-detail.component";
-import {EntriesComponent} from "./entries.component";
-import {EntryDetailComponent} from "./entry-detail.component";
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AccountsComponent} from './accounts.component';
+import {AccountDetailComponent} from './account-detail.component';
+import {EntriesComponent} from './entries.component';
+import {EntryDetailComponent} from './entry-detail.component';
 
 const routes: Routes = [
   {

@@ -1,9 +1,9 @@
-import {NgModule} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import {ReportsComponent} from "./reports.component";
-import {BalancesComponent} from "./balances.component";
-import {CashFlowComponent} from "./cash-flow.component";
-import {ConsistencyComponent} from "./consistency.component";
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {ReportsComponent} from './reports.component';
+import {BalancesComponent} from './balances.component';
+import {CashFlowComponent} from './cash-flow.component';
+import {ConsistencyComponent} from './consistency.component';
 
 const routes: Routes = [
   {

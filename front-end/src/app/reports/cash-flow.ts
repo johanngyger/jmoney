@@ -4,5 +4,5 @@ export class CashFlow {
   income: number;
   expense: number;
   difference: number;
-  total: boolean
+  total: boolean;
 }

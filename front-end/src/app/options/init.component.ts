@@ -1,5 +1,5 @@
-import {Component} from "@angular/core";
-import {OptionsService} from "./options.service";
+import {Component} from '@angular/core';
+import {OptionsService} from './options.service';
 
 @Component({
   templateUrl: './init.component.html'

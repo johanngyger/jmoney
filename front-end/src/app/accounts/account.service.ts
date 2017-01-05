@@ -1,12 +1,12 @@
-import {Injectable} from "@angular/core";
-import {Http} from "@angular/http";
-import "rxjs/add/operator/toPromise";
-import {Subject} from "rxjs/Subject";
-import {Account} from "./account";
+import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
+import 'rxjs/add/operator/toPromise';
+import {Subject} from 'rxjs/Subject';
+import {Account} from './account';
 
 @Injectable()
 export class AccountService {
-  private accountsPath = '/rest/accounts';
+  accountsPath = '/rest/accounts';
   accountChange = new Subject<number>();
 
   constructor(private http: Http) {

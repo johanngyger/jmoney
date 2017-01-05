@@ -1,7 +1,7 @@
-import {Component, OnInit} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AccountService} from "./account.service";
-import {Account} from "./account";
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AccountService} from './account.service';
+import {Account} from './account';
 
 @Component({
   templateUrl: './account-detail.component.html'
@@ -17,10 +17,9 @@ export class AccountDetailComponent implements OnInit {
       .switchMap(params => {
         let id = params['accountId'];
         if (id) {
-          return this.accountService.getAccount(+id)
-        }
-        else {
-          return Promise.resolve(new Account())
+          return this.accountService.getAccount(+id);
+        } else {
+          return Promise.resolve(new Account());
         }
       })
       .subscribe(account => this.account = account);
@@ -30,8 +29,7 @@ export class AccountDetailComponent implements OnInit {
     if (this.account.id) {
       this.accountService.updateAccount(this.account)
         .then(() => this.router.navigate(['/accounts', this.account.id, 'entries']));
-    }
-    else {
+    } else {
       this.accountService.createAccount(this.account)
         .then(accountId => this.router.navigate(['/accounts', accountId, 'entries']));
     }

@@ -1,6 +1,6 @@
-import {Injectable} from "@angular/core";
-import {URLSearchParams, Http} from "@angular/http";
-import {Entry} from "./entry";
+import {Injectable} from '@angular/core';
+import {URLSearchParams, Http} from '@angular/http';
+import {Entry} from './entry';
 
 @Injectable()
 export class EntryService {
@@ -9,8 +9,12 @@ export class EntryService {
 
   getEntries(accountId: number, filter: string, page: number): Promise<Entry[]> {
     let params = new URLSearchParams();
-    if (filter) params.set('filter', filter);
-    if (page) params.set('page', '' + page);
+    if (filter) {
+      params.set('filter', filter);
+    }
+    if (page) {
+      params.set('page', '' + page);
+    }
 
     return this.http
       .get(this.getEntriesPath(accountId), {search: params})
@@ -51,7 +55,7 @@ export class EntryService {
       .toPromise();
   }
 
-  private getEntriesPath(accountId: number): string {
+  getEntriesPath(accountId: number): string {
     return '/rest/accounts/' + accountId + '/entries/';
   }
 }

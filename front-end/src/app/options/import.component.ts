@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component} from '@angular/core';
 import {NgUploaderOptions} from 'ngx-uploader';
 
 @Component({
@@ -17,10 +17,10 @@ export class ImportComponent {
   }
 
   handleUpload(data): void {
-    if (data.status != 200) {
+    if (data.status !== 200) {
       this.status = 'error';
       this.loading = false;
-    } else if (data.status == 200) {
+    } else if (data.status === 200) {
       this.status = 'success';
       this.loading = false;
     }

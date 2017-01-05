@@ -1,8 +1,7 @@
-import {Component, OnInit, OnDestroy} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
-import {Subscription}   from 'rxjs/Subscription';
-import {AccountService} from "./account.service";
-import {Account} from "./account";
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Subscription} from 'rxjs/Subscription';
+import {AccountService} from './account.service';
+import {Account} from './account';
 
 @Component({
   templateUrl: './accounts.component.html'
@@ -10,10 +9,10 @@ import {Account} from "./account";
 export class AccountsComponent implements OnInit, OnDestroy {
   accounts: Account[];
   accountId: number;
-  private accountChanges: Subscription;
-  private error: boolean;
+  accountChanges: Subscription;
+  error: boolean;
 
-  constructor(private accountService: AccountService, private route: ActivatedRoute) {
+  constructor(private accountService: AccountService) {
     this.accountChanges = accountService.accountChange
       .subscribe(accountId => {
         this.accountId = accountId;
@@ -25,10 +24,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
     this.getAccounts();
   }
 
-  private getAccounts() {
+  getAccounts() {
     this.accountService.getAccounts()
       .then(accounts => this.accounts = accounts)
-      .catch(reason => this.error = true);
+      .catch(() => this.error = true);
   }
 
   ngOnDestroy(): void {

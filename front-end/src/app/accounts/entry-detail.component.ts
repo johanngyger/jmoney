@@ -1,9 +1,9 @@
-import {Component, OnInit} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
-import {EntryService} from "./entry.service";
-import {Entry} from "./entry";
-import {CategoryService} from "../categories/category.service";
-import {Category} from "../categories/category";
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {EntryService} from './entry.service';
+import {Entry} from './entry';
+import {CategoryService} from '../categories/category.service';
+import {Category} from '../categories/category';
 
 @Component({
   templateUrl: './entry-detail.component.html'
@@ -15,12 +15,13 @@ export class EntryDetailComponent implements OnInit {
   splitCategory: Category;
 
   entryStates = [
-    {id: null, label: ""},
-    {id: "RECONCILING", label: "Reconciling"},
-    {id: "CLEARED", label: "Cleared"}
+    {id: null, label: ''},
+    {id: 'RECONCILING', label: 'Reconciling'},
+    {id: 'CLEARED', label: 'Cleared'}
   ];
 
-  constructor(private entryService: EntryService, private categoryService: CategoryService, private route: ActivatedRoute, private router: Router) {
+  constructor(private entryService: EntryService, private categoryService: CategoryService,
+              private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -35,9 +36,9 @@ export class EntryDetailComponent implements OnInit {
         this.accountId = +params['accountId'];
         let entryId = params['entryId'];
         if (entryId) {
-          return this.entryService.getEntry(this.accountId, +entryId)
+          return this.entryService.getEntry(this.accountId, +entryId);
         } else {
-          return Promise.resolve(new Entry())
+          return Promise.resolve(new Entry());
         }
       })
       .subscribe(entry => {
@@ -47,7 +48,7 @@ export class EntryDetailComponent implements OnInit {
       });
   }
 
-  private initAmount(entry) {
+  initAmount(entry) {
     if (entry.amount >= 0) {
       entry.income = entry.amount / 100;
     } else {
@@ -84,8 +85,7 @@ export class EntryDetailComponent implements OnInit {
     if (this.entry.id) {
       this.entryService.updateEntry(this.accountId, this.entry)
         .then(() => this.router.navigate(['/accounts', this.accountId, 'entries']));
-    }
-    else {
+    } else {
       this.entryService.createEntry(this.accountId, this.entry)
         .then(accountId => this.router.navigate(['/accounts', this.accountId, 'entries']));
     }

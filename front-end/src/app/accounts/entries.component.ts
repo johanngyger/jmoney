@@ -1,24 +1,23 @@
-import "rxjs/add/operator/switchMap";
-import {Component, OnInit} from "@angular/core";
-import {ActivatedRoute, Params} from "@angular/router";
-import {Entry} from "./entry";
-import {EntryService} from "./entry.service";
+import 'rxjs/add/operator/switchMap';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {Entry} from './entry';
+import {EntryService} from './entry.service';
 
 @Component({
   templateUrl: './entries.component.html'
 })
 export class EntriesComponent implements OnInit {
-  private entries: Entry[];
-  private accountId: number;
-  private filter = '';
+  entries: Entry[];
+  accountId: number;
+  filter = '';
 
-  private entryCount: number;
-  private page = 1;
-  private maxPage: number;
+  entryCount: number;
+  page = 1;
+  maxPage: number;
 
 
-  constructor(private entryService: EntryService,
-              private route: ActivatedRoute) {
+  constructor(private entryService: EntryService, private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -39,7 +38,7 @@ export class EntriesComponent implements OnInit {
       .switchMap(params => this.entryService.getEntryCount(+params['accountId'], this.filter, this.page))
       .subscribe(count => {
         this.entryCount = count;
-        this.maxPage = Math.ceil(this.entryCount / 10)
+        this.maxPage = Math.ceil(this.entryCount / 10);
       });
 
     this.route.params
@@ -56,10 +55,10 @@ export class EntriesComponent implements OnInit {
   }
 
   getStatusText(status): string {
-    if (status === "RECONCILING") {
-      return "R";
-    } else if (status === "CLEARED") {
-      return "C";
+    if (status === 'RECONCILING') {
+      return 'R';
+    } else if (status === 'CLEARED') {
+      return 'C';
     } else {
       return null;
     }

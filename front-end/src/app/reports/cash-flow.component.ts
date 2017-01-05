@@ -1,8 +1,8 @@
-import "rxjs/add/operator/switchMap";
-import {Component, OnInit} from "@angular/core";
-import {ReportsService} from "./reports.service";
-import {CashFlow} from "./cash-flow";
-import * as moment from "moment";
+import 'rxjs/add/operator/switchMap';
+import {Component, OnInit} from '@angular/core';
+import {ReportsService} from './reports.service';
+import {CashFlow} from './cash-flow';
+import * as moment from 'moment';
 
 @Component({
   templateUrl: './cash-flow.component.html'
@@ -18,7 +18,7 @@ export class CashFlowComponent implements OnInit {
   period = 'thisMonth';
   fromDate: string;
   toDate: string;
-  private error: boolean;
+  error: boolean;
 
   constructor(private reportsService: ReportsService) {
   }
@@ -30,26 +30,26 @@ export class CashFlowComponent implements OnInit {
   fetchCashFlow(): void {
     this.reportsService.getCashFlow(this.fromDate, this.toDate)
       .then(cashFlows => this.cashFlows = cashFlows)
-      .catch(reason => this.error = true);
+      .catch(() => this.error = true);
   }
 
   onPeriodChange(): void {
     switch (this.period) {
-      case "thisMonth":
-        this.fromDate = moment().startOf('month').format("YYYY-MM-DD");
-        this.toDate = moment().endOf('month').format("YYYY-MM-DD");
+      case 'thisMonth':
+        this.fromDate = moment().startOf('month').format('YYYY-MM-DD');
+        this.toDate = moment().endOf('month').format('YYYY-MM-DD');
         break;
-      case "thisYear":
-        this.fromDate = moment().startOf('year').format("YYYY-MM-DD");
-        this.toDate = moment().endOf('year').format("YYYY-MM-DD");
+      case 'thisYear':
+        this.fromDate = moment().startOf('year').format('YYYY-MM-DD');
+        this.toDate = moment().endOf('year').format('YYYY-MM-DD');
         break;
-      case "lastMonth":
-        this.fromDate = moment().subtract(1, 'month').startOf('month').format("YYYY-MM-DD");
-        this.toDate = moment().subtract(1, 'month').endOf('month').format("YYYY-MM-DD");
+      case 'lastMonth':
+        this.fromDate = moment().subtract(1, 'month').startOf('month').format('YYYY-MM-DD');
+        this.toDate = moment().subtract(1, 'month').endOf('month').format('YYYY-MM-DD');
         break;
-      case "lastYear":
-        this.fromDate = moment().subtract(1, 'year').startOf('year').format("YYYY-MM-DD");
-        this.toDate = moment().subtract(1, 'year').endOf('year').format("YYYY-MM-DD");
+      case 'lastYear':
+        this.fromDate = moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD');
+        this.toDate = moment().subtract(1, 'year').endOf('year').format('YYYY-MM-DD');
         break;
     }
 
