@@ -2,6 +2,7 @@
 import {TestBed, async} from '@angular/core/testing';
 import {AppComponent} from './app.component';
 
+/*
 describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -18,3 +19,4 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   }));
 });
+*/
