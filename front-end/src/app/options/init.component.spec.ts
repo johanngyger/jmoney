@@ -1,4 +1,4 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {fakeAsync, tick, ComponentFixture, TestBed} from '@angular/core/testing';
 import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import {InitComponent} from './init.component';
@@ -49,7 +49,7 @@ describe('InitComponent', () => {
     expect(divSuccess.nativeElement.textContent).toContain('successful');
   });
 
-  it('can show success message with fake service', () => {
+  it('can show success message with fake service', fakeAsync(() => {
     initSuccess = true;
     expect(imgLoading).toBeNull();
     comp.init();
@@ -58,17 +58,16 @@ describe('InitComponent', () => {
     expect(divError).toBeNull();
     expect(divSuccess).toBeNull();
     expect(imgLoading.nativeElement).toBeTruthy();
-    fixture.whenStable()
-      .then(() => {
-        fixture.detectChanges();
-        fetchElements();
-        expect(imgLoading).toBeNull();
-        expect(divError).toBeNull();
-        expect(divSuccess.nativeElement).toBeTruthy();
-      });
-  });
 
-  it('can show error message with fake service', () => {
+    tick();
+    fixture.detectChanges();
+    fetchElements();
+    expect(imgLoading).toBeNull();
+    expect(divError).toBeNull();
+    expect(divSuccess.nativeElement).toBeTruthy();
+  }));
+
+  it('can show error message with fake service', fakeAsync(() => {
     initSuccess = false;
     comp.init();
     fixture.detectChanges();
@@ -76,13 +75,12 @@ describe('InitComponent', () => {
     expect(divError).toBeNull();
     expect(divSuccess).toBeNull();
     expect(imgLoading.nativeElement).toBeTruthy();
-    fixture.whenStable()
-      .then(() => {
-        fixture.detectChanges();
-        fetchElements();
-        expect(imgLoading).toBeNull();
-        expect(divSuccess).toBeNull();
-        expect(divError.nativeElement).toBeTruthy();
-      });
-  });
-});
+
+    tick();
+    fixture.detectChanges();
+    fetchElements();
+    expect(imgLoading).toBeNull();
+    expect(divSuccess).toBeNull();
+    expect(divError.nativeElement).toBeTruthy();
+  }));
+}
