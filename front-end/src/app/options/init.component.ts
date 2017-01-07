@@ -15,11 +15,10 @@ export class InitComponent {
     this.loading = true;
 
     this.optionsService.init()
-      .then(response => {
+      .then(() => {
         this.status = 'success';
         this.loading = false;
-      })
-      .catch(response => {
+      }, () => {
         this.status = 'error';
         this.loading = false;
       });

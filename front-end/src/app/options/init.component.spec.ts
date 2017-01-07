@@ -1,37 +1,88 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {By}              from '@angular/platform-browser';
-import {DebugElement}    from '@angular/core';
+import {DebugElement} from '@angular/core';
+import {By} from '@angular/platform-browser';
 import {InitComponent} from './init.component';
+import {OptionsService} from './options.service';
 
-describe('Init component', () => {
-
+describe('InitComponent', () => {
   let comp: InitComponent;
   let fixture: ComponentFixture<InitComponent>;
+  let divSuccess: DebugElement;
+  let divError: DebugElement;
+  let imgLoading: DebugElement;
+  let buttonSubmit: DebugElement;
+  let initSuccess: boolean;
   let de: DebugElement;
-  let el: HTMLElement;
+
+  class FakeOptionsService {
+    init(): Promise<any> {
+      return initSuccess ? Promise.resolve(initSuccess) : Promise.reject(initSuccess);
+    }
+  }
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [InitComponent],
+      providers: [{provide: OptionsService, useClass: FakeOptionsService}]
     });
     fixture = TestBed.createComponent(InitComponent);
     comp = fixture.componentInstance;
-    de = fixture.debugElement.query(By.css('h1'));
-    el = de.nativeElement;
+    de = fixture.debugElement;
+    fetchElements();
   });
 
-  it('no title in the DOM until manually call `detectChanges`', () => {
-    expect(el.textContent).toEqual('');
+  function fetchElements() {
+    buttonSubmit = de.query(By.css('button'));
+    divSuccess = de.query(By.css('.alert-success'));
+    divError = de.query(By.css('.alert-error'));
+    imgLoading = de.query(By.css('img'));
+  }
+
+  it('can show init button', () => {
+    expect(buttonSubmit.nativeElement.textContent).toEqual('Initialize');
   });
 
-  it('should display original title', () => {
+  it('can show success message', () => {
+    comp.status = 'success';
     fixture.detectChanges();
-    expect(el.textContent).toContain(comp.title);
+    fetchElements();
+    expect(divSuccess.nativeElement.textContent).toContain('successful');
   });
 
-  it('should display a different test title', () => {
-    comp.title = 'Test Title';
+  it('can show success message with fake service', () => {
+    initSuccess = true;
+    expect(imgLoading).toBeNull();
+    comp.init();
     fixture.detectChanges();
-    expect(el.textContent).toContain('Test Title');
+    fetchElements();
+    expect(divError).toBeNull();
+    expect(divSuccess).toBeNull();
+    expect(imgLoading.nativeElement).toBeTruthy();
+    fixture.whenStable()
+      .then(() => {
+        fixture.detectChanges();
+        fetchElements();
+        expect(imgLoading).toBeNull();
+        expect(divError).toBeNull();
+        expect(divSuccess.nativeElement).toBeTruthy();
+      });
+  });
+
+  it('can show error message with fake service', () => {
+    initSuccess = false;
+    comp.init();
+    fixture.detectChanges();
+    fetchElements();
+    expect(divError).toBeNull();
+    expect(divSuccess).toBeNull();
+    expect(imgLoading.nativeElement).toBeTruthy();
+    fixture.whenStable()
+      .then(() => {
+        fixture.detectChanges();
+        fetchElements();
+        expect(imgLoading).toBeNull();
+        expect(divSuccess).toBeNull();
+        expect(divError.nativeElement).toBeTruthy();
+      });
   });
 });
