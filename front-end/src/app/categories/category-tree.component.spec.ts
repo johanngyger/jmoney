@@ -1,5 +1,5 @@
 import {fakeAsync, tick, ComponentFixture, TestBed} from '@angular/core/testing';
-import {DebugElement, NO_ERRORS_SCHEMA} from '@angular/core';
+import {DebugElement} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {By} from '@angular/platform-browser';
 import {CategoryTreeComponent} from './category-tree.component';
@@ -36,8 +36,7 @@ describe('CategoryTreeComponent', () => {
     TestBed.configureTestingModule({
       imports: [FormsModule],
       declarations: [CategoryTreeComponent],
-      providers: [{provide: CategoryService, useClass: FakeCategoryService}],
-      // schemas: [NO_ERRORS_SCHEMA]
+      providers: [{provide: CategoryService, useClass: FakeCategoryService}]
     });
     fixture = TestBed.createComponent(CategoryTreeComponent);
     comp = fixture.componentInstance;

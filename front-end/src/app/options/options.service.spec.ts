@@ -1,7 +1,6 @@
-import {async, inject, ComponentFixture, TestBed} from '@angular/core/testing';
+import {async, inject, TestBed} from '@angular/core/testing';
 import {MockBackend, MockConnection} from '@angular/http/testing';
 import {HttpModule, Http, XHRBackend, Response, ResponseOptions} from '@angular/http';
-import {InitComponent} from './init.component';
 import {OptionsService} from './options.service';
 
 describe('OptionsService', () => {
