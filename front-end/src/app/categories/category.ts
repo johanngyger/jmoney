@@ -6,4 +6,10 @@ export class Category {
   parentId: number;
   categoryName: string;
   children: Category[];
+
+  constructor(fields?: Object) {
+    if (fields) {
+      Object.assign(this, fields);
+    }
+  }
 }

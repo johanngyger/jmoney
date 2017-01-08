@@ -54,14 +54,4 @@ export class EntriesComponent implements OnInit {
     return Math.min(this.page + 1, this.maxPage);
   }
 
-  getStatusText(status): string {
-    if (status === 'RECONCILING') {
-      return 'R';
-    } else if (status === 'CLEARED') {
-      return 'C';
-    } else {
-      return null;
-    }
-  }
-
 }

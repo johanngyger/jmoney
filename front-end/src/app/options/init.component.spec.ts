@@ -83,4 +83,4 @@ describe('InitComponent', () => {
     expect(divSuccess).toBeNull();
     expect(divError.nativeElement).toBeTruthy();
   }));
-}
+});

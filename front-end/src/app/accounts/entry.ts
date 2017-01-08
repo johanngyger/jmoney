@@ -14,4 +14,10 @@ export class Entry {
   categoryId: number;
   categoryName: string;
   subEntries: Entry[] = [];
+
+  constructor(fields?: Object) {
+    if (fields) {
+      Object.assign(this, fields);
+    }
+  }
 }
