@@ -26,8 +26,7 @@ describe('CategoriesComponent', () => {
     let cat32 = new Category({id: 9, name: 'Cat3.2', children: [cat321, cat322, cat323]});
     let cat33 = new Category({id: 10, name: 'Cat3.3', children: []});
     let cat3 = new Category({id: 11, name: 'Cat3', children: [cat31, cat32, cat33]});
-    let rootCat = new Category({id: 0, name: 'Cat3', children: [cat1, cat2, cat3]});
-    return rootCat;
+    return new Category({id: 0, name: 'Cat3', children: [cat1, cat2, cat3]});
   };
 
   class FakeCategoryService {

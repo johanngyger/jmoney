@@ -2,7 +2,7 @@ import {async, inject, TestBed} from '@angular/core/testing';
 import {MockBackend, MockConnection} from '@angular/http/testing';
 import {HttpModule, Http, XHRBackend, Response, ResponseOptions} from '@angular/http';
 import {CategoryService} from './category.service';
-import {Category} from "./category";
+import {Category} from './category';
 
 describe('CategoryService', () => {
   beforeEach(async(() => {
