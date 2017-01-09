@@ -22,7 +22,7 @@ export class EntryService {
       .then(response => response.json() as Entry[]);
   }
 
-  getEntryCount(accountId: number, filter: string, page: number) {
+  getEntryCount(accountId: number, filter: string, page: number): Promise<number> {
     let params = new URLSearchParams();
     if (filter) {
       params.set('filter', filter);
