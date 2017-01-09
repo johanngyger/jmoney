@@ -3,8 +3,8 @@
     An error occured.
   </div>
 
-  <div *ngIf="!error">
-    <a (click)="add()"><i class="icon-plus-sign"></i> Neue Hauptkategorie</a>
+  <div *ngIf="categoryTree">
+    <a (click)="add()" class="kinda-link"><i class="icon-plus-sign"></i> Neue Hauptkategorie</a>
     <hr>
 
     <div class="button-bar">

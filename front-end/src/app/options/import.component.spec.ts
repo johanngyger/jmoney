@@ -29,7 +29,7 @@ describe('ImportComponent', () => {
     imgLoading = de.query(By.css('img'));
   }
 
-  it('can show loading status', () => {
+  it('can show the loading status', () => {
     expect(imgLoading).toBeNull();
     comp.beforeUpload('file');
     fixture.detectChanges();
@@ -37,7 +37,7 @@ describe('ImportComponent', () => {
     expect(imgLoading.nativeElement).toBeTruthy();
   });
 
-  it('handle the upload (positive case)', () => {
+  it('can handle the upload (positive case)', () => {
     expect(divSuccess).toBeNull();
     comp.handleUpload({status: 200});
     fixture.detectChanges();
@@ -47,7 +47,7 @@ describe('ImportComponent', () => {
     expect(imgLoading).toBeNull();
   });
 
-  it('handle the upload (negative case)', () => {
+  it('can handle the upload (negative case)', () => {
     expect(divError).toBeNull();
     comp.handleUpload({status: 500});
     fixture.detectChanges();

@@ -33,13 +33,13 @@ export class CategoriesComponent implements OnInit {
 
   add(): void {
     this.categoryService.createCategory(this.categoryTree.id)
-      .then(newCat => this.categoryTree.children.unshift(newCat));
+      .then(newCat => this.categoryTree.children.unshift(newCat))
+      .catch(() => this.error = true);
   }
 
   save(): void {
     this.categoryService.saveCategoryTree(this.categoryTree)
       .then(result => this.fetch())
       .catch(() => this.error = true);
-    this.categoryTree = null;
   }
 }
