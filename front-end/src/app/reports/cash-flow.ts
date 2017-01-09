@@ -5,4 +5,10 @@ export class CashFlow {
   expense: number;
   difference: number;
   total: boolean;
+
+  constructor(fields?: Object) {
+    if (fields) {
+      Object.assign(this, fields);
+    }
+  }
 }
