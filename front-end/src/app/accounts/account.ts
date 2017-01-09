@@ -7,4 +7,10 @@ export class Account {
   minBalance: number;
   abbreviation: string;
   comment: string;
+
+  constructor(fields?: Object) {
+    if (fields) {
+      Object.assign(this, fields);
+    }
+  }
 }

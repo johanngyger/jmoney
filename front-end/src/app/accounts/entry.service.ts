@@ -23,8 +23,16 @@ export class EntryService {
   }
 
   getEntryCount(accountId: number, filter: string, page: number) {
+    let params = new URLSearchParams();
+    if (filter) {
+      params.set('filter', filter);
+    }
+    if (page) {
+      params.set('page', '' + page);
+    }
+
     return this.http
-      .get(this.getEntriesPath(accountId) + '/count')
+      .get(this.getEntriesPath(accountId) + '/count', {search: params})
       .toPromise()
       .then(response => response.json() as number);
   }
@@ -38,24 +46,24 @@ export class EntryService {
 
   createEntry(accountId: number, entry: Entry): Promise<number> {
     return this.http
-      .post('rest/accounts/' + accountId + '/entries/', entry)
+      .post(this.getEntriesPath(accountId), entry)
       .toPromise()
       .then(response => response.json() as number);
   }
 
   updateEntry(accountId: number, entry: Entry): Promise<any> {
     return this.http
-      .put('rest/accounts/' + accountId + '/entries/' + entry.id, entry)
+      .put(this.getEntriesPath(accountId) + entry.id, entry)
       .toPromise();
   }
 
   deleteEntry(accountId: number, entryId): Promise<any> {
     return this.http
-      .delete('rest/accounts/' + accountId + '/entries/' + entryId)
+      .delete(this.getEntriesPath(accountId) + entryId)
       .toPromise();
   }
 
-  getEntriesPath(accountId: number): string {
-    return '/rest/accounts/' + accountId + '/entries/';
+  private getEntriesPath(accountId: number): string {
+    return 'rest/accounts/' + accountId + '/entries/';
   }
 }

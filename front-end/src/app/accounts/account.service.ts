@@ -39,13 +39,19 @@ export class AccountService {
   updateAccount(account: Account): Promise<any> {
     return this.http.put('rest/accounts/' + account.id, account)
       .toPromise()
-      .then(() => this.accountChange.next(account.id));
+      .then(res => {
+        this.accountChange.next(account.id);
+        return res;
+      });
   }
 
   deleteAccount(accountId): Promise<any> {
     return this.http.delete('rest/accounts/' + accountId)
       .toPromise()
-      .then(() => this.accountChange.next(accountId));
+      .then(res => {
+        this.accountChange.next(accountId);
+        return res;
+      });
   }
 
 }
