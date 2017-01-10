@@ -1,9 +1,8 @@
 import {fakeAsync, tick, ComponentFixture, TestBed} from '@angular/core/testing';
 import {DebugElement, NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {By} from '@angular/platform-browser';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {ActivatedRoute} from '@angular/router';
+import {ActivatedRouteStub} from '../testing/route-stubs';
 import {EntriesComponent} from './entries.component';
 import {EntryService} from './entry.service';
 import {Entry} from './entry';
@@ -81,30 +80,3 @@ describe('EntriesComponent', () => {
 
 });
 
-export class ActivatedRouteStub {
-  private paramsSubject = new BehaviorSubject(this.testParams);
-  params = this.paramsSubject.asObservable();
-
-  private _testParams: {};
-  get testParams() {
-    return this._testParams;
-  }
-
-  set testParams(params: {}) {
-    this._testParams = params;
-    this.paramsSubject.next(params);
-  }
-
-  private queryParamsSubject = new BehaviorSubject(this.testQueryParams);
-  queryParams = this.queryParamsSubject.asObservable();
-
-  private _testQueryParams: {};
-  get testQueryParams() {
-    return this._testQueryParams;
-  }
-
-  set testQueryParams(params: {}) {
-    this._testQueryParams = params;
-    this.queryParamsSubject.next(params);
-  }
-}

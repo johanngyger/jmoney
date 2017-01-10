@@ -17,6 +17,7 @@ describe('CashFlowComponent', () => {
     new CashFlow({categoryId: 0, categoryName: 'Cat 3', income: 10000, expense: 20000, difference: 10000}),
     new CashFlow({categoryId: 0, categoryName: 'Cat 4', income: 10000, expense: 20000, difference: 10000}),
     new CashFlow({categoryId: 0, categoryName: 'Total', income: 10000, expense: 20000, difference: 10000, total: true}),
+    new CashFlow(),
   ];
   let success: boolean;
 
@@ -48,7 +49,7 @@ describe('CashFlowComponent', () => {
     comp.fetchCashFlow();
     handleChanges();
     let entries = de.queryAll(By.css('tr'));
-    expect(entries.length).toBe(6);
+    expect(entries.length).toBe(7);
     expect(entries[1].nativeElement.textContent).toContain('Cat 1');
     expect(entries[2].nativeElement.textContent).toContain('Cat 2');
     expect(entries[3].nativeElement.textContent).toContain('Cat 3');

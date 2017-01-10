@@ -21,7 +21,7 @@ describe('CategoryService', () => {
     })
   );
 
-  it('can instantiate service with "new"', inject([Http], (http: Http) => {
+  it('can instantiate service with new', inject([Http], (http: Http) => {
     expect(http).not.toBeNull('http should be provided');
     let service = new CategoryService(http);
     expect(service instanceof CategoryService).toBe(true, 'new service should be ok');

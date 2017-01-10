@@ -21,7 +21,7 @@ describe('AccountService', () => {
     })
   );
 
-  it('can instantiate service with "new"', inject([Http], (http: Http) => {
+  it('can instantiate service with new', inject([Http], (http: Http) => {
     expect(http).not.toBeNull('http should be provided');
     let service = new AccountService(http);
     expect(service instanceof AccountService).toBe(true, 'new service should be ok');

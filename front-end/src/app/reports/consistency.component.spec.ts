@@ -57,9 +57,7 @@ describe('ConsistencyComponent', () => {
       imports: [FormsModule],
       declarations: [ConsistencyComponent, EntriesTableComponent],
       providers: [{provide: ReportsService, useClass: FakeReportsService}],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(ConsistencyComponent);
     comp = fixture.componentInstance;

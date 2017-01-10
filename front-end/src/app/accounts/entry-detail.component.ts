@@ -87,7 +87,7 @@ export class EntryDetailComponent implements OnInit {
         .then(() => this.router.navigate(['/accounts', this.accountId, 'entries']));
     } else {
       this.entryService.createEntry(this.accountId, this.entry)
-        .then(accountId => this.router.navigate(['/accounts', this.accountId, 'entries']));
+        .then(() => this.router.navigate(['/accounts', this.accountId, 'entries']));
     }
   }
 

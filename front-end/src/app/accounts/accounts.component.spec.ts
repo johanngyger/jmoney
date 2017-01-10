@@ -28,9 +28,7 @@ describe('AccountsComponent', () => {
       imports: [FormsModule],
       declarations: [AccountsComponent],
       providers: [{provide: AccountService, useClass: FakeAccountService}],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(AccountsComponent);
     comp = fixture.componentInstance;

@@ -11,12 +11,8 @@ describe('EntriesTableComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        EntriesTableComponent
-      ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      declarations: [EntriesTableComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(EntriesTableComponent);
     comp = fixture.componentInstance;
