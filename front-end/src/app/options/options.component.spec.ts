@@ -9,7 +9,8 @@ describe('InitComponent', () => {
     });
   });
 
-  it('should survive an empty test', () => {
+  it('test harness', () => {
+    expect(true).toBeTruthy();
   });
 
 });

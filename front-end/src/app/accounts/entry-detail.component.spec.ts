@@ -23,11 +23,11 @@ describe('EntryDetailComponent', () => {
       return Promise.resolve(entry);
     }
 
-    createEntry(accountId: number, entry: Entry): Promise<number> {
+    createEntry(accountId: number, e: Entry): Promise<number> {
       return Promise.resolve(88);
     }
 
-    updateEntry(accountId: number, entry: Entry): Promise<any> {
+    updateEntry(accountId: number, e: Entry): Promise<any> {
       return Promise.resolve(true);
     }
 
@@ -138,7 +138,6 @@ describe('EntryDetailComponent', () => {
     expect(entryInputs[2].nativeElement.value).toBe('');
     expect(entryInputs[3].nativeElement.value).toBe('');
     expect(entryInputs[5].nativeElement.value).toBe('');
-
   }));
 
   it('updateIncome() updates ', fakeAsync(() => {
