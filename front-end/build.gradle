@@ -8,13 +8,18 @@ node {
   download = true
 }
 
-clean {
+task test(type: NpmTask) {
+  args = ['run', 'testprod']
+}
+
+task clean(type: Delete) {
   delete "dist"
 }
 
 task ngBuild(type: NpmTask) {
   args = ['run', 'ngbuildprod']
+  inputs.files(fileTree('src'))
+  outputs.dir('dist')
 }
 ngBuild.dependsOn npmInstall
 
-build.dependsOn ngBuild

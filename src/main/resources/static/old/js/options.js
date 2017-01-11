@@ -13,7 +13,7 @@ function OptionsController($scope, $location) {
 function InitController($scope, $http) {
     $scope.init = function () {
         $scope.loading = true;
-        $http.put('rest/options/init', {timeout: 5000})
+        $http.put('/rest/options/init', {timeout: 5000})
             .success(function () {
                 $scope.success = true;
                 $scope.loading = false;

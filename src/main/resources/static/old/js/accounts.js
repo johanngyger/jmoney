@@ -20,7 +20,7 @@ function parseDate(dateString) {
 function AccountController($scope, $http, $routeParams, $rootScope) {
     var load = function () {
         $scope.loadingAccounts = true;
-        $http.get('rest/accounts')
+        $http.get('/rest/accounts')
             .success(function (data) {
                 $scope.accounts = data;
                 $scope.loadingAccounts = false;
@@ -41,7 +41,7 @@ function AccountController($scope, $http, $routeParams, $rootScope) {
 
 function AccountDetailsController($scope, $http, $routeParams, $location, $rootScope) {
     if ($routeParams.accountId) {
-        $http.get('rest/accounts/' + $routeParams.accountId).success(function (data) {
+        $http.get('/rest/accounts/' + $routeParams.accountId).success(function (data) {
             $scope.account = data;
             $scope.account.startBalance100 = data.startBalance / 100;
             $scope.account.minBalance100 = data.minBalance / 100;
@@ -52,12 +52,12 @@ function AccountDetailsController($scope, $http, $routeParams, $location, $rootS
         $scope.account.startBalance = $scope.account.startBalance100 * 100;
         $scope.account.minBalance = $scope.account.startBalance100 * 100;
         if ($scope.account.id != null) {
-            $http.put('rest/accounts/' + $routeParams.accountId, $scope.account).success(function (data) {
+            $http.put('/rest/accounts/' + $routeParams.accountId, $scope.account).success(function (data) {
                 $rootScope.$broadcast('account');
                 $location.path('/accounts/' + $routeParams.accountId + '/entries');
             });
         } else {
-            $http.post('rest/accounts', $scope.account).success(function (data) {
+            $http.post('/rest/accounts', $scope.account).success(function (data) {
                 $rootScope.$broadcast('account');
                 $location.path('/accounts/' + data + '/entries');
             });
@@ -71,7 +71,7 @@ function AccountDetailsController($scope, $http, $routeParams, $location, $rootS
         }
 
         if ($routeParams.accountId) {
-            $http.delete('rest/accounts/' + $routeParams.accountId).success(function (data) {
+            $http.delete('/rest/accounts/' + $routeParams.accountId).success(function (data) {
                 $rootScope.$broadcast('account');
                 $location.path('/accounts');
             });
@@ -88,13 +88,13 @@ function EntryController($scope, $http, $routeParams, $filter, $location) {
             $scope.page = 1;
         }
 
-        $http.get('rest/accounts/' + $routeParams.accountId + '/entries/count').success(function (data) {
+        $http.get('/rest/accounts/' + $routeParams.accountId + '/entries/count').success(function (data) {
             $scope.entryCount = parseInt(data);
             $scope.maxPage = Math.ceil($scope.entryCount / 10);
         });
 
         $scope.loading = true;
-        $http.get('rest/accounts/' + $routeParams.accountId + '/entries', {params: {page: $scope.page, filter: $scope.filter}})
+        $http.get('/rest/accounts/' + $routeParams.accountId + '/entries', {params: {page: $scope.page, filter: $scope.filter}})
             .success(function (data) {
                 $scope.entries = data;
                 $scope.loading = false;
@@ -165,7 +165,7 @@ function EntryDetailsController($scope, $http, $routeParams, $filter, $location)
     $scope.load = function () {
         $scope.accountId = $routeParams.accountId;
 
-        $http.get('rest/accounts/' + $routeParams.accountId + '/entries', {params: {page: $scope.page, filter: $scope.filter}})
+        $http.get('/rest/accounts/' + $routeParams.accountId + '/entries', {params: {page: $scope.page, filter: $scope.filter}})
             .success(function (data) {
                 $scope.entries = data;
 
@@ -178,7 +178,7 @@ function EntryDetailsController($scope, $http, $routeParams, $filter, $location)
 
         $scope.loading = true;
         if ($routeParams.entryId) {
-            $http.get('rest/accounts/' + $routeParams.accountId + '/entries/' + $routeParams.entryId)
+            $http.get('/rest/accounts/' + $routeParams.accountId + '/entries/' + $routeParams.entryId)
                 .success(function (data) {
                     $scope.entry = data;
                     $scope.initAmount($scope.entry);
@@ -197,23 +197,23 @@ function EntryDetailsController($scope, $http, $routeParams, $filter, $location)
 
     $scope.load();
 
-    $http.get('rest/categories').success(function (data) {
+    $http.get('/rest/categories').success(function (data) {
         $scope.categories = data;
     });
 
-    $http.get('rest/split-category').success(function (data) {
+    $http.get('/rest/split-category').success(function (data) {
         $scope.splitCategory = data;
     });
 
 
     $scope.save = function () {
         if ($scope.entry.id) {
-            $http.put('rest/accounts/' + $routeParams.accountId + '/entries/' + $scope.entry.id, $scope.entry)
+            $http.put('/rest/accounts/' + $routeParams.accountId + '/entries/' + $scope.entry.id, $scope.entry)
                 .success(function (data) {
                     $location.path('/accounts/' + $routeParams.accountId + '/entries')
                 });
         } else {
-            $http.post('rest/accounts/' + $routeParams.accountId + '/entries', $scope.entry)
+            $http.post('/rest/accounts/' + $routeParams.accountId + '/entries', $scope.entry)
                 .success(function (data) {
                     $location.path('/accounts/' + $routeParams.accountId + '/entries');
                 });
@@ -222,7 +222,7 @@ function EntryDetailsController($scope, $http, $routeParams, $filter, $location)
 
     $scope.delete = function () {
         if ($routeParams.accountId) {
-            $http.delete('rest/accounts/' + $routeParams.accountId + '/entries/' + $scope.entry.id)
+            $http.delete('/rest/accounts/' + $routeParams.accountId + '/entries/' + $scope.entry.id)
                 .success(function (data) {
                     $location.path('/accounts/' + $routeParams.accountId + '/entries');
                 });

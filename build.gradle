@@ -10,14 +10,12 @@ buildscript {
     }
 }
 
-allprojects {
-    apply plugin: 'java'
-}
+apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 
 jar {
     baseName = 'jmoney'
-    version = '0.0.1-SNAPSHOT'
+    version = '0.1.0'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -53,3 +51,18 @@ dependencies {
     runtime('com.h2database:h2')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
+
+task testFrontend(dependsOn: 'front-end:test') {
+}
+test.dependsOn testFrontend
+
+task cleanFrontend(dependsOn: 'front-end:clean') {
+}
+clean.dependsOn cleanFrontend
+
+task processFrontendResources(type: Copy, dependsOn: 'front-end:ngBuild') {
+    from 'front-end/dist'
+    exclude 'out-tsc'
+    into 'build/resources/main/static'
+}
+processResources.dependsOn processFrontendResources

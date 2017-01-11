@@ -15,7 +15,7 @@ function BalancesController($scope, $http, $filter) {
     $scope.loading = true;
     $scope.generate = function () {
         var dateParam = $filter('date')($scope.filterDate, 'yyyy-MM-dd');
-        $http.get('rest/reports/balances', {params: {date: dateParam}})
+        $http.get('/rest/reports/balances', {params: {date: dateParam}})
             .success(function (data) {
                 $scope.balances = data;
                 $scope.loading = false;
@@ -36,7 +36,7 @@ function CashFlowController($scope, $http, $filter) {
         $scope.loading = true;
         var fromDateParam = $filter('date')($scope.fromDate, 'yyyy-MM-dd');
         var toDateParam = $filter('date')($scope.toDate, 'yyyy-MM-dd');
-        $http.get('rest/reports/cash-flows', {params: {fromDate: fromDateParam, toDate: toDateParam}})
+        $http.get('/rest/reports/cash-flows', {params: {fromDate: fromDateParam, toDate: toDateParam}})
             .success(function (data) {
                 $scope.cashFlows = data;
                 $scope.loading = false;
@@ -89,7 +89,7 @@ function CashFlowController($scope, $http, $filter) {
         var fromDateParam = $filter('date')($scope.fromDate, 'yyyy-MM-dd');
         var toDateParam = $filter('date')($scope.toDate, 'yyyy-MM-dd');
         $scope.error = false;
-        $http.get('rest/reports/entries-with-category',
+        $http.get('/rest/reports/entries-with-category',
             {params: {categoryId: categoryId, fromDate: fromDateParam, toDate: toDateParam}})
             .success(function (data) {
                 $scope.entries = data;
@@ -102,7 +102,7 @@ function CashFlowController($scope, $http, $filter) {
 
 function ConsistencyController($scope, $http) {
 
-    $http.get('rest/reports/consitency/inconsistent-split-entries')
+    $http.get('/rest/reports/consitency/inconsistent-split-entries')
         .success(function (data) {
             $scope.splitEntries = data;
         })
@@ -110,7 +110,7 @@ function ConsistencyController($scope, $http) {
             $scope.error = true;
         });
 
-    $http.get('rest/reports/consitency/entries-without-category')
+    $http.get('/rest/reports/consitency/entries-without-category')
         .success(function (data) {
             $scope.entriesWithoutCategory = data;
         })
