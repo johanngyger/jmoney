@@ -1,3 +1,4 @@
+sudo: required
 language: java
 jdk: oraclejdk8
 script: "./gradlew build"
@@ -7,5 +8,8 @@ before_cache:
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
+    - .gradle
+    - frontend/.gradle
+    - frontend/node_modules
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
