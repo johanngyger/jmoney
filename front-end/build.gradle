@@ -1,0 +1,14 @@
+plugins {
+  id "com.moowork.node" version "1.0.1"
+}
+
+clean {
+  delete "dist"
+}
+
+task ngBuild(type: NpmTask) {
+  args = ['run', 'ng', 'build', '-prod']
+}
+ngBuild.dependsOn npmInstall
+
+build.dependsOn ngBuild

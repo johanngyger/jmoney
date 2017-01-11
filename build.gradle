@@ -10,7 +10,9 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
+allprojects {
+    apply plugin: 'java'
+}
 apply plugin: 'org.springframework.boot'
 
 jar {
