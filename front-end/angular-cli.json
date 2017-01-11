@@ -8,7 +8,6 @@
       "root": "src",
       "outDir": "dist",
       "assets": [
-        "assets",
         "jmoney.ico"
       ],
       "index": "index.html",

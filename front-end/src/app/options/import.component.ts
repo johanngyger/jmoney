@@ -7,9 +7,7 @@ import {NgUploaderOptions} from 'ngx-uploader';
 export class ImportComponent {
   status: string;
   loading: boolean;
-  options: NgUploaderOptions = {
-    url: '/rest/options/import2'
-  };
+  options: NgUploaderOptions = new NgUploaderOptions({url: '/rest/options/import2'});
 
   beforeUpload(uploadingFile): void {
     this.loading = true;
