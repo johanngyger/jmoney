@@ -12,7 +12,7 @@ and
 
 ## Development server
 
-Run `ng serve --proxy proxy.config.json` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `npm start` or `ng serve --proxy proxy.config.json` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Build
 
@@ -20,7 +20,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm test` or `ng test --browsers=Chrome` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 Coverage report: `ng test -w=false -cc`. Results will be in `coverage` folder.
 
