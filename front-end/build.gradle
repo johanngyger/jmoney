@@ -8,15 +8,18 @@ node {
   download = true
 }
 
-task test(type: NpmTask) {
+task ngTest(type: NpmTask) {
+  description 'Tests the front-end.'
   args = ['run', 'testprod']
 }
 
-task clean(type: Delete) {
+task ngClean(type: Delete) {
+  description 'Cleans the front-end.'
   delete "dist"
 }
 
 task ngBuild(type: NpmTask) {
+  description 'Builds the front-end.'
   args = ['run', 'buildprod']
   inputs.files(fileTree('src'))
   outputs.dir('dist')

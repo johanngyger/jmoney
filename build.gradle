@@ -52,17 +52,36 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
-task testFrontEnd(dependsOn: 'front-end:test') {
+task cleanFE(dependsOn: 'front-end:ngClean') {
+    description 'Cleans the front-end.'
 }
-test.dependsOn testFrontEnd
-
-task cleanFrontEnd(dependsOn: 'front-end:clean') {
+task cleanAll() {
+    description 'Cleans both the front-end and back-end.'
 }
-clean.dependsOn cleanFrontEnd
+cleanAll.dependsOn cleanFE
+cleanAll.dependsOn clean
 
-task processFrontEndResources(type: Copy, dependsOn: 'front-end:ngBuild') {
+task testFE(dependsOn: 'front-end:ngTest') {
+    description 'Tests the front-end.'
+}
+task testAll() {
+    description 'Tests both the front-end and back-end.'
+}
+testAll.dependsOn testFE
+testAll.dependsOn test
+
+task buildFE(type: Copy, dependsOn: 'front-end:ngBuild') {
+    description 'Builds the front-end.'
     from 'front-end/dist'
     exclude 'out-tsc'
     into 'build/resources/main/static'
 }
-processResources.dependsOn processFrontEndResources
+task buildAll() {
+    description 'Builds both the front-end and back-end.'
+}
+buildAll.dependsOn buildFE
+buildAll.dependsOn testFE
+buildAll.dependsOn build
+build.mustRunAfter buildFE
+
+bootRun.dependsOn buildFE
