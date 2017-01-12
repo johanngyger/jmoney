@@ -89,6 +89,8 @@ task buildAll() {
 buildAll.dependsOn buildFE
 buildAll.dependsOn testFE
 buildAll.dependsOn build
+buildAll.dependsOn jacocoTestReport
 build.mustRunAfter buildFE
+jacocoTestReport.mustRunAfter build
 
 bootRun.dependsOn buildFE
