@@ -68,8 +68,7 @@ task buildFE(type: Copy, dependsOn: 'front-end:build') {
     exclude 'out-tsc'
     into 'build/resources/main/static'
 }
-build.dependsOn buildFE
-bootRun.dependsOn buildFE
+processResources.dependsOn buildFE
 
 task buildTravis(dependsOn: [build, jacocoTestReport]) {
     description 'Build/test task for Travis, see .travis.yml'
