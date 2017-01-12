@@ -3,9 +3,9 @@ plugins {
 }
 
 node {
-  //version = '6.9.4'
+  version = '6.9.4'
   npmVersion = '3.10.10'
-  //download = true
+  download = true
 }
 
 task test(type: NpmTask) {
