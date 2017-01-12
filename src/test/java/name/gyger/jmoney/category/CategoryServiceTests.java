@@ -59,13 +59,13 @@ public class CategoryServiceTests {
     @Test
     public void testGetSplitCategory() {
         Category splitCategory = categoryService.getSplitCategory();
-        assertThat(splitCategory.getName()).isEqualTo("[SPLITTBUCHUNG]");
+        assertThat(splitCategory.getName()).isEqualTo("[SPLIT]");
     }
 
     @Test
     public void testGetTransferCategory() {
         Category splitCategory = categoryService.getTransferCategory();
-        assertThat(splitCategory.getName()).isEqualTo("[UMBUCHUNG]");
+        assertThat(splitCategory.getName()).isEqualTo("[TRANSFER]");
     }
 
     @Test

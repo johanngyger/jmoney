@@ -28,6 +28,7 @@ public class SessionServiceTests {
         assertThat(s.getRootCategory()).isNotNull();
         assertThat(s.getSplitCategory()).isNotNull();
         assertThat(s.getTransferCategory()).isNotNull();
+        assertThat(s.getId()).isNotNull();
 
         sessionService.removeOldSession();
         assertThat(sessionService.isSessionAvailable()).isFalse();

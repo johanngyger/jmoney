@@ -44,7 +44,7 @@ public class CategoryControllerTests {
     @Test
     public void testGetSplitCategory() throws Exception {
         mockMvc.perform(get("/rest/split-category"))
-                .andExpect(content().json("{'name':'[SPLITTBUCHUNG]'}"))
+                .andExpect(content().json("{'name':'[SPLIT]'}"))
                 .andExpect(status().isOk());
     }
 

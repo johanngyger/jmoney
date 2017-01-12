@@ -45,16 +45,8 @@ public class Session {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public List<Account> getAccounts() {
         return accounts;
-    }
-
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
     }
 
     public Category getRootCategory() {
