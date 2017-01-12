@@ -6,7 +6,7 @@ public class RootCategory extends AbstractCategory {
 	}
 
 	public String getCategoryName() {
-		return "[KATEGORIEN]";
+		return "[CATEGORIES]";
 	}
 
 }

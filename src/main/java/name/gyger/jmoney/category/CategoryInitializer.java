@@ -20,74 +20,72 @@ public class CategoryInitializer {
         Category root = createCategory(Category.Type.ROOT, "[ROOT]", null, cList);
         session.setRootCategory(root);
 
-        Category transfer = createCategory(Category.Type.TRANSFER, "[UMBUCHUNG]", root, cList);
+        Category transfer = createCategory(Category.Type.TRANSFER, "[TRANSFER]", root, cList);
         session.setTransferCategory(transfer);
 
-        Category split = createCategory(Category.Type.SPLIT, "[SPLITTBUCHUNG]", root, cList);
+        Category split = createCategory(Category.Type.SPLIT, "[SPLIT]", root, cList);
         session.setSplitCategory(split);
 
-        createNormalCategory("Steuern", root, cList);
-        createNormalCategory("Mitgliedschaften", root, cList);
-        createNormalCategory("Spenden", root, cList);
-        createNormalCategory("Gebühren", root, cList);
-        createNormalCategory("Geschenke", root, cList);
+        createNormalCategory("Taxes", root, cList);
+        createNormalCategory("Memberships", root, cList);
+        createNormalCategory("Donations", root, cList);
+        createNormalCategory("Fees", root, cList);
+        createNormalCategory("Gifts", root, cList);
 
-        Category income = createNormalCategory("Einkünfte", root, cList);
-        createNormalCategory("Lohn", income, cList);
-        createNormalCategory("Nebenerwerb", income, cList);
-        createNormalCategory("Wertschriftenerträge", income, cList);
+        Category income = createNormalCategory("Income", root, cList);
+        createNormalCategory("Wages", income, cList);
+        createNormalCategory("Sidelines", income, cList);
 
-        Category children = createNormalCategory("Kinder", root, cList);
-        createNormalCategory("Arzt", children, cList);
-        createNormalCategory("Kleidung", children, cList);
-        createNormalCategory("Hüten", children, cList);
-        createNormalCategory("Spielsachen", children, cList);
+        Category children = createNormalCategory("Children", root, cList);
+        createNormalCategory("Doctor", children, cList);
+        createNormalCategory("Clothing", children, cList);
+        createNormalCategory("Child care", children, cList);
+        createNormalCategory("Toys", children, cList);
 
-        Category housing = createNormalCategory("Wohnen", root, cList);
-        createNormalCategory("Nebenkosten/Unterhalt", housing, cList);
-        createNormalCategory("Miete/Hypozins", housing, cList);
+        Category housing = createNormalCategory("Living", root, cList);
+        createNormalCategory("Additional costs", housing, cList);
+        createNormalCategory("Rent/Mortgage", housing, cList);
         createNormalCategory("TV", housing, cList);
 
-        Category communication = createNormalCategory("Kommunikation", root, cList);
-        createNormalCategory("Telefon", communication, cList);
+        Category communication = createNormalCategory("Communication", root, cList);
+        createNormalCategory("Phone", communication, cList);
         createNormalCategory("Mobile", communication, cList);
         createNormalCategory("Internet", communication, cList);
 
-        Category insurance = createNormalCategory("Versicherungen", root, cList);
-        createNormalCategory("Krankenkasse", insurance, cList);
-        createNormalCategory("Haushalt/Haftpflicht", insurance, cList);
+        Category insurance = createNormalCategory("Insurance", root, cList);
+        createNormalCategory("Health insurance", insurance, cList);
+        createNormalCategory("Household insurance", insurance, cList);
 
-        Category household = createNormalCategory("Haushalt", root, cList);
-        createNormalCategory("Lebensmittel", household, cList);
-        createNormalCategory("Ausser-Haus-Verpflegung", household, cList);
-        createNormalCategory("Kleidung", household, cList);
+        Category household = createNormalCategory("Household", root, cList);
+        createNormalCategory("Food", household, cList);
+        createNormalCategory("Restaurant", household, cList);
+        createNormalCategory("Clothing", household, cList);
 
-        Category transport = createNormalCategory("Verkehr", root, cList);
-        createNormalCategory("Auto", transport, cList);
-        createNormalCategory("ÖV", transport, cList);
+        Category transport = createNormalCategory("Traffic", root, cList);
+        createNormalCategory("Car", transport, cList);
+        createNormalCategory("Public transport", transport, cList);
 
-        Category entertainment = createNormalCategory("Unterhaltung", root, cList);
-        createNormalCategory("Bücher", entertainment, cList);
-        createNormalCategory("Zeitungen", entertainment, cList);
-        createNormalCategory("Zeitschriften", entertainment, cList);
-        createNormalCategory("Musik", entertainment, cList);
-        createNormalCategory("Filme", entertainment, cList);
-        createNormalCategory("Spiele", entertainment, cList);
+        Category entertainment = createNormalCategory("Entertainment", root, cList);
+        createNormalCategory("Books", entertainment, cList);
+        createNormalCategory("Newspapers", entertainment, cList);
+        createNormalCategory("Magazines", entertainment, cList);
+        createNormalCategory("Music", entertainment, cList);
+        createNormalCategory("Movies", entertainment, cList);
+        createNormalCategory("Games", entertainment, cList);
 
-        Category leisure = createNormalCategory("Freizeit", root, cList);
-        createNormalCategory("Ausgang", leisure, cList);
-        createNormalCategory("Kino", leisure, cList);
-        createNormalCategory("Sportanlässe", leisure, cList);
-        createNormalCategory("Konzerte", leisure, cList);
-        createNormalCategory("Ausflüge", leisure, cList);
-        createNormalCategory("Bücher", leisure, cList);
-        createNormalCategory("Ferien", leisure, cList);
+        Category leisure = createNormalCategory("Leisure", root, cList);
+        createNormalCategory("Outgoing", leisure, cList);
+        createNormalCategory("Cinema", leisure, cList);
+        createNormalCategory("Sports", leisure, cList);
+        createNormalCategory("Concerts", leisure, cList);
+        createNormalCategory("Trips", leisure, cList);
+        createNormalCategory("Vacation", leisure, cList);
 
-        Category healthCare = createNormalCategory("Gesundheit", root, cList);
-        createNormalCategory("Arzt", healthCare, cList);
-        createNormalCategory("Apotheke", healthCare, cList);
-        createNormalCategory("Zahnarzt", healthCare, cList);
-        createNormalCategory("Körperpflege", healthCare, cList);
+        Category healthCare = createNormalCategory("Health", root, cList);
+        createNormalCategory("Doctor", healthCare, cList);
+        createNormalCategory("Drugstore", healthCare, cList);
+        createNormalCategory("Dentist", healthCare, cList);
+        createNormalCategory("Hygiene", healthCare, cList);
 
         for (Category c : cList) {
             em.persist(c);
