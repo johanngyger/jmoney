@@ -59,38 +59,15 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
-task cleanFE(dependsOn: 'front-end:ngClean') {
-    description 'Cleans the front-end.'
-}
-task cleanAll() {
-    description 'Cleans both the front-end and back-end.'
-}
-cleanAll.dependsOn cleanFE
-cleanAll.dependsOn clean
-
-task testFE(dependsOn: 'front-end:ngTest') {
-    description 'Tests the front-end.'
-}
-task testAll() {
-    description 'Tests both the front-end and back-end.'
-}
-testAll.dependsOn testFE
-testAll.dependsOn test
-
-task buildFE(type: Copy, dependsOn: 'front-end:ngBuild') {
+task buildFE(type: Copy, dependsOn: 'front-end:build') {
     description 'Builds the front-end.'
     from 'front-end/dist'
     exclude 'out-tsc'
     into 'build/resources/main/static'
 }
-task buildAll() {
-    description 'Builds both the front-end and back-end.'
-}
-buildAll.dependsOn buildFE
-buildAll.dependsOn testFE
-buildAll.dependsOn build
-buildAll.dependsOn jacocoTestReport
-build.mustRunAfter buildFE
-jacocoTestReport.mustRunAfter build
-
+build.dependsOn buildFE
 bootRun.dependsOn buildFE
+
+task buildTravis(dependsOn: [build, jacocoTestReport]) {
+    description 'Build/test task for Travis, see .travis.yml'
+}

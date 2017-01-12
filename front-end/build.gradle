@@ -8,21 +8,22 @@ node {
   download = true
 }
 
-task ngTest(type: NpmTask) {
+task test(type: NpmTask) {
   description 'Tests the front-end.'
   args = ['run', 'testprod']
 }
 
-task ngClean(type: Delete) {
+task clean(type: Delete) {
   description 'Cleans the front-end.'
-  delete "dist"
+  delete 'dist'
+  delete 'coverage'
 }
 
-task ngBuild(type: NpmTask) {
+task build(type: NpmTask) {
   description 'Builds the front-end.'
   args = ['run', 'buildprod']
   inputs.files(fileTree('src'))
   outputs.dir('dist')
 }
-ngBuild.dependsOn npmInstall
+build.dependsOn npmInstall
 
