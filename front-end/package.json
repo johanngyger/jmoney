@@ -1,6 +1,6 @@
 {
-  "name": "jmoney-frontend",
-  "version": "0.0.0",
+  "name": "jmoney-front-end",
+  "version": "0.1.0",
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
