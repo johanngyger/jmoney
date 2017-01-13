@@ -8,21 +8,30 @@ node {
   download = true
 }
 
-task test(type: NpmTask, dependsOn: npmInstall) {
-  description 'Tests the front-end.'
-  args = ['run', 'testprod']
-}
-
 task clean(type: Delete) {
   description 'Cleans the front-end.'
   delete 'dist'
   delete 'coverage'
 }
 
-task build(type: NpmTask, dependsOn: [npmInstall, test]) {
+task test(type: NpmTask, dependsOn: npmInstall) {
+  description 'Tests the front-end.'
+  args = ['run', 'testprod']
+  inputs.files(fileTree('src'))
+  outputs.dir('coverage')
+}
+
+task lint(type: NpmTask, dependsOn: [npmInstall]) {
+  description 'Runs tslint on all .ts files'
+  args = ['run', 'lint']
+  inputs.files(fileTree('src').include('**/*.ts'))
+  outputs.dir('coverage')
+}
+
+task build(type: NpmTask, dependsOn: [npmInstall, test, lint]) {
   description 'Builds the front-end.'
   args = ['run', 'buildprod']
   inputs.files(fileTree('src'))
-  outputs.dir('dist')
+  outputs.dir('dist/prod')
 }
 

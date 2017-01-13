@@ -64,8 +64,7 @@ build.dependsOn('legacy:build')
 
 task buildFE(type: Copy, dependsOn: 'front-end:build') {
     description 'Builds the front-end.'
-    from 'front-end/dist'
-    exclude 'out-tsc'
+    from 'front-end/dist/prod'
     into 'build/resources/main/static'
 }
 processResources.dependsOn buildFE
