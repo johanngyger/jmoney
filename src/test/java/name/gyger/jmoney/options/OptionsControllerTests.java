@@ -16,7 +16,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.io.InputStream;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
