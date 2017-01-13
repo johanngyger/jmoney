@@ -81,8 +81,8 @@ public class EntryServiceTests {
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(9);
         assertThat(overallEntryCount()).isEqualTo(9);
 
-        assertThat(entryService.getEntries(accountId, null, "description")).hasSize(9);
-        assertThat(entryService.getEntries(accountId, null, "foobar")).isEmpty();
+        assertThat(entryService.getEntries(accountId, 1, "description")).hasSize(9);
+        assertThat(entryService.getEntries(accountId, 1, "foobar")).isEmpty();
     }
 
     @Test
@@ -109,7 +109,9 @@ public class EntryServiceTests {
         assertThat(entryService.getEntries(accountId, null, null)).hasSize(1);
         subEntries = entry.getSubEntries();
         assertThat(subEntries).hasSize(7);
-        assertThat(subEntries.get(0).getSplitEntry()).isEqualTo(entry);
+        Entry firstSubEntry = subEntries.get(0);
+        assertThat(firstSubEntry.getSplitEntry()).isEqualTo(entry);
+        assertThat(entryService.getEntry(firstSubEntry.getId())).isEqualTo(firstSubEntry);
 
         entry.getSubEntries().remove(0);
         entryService.updateEntry(entry);
@@ -166,6 +168,12 @@ public class EntryServiceTests {
         assertThat(overallEntryCount()).isEqualTo(2);
 
         entry = entryService.getEntry(entryId);
+        entryService.updateEntry(entry);
+        em.flush();
+        em.clear();
+        assertThat(overallEntryCount()).isEqualTo(2);
+
+        entry = entryService.getEntry(entryId);
         entry.setCategoryId(0);
         entryService.updateEntry(entry);
         em.flush();
@@ -173,6 +181,7 @@ public class EntryServiceTests {
         assertThat(overallEntryCount()).isEqualTo(1);
         assertThat(entryService.getEntryCount(accIdA)).isEqualTo(1);
         assertThat(entryService.getEntryCount(accIdB)).isEqualTo(0);
+
     }
 
     private Long overallEntryCount() {
