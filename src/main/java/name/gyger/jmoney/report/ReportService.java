@@ -203,9 +203,9 @@ public class ReportService {
             Long income = null;
             Long expense = null;
 
-            if (sum > 0) {
+            if (sum >= 0) {
                 income = sum;
-            } else if (sum < 0) {
+            } else {
                 expense = -sum;
             }
 

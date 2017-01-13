@@ -18,8 +18,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,6 +62,7 @@ public class ReportServiceTests {
         long accountB = EntityFactory.createAccount("B", 0, accountService);
 
         Date date = DateUtil.parse("2000-01-01");
+        assertThat(reportService.getBalances(date)).hasSize(3);
 
         Entry entry = new Entry();
         entry.setAccountId(accountA);
@@ -96,6 +100,7 @@ public class ReportServiceTests {
         long catA = EntityFactory.createTopLevelCategory("A", categoryService);
         long catB = EntityFactory.createTopLevelCategory("B", categoryService);
         long catC = EntityFactory.createTopLevelCategory("C", categoryService);
+        long catD = EntityFactory.createTopLevelCategory("D", categoryService);
 
         Date date = DateUtil.parse("2000-10-07");
         Entry entry = new Entry();
@@ -147,16 +152,24 @@ public class ReportServiceTests {
     }
 
     @Test
-    public void testEmptyInconsistentSplitEntry() {
+    public void testInconsistentSplitEntry() {
         long accountId = EntityFactory.createAccount("my account", 0, accountService);
-        Category split = categoryService.getSplitCategory();
 
+        Category split = categoryService.getSplitCategory();
         Entry entry = new Entry();
         entry.setCategoryId(split.getId());
         entry.setAccountId(accountId);
         entry.setAmount(12715);
         entryService.createEntry(entry);
         assertThat(reportService.getInconsistentSplitEntries()).hasSize(1);
+
+        Entry subEntry = new Entry();
+        subEntry.setAmount(12715);
+        List<Entry> subEntries = new ArrayList<>();
+        subEntries.add(subEntry);
+        entry.setSubEntries(subEntries);
+        entryService.updateEntry(entry);
+        assertThat(reportService.getInconsistentSplitEntries()).hasSize(0);
     }
 
     @Test
