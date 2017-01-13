@@ -38,13 +38,11 @@ public class CategoryService {
     public List<Category> getCategories() {
         Category rootCategory = getRootCategory();
         List<Category> categories = new ArrayList<>();
-        if (rootCategory != null) {
-            addChildCategories(categories, rootCategory, 0);
-        }
+        addChildCategories(categories, rootCategory, 0);
         categories.forEach(c -> {
             em.detach(c);
             Category parent = c.getParent();
-            if (parent != null) c.setParentId(parent.getId());
+            c.setParentId(parent.getId());
         });
         return categories;
     }

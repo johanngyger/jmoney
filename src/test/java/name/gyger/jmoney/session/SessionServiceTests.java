@@ -23,6 +23,9 @@ public class SessionServiceTests {
         sessionService.initSession();
         assertThat(sessionService.isSessionAvailable()).isTrue();
 
+        sessionService.handleContextRefresh(null);
+        assertThat(sessionService.isSessionAvailable()).isTrue();
+
         Session s = sessionService.getSession();
         assertThat(s).isNotNull();
         assertThat(s.getRootCategory()).isNotNull();
