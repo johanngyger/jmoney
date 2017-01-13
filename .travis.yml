@@ -8,9 +8,9 @@ before_cache:
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-#    - front-end/.gradle/nodejs/
-#    - front-end/.gradle/npm/
-#    - front-end/node_modules/
+    - front-end/.gradle/nodejs/
+    - front-end/.gradle/npm/
+    - front-end/node_modules/
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
