@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,7 +42,7 @@ public class AccountControllerTests {
     }
 
     @Test
-    public void testCreateAccounts() throws Exception {
+    public void testBasics() throws Exception {
         MvcResult result = mockMvc.perform(post("/rest/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"Account 1\"}"))
@@ -69,4 +70,31 @@ public class AccountControllerTests {
     }
 
 
+    @Test
+    public void testAccountWithEntries() throws Exception {
+        String accountId = mockMvc.perform(post("/rest/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"name\": \"Account 1\",\n" +
+                        "  \"entries\": [\n" +
+                        "    {\n" +
+                        "      \"date\": \"2001-17-19\",\n" +
+                        "      \"description\": \"Entry 1\",\n" +
+                        "      \"expense\": 10\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        mockMvc.perform(get("/rest/accounts/" + accountId))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{'name':'Account 1','entries':null}"));
+
+        String entry = mockMvc.perform(get("/rest/accounts/" + accountId + "/entries"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"))
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(entry);
+    }
 }

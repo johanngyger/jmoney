@@ -41,19 +41,7 @@ public class OptionsControllerTests {
         MockMultipartFile multipartFile = new MockMultipartFile("file", is);
         mockMvc.perform(MockMvcRequestBuilders.fileUpload("/rest/options/import")
                 .file(multipartFile))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/options.html#/options/import?success"));
-    }
-
-    @Test
-    public void testImportWithInvalidInput() throws Exception {
-        ClassPathResource cpr = new ClassPathResource("lorem_ipsum.txt");
-        InputStream is = cpr.getInputStream();
-        MockMultipartFile multipartFile = new MockMultipartFile("file", is);
-        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/rest/options/import")
-                .file(multipartFile))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/options.html#/options/import?error"));
+                .andExpect(status().isOk());
     }
 
 }

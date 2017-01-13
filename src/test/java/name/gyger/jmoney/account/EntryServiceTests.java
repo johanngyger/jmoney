@@ -107,7 +107,9 @@ public class EntryServiceTests {
         assertThat(overallEntryCount()).isEqualTo(8);
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(1);
         assertThat(entryService.getEntries(accountId, null, null)).hasSize(1);
-        assertThat(entry.getSubEntries()).hasSize(7);
+        subEntries = entry.getSubEntries();
+        assertThat(subEntries).hasSize(7);
+        assertThat(subEntries.get(0).getSplitEntry()).isEqualTo(entry);
 
         entry.getSubEntries().remove(0);
         entryService.updateEntry(entry);
