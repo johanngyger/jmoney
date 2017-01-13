@@ -10,7 +10,7 @@ cache:
   directories:
 #    - front-end/.gradle/nodejs/
 #    - front-end/.gradle/npm/
-    - front-end/node_modules/
+#    - front-end/node_modules/
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
