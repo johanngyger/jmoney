@@ -14,10 +14,11 @@ apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'jacoco'
 
-jar {
-    baseName = 'jmoney'
-    version = '0.1.0'
+allprojects {
+    String buildNumber = System.env.TRAVIS_BUILD_NUMBER
+    project.version = '0.2' + (buildNumber ? '.' + buildNumber : '.0-dev')
 }
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 

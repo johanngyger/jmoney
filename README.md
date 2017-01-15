@@ -22,3 +22,11 @@ A demo instance is available at <https://jmoney-demo.herokuapp.com>.
 You can also deploy your own instance: 
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+## Development
+
+* Back-end dev: Run JMoneyApplication in your IDE. It will listen on http://localhost:8080 and include a recent version
+of the front-end.
+* Front-end dev: `cd front-end; npm start`. This will start a separate web server on http://localhost:4200 for the
+front-end and it will proxy requests to http://localhost:8080. See [front-end/README.md](front-end/README.md) for 
+details.

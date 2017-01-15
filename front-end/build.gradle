@@ -27,7 +27,13 @@ task lint(type: NpmTask, dependsOn: [npmInstall]) {
   inputs.files(fileTree('src').include('**/*.ts'))
 }
 
-task build(type: NpmTask, dependsOn: [npmInstall, test, lint]) {
+task version(type: NpmTask, dependsOn: [npmInstall]) {
+  description 'Sets the version in package.json'
+  args = ['version', project.version]
+  ignoreExitValue = true
+}
+
+task build(type: NpmTask, dependsOn: [npmInstall, test, lint, 'version']) {
   description 'Builds the front-end.'
   args = ['run', 'buildprod']
   inputs.files(fileTree('src'))
