@@ -6,19 +6,23 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'jacoco'
+apply plugin: 'docker'
 
 allprojects {
     String buildNumber = System.env.TRAVIS_BUILD_NUMBER
-    project.version = '0.2' + (buildNumber ? '.' + buildNumber : '.0-dev')
+    if (buildNumber) {
+        project.version = '0.2.' + buildNumber
+    }
 }
-
+group = 'name.gyger'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -69,7 +73,21 @@ task buildFE(type: Copy, dependsOn: 'front-end:build') {
     into 'build/resources/main/static'
 }
 processResources.dependsOn buildFE
+build.dependsOn jacocoTestReport
 
-task buildTravis(dependsOn: [build, jacocoTestReport]) {
+task buildDocker(type: Docker, dependsOn: build) {
+    applicationName = jar.baseName
+    tagVersion = 'latest'
+    baseImage "frolvlad/alpine-oraclejdk8:slim"
+    volume '/tmp'
+    addFile {
+        from jar
+        rename { 'app.jar' }
+    }
+    runCommand 'sh -c "touch /app.jar"'
+    entryPoint(["sh", "-c", 'java -jar /app.jar'])
+}
+
+task buildTravis(dependsOn: buildDocker) {
     description 'Build/test task for Travis, see .travis.yml'
 }

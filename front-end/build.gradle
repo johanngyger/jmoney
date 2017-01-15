@@ -11,12 +11,13 @@ node {
 task clean(type: Delete) {
   description 'Cleans the front-end.'
   delete 'dist'
+  delete 'dist'
   delete 'coverage'
 }
 
 task version(type: NpmTask, dependsOn: [npmInstall]) {
   description 'Sets the version in package.json'
-  args = ['version', project.version]
+  args = ['version', (project.version != 'unspecified' ? project.version : '0.0.0-dev')]
   ignoreExitValue = true
 }
 

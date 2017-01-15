@@ -15,6 +15,16 @@ cd jmoney
 ```
 Then fire up a browser at <http://localhost:8080>.
 
+## Running with Docker
+
+You can also build and run a Docker image:
+```
+git clone https://github.com/jogy/jmoney.git
+cd jmoney
+./gradlew buildDocker
+docker run -p 8020:8080 -t name.gyger/jmoney
+```
+
 ## Running on Heroku
 
 A demo instance is available at <https://jmoney-demo.herokuapp.com>.
