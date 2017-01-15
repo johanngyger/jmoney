@@ -14,23 +14,23 @@ task clean(type: Delete) {
   delete 'coverage'
 }
 
-task test(type: NpmTask, dependsOn: npmInstall) {
+task version(type: NpmTask, dependsOn: [npmInstall]) {
+  description 'Sets the version in package.json'
+  args = ['version', project.version]
+  ignoreExitValue = true
+}
+
+task test(type: NpmTask, dependsOn: [npmInstall, 'version']) {
   description 'Tests the front-end.'
   args = ['run', 'testprod']
   inputs.files(fileTree('src'))
   outputs.dir('coverage')
 }
 
-task lint(type: NpmTask, dependsOn: [npmInstall]) {
+task lint(type: NpmTask, dependsOn: [npmInstall, 'version']) {
   description 'Runs tslint on all .ts files'
   args = ['run', 'lint']
   inputs.files(fileTree('src').include('**/*.ts'))
-}
-
-task version(type: NpmTask, dependsOn: [npmInstall]) {
-  description 'Sets the version in package.json'
-  args = ['version', project.version]
-  ignoreExitValue = true
 }
 
 task build(type: NpmTask, dependsOn: [npmInstall, test, lint, 'version']) {
