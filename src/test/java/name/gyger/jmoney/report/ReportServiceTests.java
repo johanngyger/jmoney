@@ -1,13 +1,13 @@
 package name.gyger.jmoney.report;
 
-import name.gyger.jmoney.EntityFactory;
+import name.gyger.jmoney.EntityFactoryKt;
 import name.gyger.jmoney.account.AccountService;
 import name.gyger.jmoney.account.Entry;
 import name.gyger.jmoney.account.EntryService;
 import name.gyger.jmoney.category.Category;
 import name.gyger.jmoney.category.CategoryService;
 import name.gyger.jmoney.session.SessionService;
-import name.gyger.jmoney.util.DateUtil;
+import name.gyger.jmoney.util.DateUtilKt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,8 +21,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,21 +56,21 @@ public class ReportServiceTests {
 
     @Test
     public void testBalances() {
-        long accountA = EntityFactory.createAccount("A", 0, accountService);
-        long accountB = EntityFactory.createAccount("B", 0, accountService);
+        long accountA = EntityFactoryKt.createAccount("A", 0, accountService);
+        long accountB = EntityFactoryKt.createAccount("B", 0, accountService);
 
-        Date date = DateUtil.parse("2000-01-01");
+        Date date = DateUtilKt.parse("2000-01-01");
         assertThat(reportService.getBalances(date)).hasSize(3);
 
         Entry entry = new Entry();
         entry.setAccountId(accountA);
         entry.setDate(date);
         entry.setAmount(15);
-        EntityFactory.createEntries(entry, 10, entryService);
+        EntityFactoryKt.createEntries(entry, 10, entryService);
 
         entry.setAccountId(accountB);
         entry.setAmount(-5);
-        EntityFactory.createEntries(entry, 10, entryService);
+        EntityFactoryKt.createEntries(entry, 10, entryService);
 
         List<Balance> balances = reportService.getBalances(date);
         assertThat(balances).hasSize(3);
@@ -95,34 +93,34 @@ public class ReportServiceTests {
 
     @Test
     public void testCashFlow() {
-        long accId = EntityFactory.createAccount("A", 0, accountService);
+        long accId = EntityFactoryKt.createAccount("A", 0, accountService);
 
-        long catA = EntityFactory.createTopLevelCategory("A", categoryService);
-        long catB = EntityFactory.createTopLevelCategory("B", categoryService);
-        long catC = EntityFactory.createTopLevelCategory("C", categoryService);
-        long catD = EntityFactory.createTopLevelCategory("D", categoryService);
+        long catA = EntityFactoryKt.createTopLevelCategory("A", categoryService);
+        long catB = EntityFactoryKt.createTopLevelCategory("B", categoryService);
+        long catC = EntityFactoryKt.createTopLevelCategory("C", categoryService);
+        long catD = EntityFactoryKt.createTopLevelCategory("D", categoryService);
 
-        Date date = DateUtil.parse("2000-10-07");
+        Date date = DateUtilKt.parse("2000-10-07");
         Entry entry = new Entry();
         entry.setAccountId(accId);
         entry.setDate(date);
         entry.setAmount(7);
         entry.setCategoryId(catA);
-        EntityFactory.createEntries(entry, 8, entryService);
+        EntityFactoryKt.createEntries(entry, 8, entryService);
 
         entry.setAmount(-9);
         entry.setCategoryId(catB);
-        EntityFactory.createEntries(entry, 10, entryService);
+        EntityFactoryKt.createEntries(entry, 10, entryService);
 
         entry.setAmount(11);
         entry.setCategoryId(catC);
-        EntityFactory.createEntries(entry, 12, entryService);
+        EntityFactoryKt.createEntries(entry, 12, entryService);
 
         em.flush();
         em.clear();
 
-        Date from = DateUtil.parse("2000-01-01");
-        Date to = DateUtil.parse("2001-01-01");
+        Date from = DateUtilKt.parse("2000-01-01");
+        Date to = DateUtilKt.parse("2001-01-01");
         List<CashFlow> cashFlow = reportService.getCashFlow(from, to);
         assertThat(cashFlow).hasSize(7);
 
@@ -153,7 +151,7 @@ public class ReportServiceTests {
 
     @Test
     public void testInconsistentSplitEntry() {
-        long accountId = EntityFactory.createAccount("my account", 0, accountService);
+        long accountId = EntityFactoryKt.createAccount("my account", 0, accountService);
 
         Category split = categoryService.getSplitCategory();
         Entry entry = new Entry();
@@ -174,10 +172,10 @@ public class ReportServiceTests {
 
     @Test
     public void testEntriesWithoutCategory() {
-        long accountId = EntityFactory.createAccount("my account", 0, accountService);
+        long accountId = EntityFactoryKt.createAccount("my account", 0, accountService);
         Entry entryDto = new Entry();
         entryDto.setAccountId(accountId);
-        EntityFactory.createEntries(entryDto, 37, entryService);
+        EntityFactoryKt.createEntries(entryDto, 37, entryService);
         assertThat(reportService.getEntriesWithoutCategory()).hasSize(37);
     }
 
@@ -188,13 +186,13 @@ public class ReportServiceTests {
         newCat.setParentId(categoryService.getRootCategory().getId());
         long newCatId = categoryService.createCategory(newCat);
 
-        long accountId = EntityFactory.createAccount("my account", 0, accountService);
-        Date date = DateUtil.parse("2000-10-07");
+        long accountId = EntityFactoryKt.createAccount("my account", 0, accountService);
+        Date date = DateUtilKt.parse("2000-10-07");
         Entry entry = new Entry();
         entry.setAccountId(accountId);
         entry.setDate(date);
         entry.setCategoryId(newCatId);
-        EntityFactory.createEntries(entry, 7, entryService);
+        EntityFactoryKt.createEntries(entry, 7, entryService);
 
         assertThat(reportService.getEntriesForCategory(newCatId, date, date)).hasSize(7);
     }

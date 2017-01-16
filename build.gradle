@@ -23,10 +23,6 @@ apply plugin: 'docker'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 group = 'jogy'
-sourceSets {
-    main.java.srcDirs += 'src/main/kotlin'
-    test.java.srcDirs += 'src/test/kotlin'
-}
 
 allprojects {
     String buildNumber = System.env.TRAVIS_BUILD_NUMBER
@@ -69,6 +65,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5")
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin")
     compile("org.apache.commons:commons-lang3:3.4")
     compile project("legacy")
     runtime('com.h2database:h2')

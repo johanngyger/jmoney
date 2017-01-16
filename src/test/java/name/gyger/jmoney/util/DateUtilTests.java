@@ -14,17 +14,17 @@ public class DateUtilTests {
 
     @Test
     public void testParsing() {
-        assertThat(DateUtil.parse("2005-05-14")).isNotNull();
+        assertThat(DateUtilKt.parse("2005-05-14")).isNotNull();
     }
 
     @Test
     public void testParseNull() {
-        assertThat(DateUtil.parse(null)).isNull();
+        assertThat(DateUtilKt.parse(null)).isNull();
     }
 
     @Test
     public void testInvalidString() {
-        assertThatThrownBy(() -> DateUtil.parse("INVALID STRING"))
+        assertThatThrownBy(() -> DateUtilKt.parse("INVALID STRING"))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

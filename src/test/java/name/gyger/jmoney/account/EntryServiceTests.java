@@ -1,10 +1,10 @@
 package name.gyger.jmoney.account;
 
-import name.gyger.jmoney.EntityFactory;
+import name.gyger.jmoney.EntityFactoryKt;
 import name.gyger.jmoney.category.Category;
 import name.gyger.jmoney.category.CategoryService;
 import name.gyger.jmoney.session.SessionService;
-import name.gyger.jmoney.util.DateUtil;
+import name.gyger.jmoney.util.DateUtilKt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +50,7 @@ public class EntryServiceTests {
 
     @Test
     public void testBasics() {
-        long accountId = EntityFactory.createAccount("my account", 1000, accountService);
+        long accountId = EntityFactoryKt.createAccount("my account", 1000, accountService);
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(0);
         assertThat(overallEntryCount()).isEqualTo(0);
 
@@ -65,7 +65,7 @@ public class EntryServiceTests {
             entry.setAmount(i);
             entry.setDescription("My description");
             entry.setCategoryId(myCatId);
-            entry.setDate(DateUtil.parse("2016-01-0" + i));
+            entry.setDate(DateUtilKt.parse("2016-01-0" + i));
             entryService.createEntry(entry);
         });
         em.flush();
@@ -87,7 +87,7 @@ public class EntryServiceTests {
 
     @Test
     public void testSplitEntry() {
-        long accountId = EntityFactory.createAccount("my account", 1000, accountService);
+        long accountId = EntityFactoryKt.createAccount("my account", 1000, accountService);
         Category split = categoryService.getSplitCategory();
 
         Entry entry = new Entry();
@@ -131,8 +131,8 @@ public class EntryServiceTests {
 
     @Test
     public void testDoubleEntryCreateDelete() {
-        long accIdA = EntityFactory.createAccount("A", 0, accountService);
-        long accIdB = EntityFactory.createAccount("B", 0, accountService);
+        long accIdA = EntityFactoryKt.createAccount("A", 0, accountService);
+        long accIdB = EntityFactoryKt.createAccount("B", 0, accountService);
 
         Entry entry = new Entry();
         entry.setAccountId(accIdA);
@@ -154,8 +154,8 @@ public class EntryServiceTests {
 
     @Test
     public void testDoubleEntryCreateUpdate() {
-        long accIdA = EntityFactory.createAccount("A", 0, accountService);
-        long accIdB = EntityFactory.createAccount("B", 0, accountService);
+        long accIdA = EntityFactoryKt.createAccount("A", 0, accountService);
+        long accIdB = EntityFactoryKt.createAccount("B", 0, accountService);
 
         Entry entry = new Entry();
         entry.setAccountId(accIdA);
