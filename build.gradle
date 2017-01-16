@@ -22,9 +22,9 @@ allprojects {
         project.version = '0.2.' + buildNumber
     }
 }
-group = 'name.gyger'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+group = 'jogy'
 
 jacocoTestReport {
     reports {
@@ -76,8 +76,8 @@ processResources.dependsOn buildFE
 build.dependsOn jacocoTestReport
 
 task buildDocker(type: Docker, dependsOn: build) {
+    push = true
     applicationName = jar.baseName
-    tagVersion = 'latest'
     baseImage "frolvlad/alpine-oraclejdk8:slim"
     volume '/tmp'
     addFile {
