@@ -1,5 +1,6 @@
 buildscript {
     ext {
+        kotlinVersion = '1.0.6'
         springBootVersion = '1.4.2.RELEASE'
     }
     repositories {
@@ -7,14 +8,25 @@ buildscript {
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
         classpath 'se.transmode.gradle:gradle-docker:1.2'
     }
 }
 
-apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'jacoco'
 apply plugin: 'docker'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+group = 'jogy'
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+}
 
 allprojects {
     String buildNumber = System.env.TRAVIS_BUILD_NUMBER
@@ -22,9 +34,6 @@ allprojects {
         project.version = '0.2.' + buildNumber
     }
 }
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-group = 'jogy'
 
 jacocoTestReport {
     reports {
@@ -52,6 +61,7 @@ test {
 }
 
 dependencies {
+    compile("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-data-rest') {
         exclude module: "spring-boot-starter-tomcat"
