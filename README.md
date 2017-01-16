@@ -17,12 +17,19 @@ Then fire up a browser at <http://localhost:8080>.
 
 ## Running with Docker
 
-You can also build and run a Docker image:
+You can pull a Docker image from Docker Hub:
+
+```
+docker run -p 8080:8080 -t jogy/jmoney:<tag>
+```
+(See https://hub.docker.com/r/jogy/jmoney/tags/ for valid tags.)
+
+You can also build the Docker image before running it:
 ```
 git clone https://github.com/jogy/jmoney.git
 cd jmoney
 ./gradlew buildDocker
-docker run -p 8020:8080 -t name.gyger/jmoney
+docker run -p 8080:8080 -t jogy/jmoney
 ```
 
 ## Running on Heroku
