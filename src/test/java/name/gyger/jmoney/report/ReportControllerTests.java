@@ -35,7 +35,7 @@ public class ReportControllerTests {
     @Test
     public void testGetBalances() throws Exception {
         mockMvc.perform(get("/rest/reports/balances"))
-                .andExpect(content().json("[{'accountName':'Gesamt','balance':0,'total':true}]"))
+                .andExpect(content().json("[{'accountName':'Total','balance':0,'total':true}]"))
                 .andExpect(status().isOk());
     }
 
@@ -44,7 +44,7 @@ public class ReportControllerTests {
         mockMvc.perform(get("/rest/reports/cash-flows")
                 .param("fromDate", "2016-12-01")
                 .param("toDate", "2016-12-31"))
-                .andExpect(content().json("[{'categoryId':null,'categoryName':'Gesamttotal','income':0,'expense':0,'difference':0,'total':true}]"))
+                .andExpect(content().json("[{'categoryId':null,'categoryName':'Total','income':0,'expense':0,'difference':0,'total':true}]"))
                 .andExpect(status().isOk());
     }
 

@@ -8,11 +8,11 @@ class AccountController(private val accountService: AccountService) {
 
     @GetMapping
     fun getAccounts(): Collection<Account> {
-        return accountService.accounts
+        return accountService.getAccounts()
     }
 
     @GetMapping("/{accountId}")
-    fun getAccount(@PathVariable accountId: Long): Account {
+    fun getAccount(@PathVariable accountId: Long): Account? {
         return accountService.getAccount(accountId)
     }
 

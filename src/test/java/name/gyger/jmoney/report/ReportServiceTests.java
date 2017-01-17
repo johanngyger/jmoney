@@ -88,7 +88,7 @@ public class ReportServiceTests {
         Balance balanceTotal = balances.get(2);
         assertThat(balanceTotal.getBalance()).isEqualTo(100);
         assertThat(balanceTotal.isTotal()).isTrue();
-        assertThat(balanceTotal.getAccountName()).isEqualTo("Gesamt");
+        assertThat(balanceTotal.getAccountName()).isEqualTo("Total");
     }
 
     @Test

@@ -8,7 +8,7 @@ class CategoryController(private val categoryService: CategoryService) {
 
     @GetMapping("/categories")
     fun getCategories(): List<Category> {
-        val categories = categoryService.categories
+        val categories = categoryService.getCategories()
         categories.forEach { c ->
             c.parent = null
             c.children = null
@@ -18,12 +18,12 @@ class CategoryController(private val categoryService: CategoryService) {
 
     @GetMapping("/split-category")
     fun getSplitCategory(): Category {
-        return categoryService.splitCategory
+        return categoryService.getSplitCategory()
     }
 
     @GetMapping("/root-category")
     fun getRootCategory(): Category {
-        val rootCategory = categoryService.rootCategory
+        val rootCategory = categoryService.getRootCategory()
         rootCategory.children = null
         return rootCategory
     }
@@ -40,9 +40,9 @@ class CategoryController(private val categoryService: CategoryService) {
 
     @GetMapping("/category-tree")
     fun getCategoryMapping(): Category {
-        val rootCategory = categoryService.categoryTree
-        rootCategory.children.remove(categoryService.splitCategory)
-        rootCategory.children.remove(categoryService.transferCategory)
+        val rootCategory = categoryService.getCategoryTree()
+        rootCategory.children.remove(categoryService.getSplitCategory())
+        rootCategory.children.remove(categoryService.getTransferCategory())
         cleanupCategories(rootCategory)
         return rootCategory
     }

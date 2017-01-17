@@ -19,8 +19,8 @@ class ReportController(private val reportService: ReportService) {
     }
 
     @GetMapping("/cash-flows")
-    fun getCashFlow(@RequestParam(value = "fromDate", required = false) fromDateString: String?,
-                    @RequestParam(value = "toDate", required = false) toDateString: String?): List<CashFlow> {
+    fun getCashFlow(@RequestParam(value = "fromDate") fromDateString: String,
+                    @RequestParam(value = "toDate") toDateString: String): List<CashFlow> {
         val fromDate = parse(fromDateString)
         val toDate = parse(toDateString)
         return reportService.getCashFlow(fromDate, toDate)
@@ -37,12 +37,12 @@ class ReportController(private val reportService: ReportService) {
 
     @GetMapping("/consitency/inconsistent-split-entries")
     fun getInconsistentSplitEntries(): List<Entry> {
-        return reportService.inconsistentSplitEntries
+        return reportService.getInconsistentSplitEntries()
     }
 
     @GetMapping("/consitency/entries-without-category")
     fun getEntriesWithoutCategory(): List<Entry> {
-        return reportService.entriesWithoutCategory
+        return reportService.getEntriesWithoutCategory()
     }
 
 }

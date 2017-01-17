@@ -25,7 +25,7 @@ fun createAccount(name: String, startBalance: Long, accountService: AccountServi
 fun createTopLevelCategory(name: String, categoryService: CategoryService): Long {
     val catA = Category()
     catA.name = name
-    catA.parentId = categoryService.rootCategory.id
+    catA.parentId = categoryService.getRootCategory().id
     return categoryService.createCategory(catA)
 }
 
