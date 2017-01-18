@@ -35,8 +35,7 @@ class Entry {
     var splitEntry: Entry? = null
 
     @OneToMany(mappedBy = "splitEntry", fetch = FetchType.EAGER, cascade = arrayOf(CascadeType.REMOVE))
-    var subEntries: List<Entry>? = null
-        get() = if (field == null) ArrayList<Entry>() else field
+    var subEntries: MutableList<Entry> = mutableListOf()
 
     /**
      * Double entry booking
