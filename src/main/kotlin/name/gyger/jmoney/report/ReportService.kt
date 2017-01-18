@@ -2,6 +2,7 @@ package name.gyger.jmoney.report
 
 import name.gyger.jmoney.account.Entry
 import name.gyger.jmoney.category.Category
+import name.gyger.jmoney.category.Category.Type
 import name.gyger.jmoney.category.CategoryService
 import name.gyger.jmoney.session.SessionService
 import org.springframework.stereotype.Service
@@ -100,7 +101,7 @@ class ReportService(private val sessionService: SessionService, private val cate
             if (entry.amount != sum) {
                 result.add(entry)
             }
-            entry.accountId = entry.account.id
+            entry.accountId = entry.account!!.id
         }
 
         return result
@@ -110,7 +111,7 @@ class ReportService(private val sessionService: SessionService, private val cate
         val q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = null AND e.splitEntry = null ORDER BY " +
                 "CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC", Entry::class.java)
         val entries = q.resultList
-        entries.forEach { entry -> entry.accountId = entry.account.id }
+        entries.forEach { entry -> entry.accountId = entry.account!!.id }
         return entries
     }
 

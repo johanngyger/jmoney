@@ -18,7 +18,7 @@ class Session(
 
         @Id
         @GeneratedValue
-        val id: Long = 0,
+        var id: Long = 0,
 
         @OneToMany(mappedBy = "session", cascade = arrayOf(CascadeType.REMOVE))
         val accounts: List<Account> = mutableListOf()

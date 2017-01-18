@@ -1,6 +1,7 @@
 package name.gyger.jmoney.account
 
 import name.gyger.jmoney.category.Category
+import name.gyger.jmoney.category.Category.Type
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -32,7 +33,7 @@ class EntryService(private val accountService: AccountService) {
         var entries = q.resultList
                 .filter { e -> e.contains(filter) }
                 .map { e ->
-                    balance[0] += e.getAmount()
+                    balance[0] += e.amount
                     e.balance = balance[0]
                     e
                 }
@@ -45,7 +46,7 @@ class EntryService(private val accountService: AccountService) {
         entries = entries.subList(from, to)
 
         entries.forEach {
-            it.accountId = it.account.id
+            it.accountId = it.account!!.id
             em.detach(it)
         }
 
@@ -110,14 +111,14 @@ class EntryService(private val accountService: AccountService) {
         val oldSubEntries = q.resultList
         val newSubEntries = e.subEntries
         oldSubEntries.forEach { subEntry ->
-            if (!newSubEntries.contains(subEntry)) {
+            if (!newSubEntries!!.contains(subEntry)) {
                 em.remove(subEntry)
             }
         }
     }
 
     private fun createSubEntries(e: Entry) {
-        e.subEntries.forEach {
+        e.subEntries?.forEach {
             val subEntry = em.merge(it)
             subEntry.category = em.find(Category::class.java, subEntry.categoryId)
             subEntry.splitEntry = e

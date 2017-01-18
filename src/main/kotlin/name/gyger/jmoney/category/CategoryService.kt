@@ -32,7 +32,7 @@ class CategoryService(private val sessionService: SessionService) {
         addChildCategories(categories, getRootCategory(), 0)
         categories.forEach { c ->
             em.detach(c)
-            c.parentId = c.parent.id
+            c.parentId = c.parent!!.id
         }
         return categories
     }

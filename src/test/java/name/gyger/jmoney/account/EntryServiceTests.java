@@ -104,6 +104,8 @@ public class EntryServiceTests {
         em.flush();
         em.clear();
         entry = entryService.getEntry(entryId);
+        assertThat(entry.getAccountId()).isGreaterThan(0);
+        assertThat(entry.getCategoryId()).isGreaterThan(0);
         assertThat(overallEntryCount()).isEqualTo(8);
         assertThat(entryService.getEntryCount(accountId)).isEqualTo(1);
         assertThat(entryService.getEntries(accountId, null, null)).hasSize(1);

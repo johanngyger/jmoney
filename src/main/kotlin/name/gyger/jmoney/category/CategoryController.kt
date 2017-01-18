@@ -11,7 +11,7 @@ class CategoryController(private val categoryService: CategoryService) {
         val categories = categoryService.getCategories()
         categories.forEach { c ->
             c.parent = null
-            c.children = null
+            c.children.clear();
         }
         return categories
     }
@@ -24,7 +24,7 @@ class CategoryController(private val categoryService: CategoryService) {
     @GetMapping("/root-category")
     fun getRootCategory(): Category {
         val rootCategory = categoryService.getRootCategory()
-        rootCategory.children = null
+        rootCategory.children.clear()
         return rootCategory
     }
 
