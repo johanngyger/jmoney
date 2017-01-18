@@ -1,6 +1,7 @@
 package name.gyger.jmoney.session
 
-import name.gyger.jmoney.category.CategoryInitializer
+import name.gyger.jmoney.category.Category
+import name.gyger.jmoney.category.CategoryFactory
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
@@ -12,7 +13,7 @@ import javax.persistence.Query
 
 @Service
 @Transactional
-class SessionService(private val categoryInitializer: CategoryInitializer) {
+class SessionService(private val categoryFactory: CategoryFactory) {
 
     @PersistenceContext
     private lateinit var em: EntityManager
@@ -25,8 +26,12 @@ class SessionService(private val categoryInitializer: CategoryInitializer) {
 
     fun initSession() {
         removeOldSession()
-        val session = Session()
-        categoryInitializer.initCategories(session)
+
+        val rootCategory = categoryFactory.createRootCategory()
+        val transferCategory = categoryFactory.createTransferCategory(rootCategory)
+        val splitCategory = categoryFactory.createSplitCategory(rootCategory)
+        val session = Session(rootCategory, transferCategory, splitCategory)
+        categoryFactory.createNormalCategories(rootCategory)
         em.persist(session)
     }
 

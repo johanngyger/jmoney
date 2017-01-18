@@ -11,7 +11,8 @@ import java.util.*
 import javax.persistence.EntityManager
 
 open class LegacySessionMigrator(inputStream: InputStream, private val em: EntityManager) {
-    private val session = Session()
+    private val session = name.gyger.jmoney.session.Session(name.gyger.jmoney.category.Category(),
+            name.gyger.jmoney.category.Category(), name.gyger.jmoney.category.Category())
     private val oldSession = XMLReader.readSessionFromInputStream(inputStream)
     private val oldToNewCategoryMap = HashMap<Category, name.gyger.jmoney.category.Category>()
     private val entryToOldCategoryMap = HashMap<Entry, Category>()
@@ -66,9 +67,9 @@ open class LegacySessionMigrator(inputStream: InputStream, private val em: Entit
     }
 
     private fun mapRootCategoryToSession() {
-        val oldRootCat = oldSession!!.categories.rootNode.category
+        val oldRootCat = oldSession.categories.rootNode.category
         val rootCat = oldToNewCategoryMap[oldRootCat]
-        session.rootCategory = rootCat
+        session.rootCategory = rootCat!!
     }
 
     private fun mapCategoryToEntry() {
