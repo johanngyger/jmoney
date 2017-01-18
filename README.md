@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/jogy/jmoney/branch/master/graph/badge.svg)](https://codecov.io/gh/jogy/jmoney)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](http://jogy.mit-license.org)
 
-JMoney is a personal finance tracker written in Java/JavaScript using Spring Boot, JPA, and AngularJS.
+JMoney is a personal finance tracker written in Kotlin/TypeScript using Spring Boot, JPA, and Angular 2.
 
 ## Running locally
 

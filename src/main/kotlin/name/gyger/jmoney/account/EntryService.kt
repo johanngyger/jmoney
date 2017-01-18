@@ -1,20 +1,14 @@
 package name.gyger.jmoney.account
 
 import name.gyger.jmoney.category.Category
-import name.gyger.jmoney.category.Category.Type
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
-import javax.persistence.Query
-import javax.persistence.TypedQuery
-import java.util.Collections
-import java.util.stream.Collectors
 
 @Service
 @Transactional
-class EntryService(private val accountService: AccountService) {
+open class EntryService(private val accountService: AccountService) {
 
     @PersistenceContext
     private lateinit var em: EntityManager
@@ -26,7 +20,8 @@ class EntryService(private val accountService: AccountService) {
     }
 
     fun getEntries(accountId: Long, pageParam: Int?, filter: String?): List<Entry> {
-        val q = em.createQuery("SELECT e FROM Entry e LEFT JOIN FETCH e.category WHERE e.account.id = :id" + " ORDER BY CASE WHEN e.date IS NULL THEN 1 ELSE 0 END, e.date, e.creation", Entry::class.java)
+        val q = em.createQuery("SELECT e FROM Entry e LEFT JOIN FETCH e.category WHERE e.account.id = :id " +
+                "ORDER BY CASE WHEN e.date IS NULL THEN 1 ELSE 0 END, e.date, e.creation", Entry::class.java)
         q.setParameter("id", accountId)
 
         val balance = longArrayOf(accountService.getAccount(accountId)!!.startBalance)
@@ -39,7 +34,7 @@ class EntryService(private val accountService: AccountService) {
                 }
                 .reversed()
 
-        var page = pageParam ?: 1
+        val page = pageParam ?: 1
         val count = entries.size
         val from = Math.min((page - 1) * 10, count)
         val to = Math.min((page - 1) * 10 + 10, count)
@@ -111,14 +106,14 @@ class EntryService(private val accountService: AccountService) {
         val oldSubEntries = q.resultList
         val newSubEntries = e.subEntries
         oldSubEntries.forEach { subEntry ->
-            if (!newSubEntries!!.contains(subEntry)) {
+            if (!newSubEntries.contains(subEntry)) {
                 em.remove(subEntry)
             }
         }
     }
 
     private fun createSubEntries(e: Entry) {
-        e.subEntries?.forEach {
+        e.subEntries.forEach {
             val subEntry = em.merge(it)
             subEntry.category = em.find(Category::class.java, subEntry.categoryId)
             subEntry.splitEntry = e

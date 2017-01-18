@@ -1,18 +1,15 @@
 package name.gyger.jmoney.category
 
-import name.gyger.jmoney.session.Session
 import name.gyger.jmoney.session.SessionService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-
+import java.util.*
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
-import javax.persistence.Query
-import java.util.ArrayList
 
 @Service
 @Transactional
-class CategoryService(private val sessionService: SessionService) {
+open class CategoryService(private val sessionService: SessionService) {
 
     @PersistenceContext
     private lateinit var em: EntityManager

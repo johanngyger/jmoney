@@ -1,19 +1,16 @@
 package name.gyger.jmoney.session
 
-import name.gyger.jmoney.category.Category
 import name.gyger.jmoney.category.CategoryFactory
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
-import javax.persistence.Query
 
 @Service
 @Transactional
-class SessionService(private val categoryFactory: CategoryFactory) {
+open class SessionService(private val categoryFactory: CategoryFactory) {
 
     @PersistenceContext
     private lateinit var em: EntityManager

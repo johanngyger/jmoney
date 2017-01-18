@@ -1,27 +1,26 @@
 package name.gyger.jmoney.report
 
-import name.gyger.jmoney.*
 import name.gyger.jmoney.account.AccountService
 import name.gyger.jmoney.account.Entry
 import name.gyger.jmoney.account.EntryService
 import name.gyger.jmoney.category.Category
 import name.gyger.jmoney.category.CategoryService
+import name.gyger.jmoney.createAccount
+import name.gyger.jmoney.createEntries
+import name.gyger.jmoney.createTopLevelCategory
 import name.gyger.jmoney.session.SessionService
-import name.gyger.jmoney.util.*
+import name.gyger.jmoney.util.parse
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
-
+import java.util.*
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 import javax.transaction.Transactional
-import java.util.ArrayList
-import java.util.Date
-
-import org.assertj.core.api.Assertions.assertThat
 
 @RunWith(SpringRunner::class)
 @SpringBootTest

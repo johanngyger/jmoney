@@ -11,7 +11,7 @@ class CategoryController(private val categoryService: CategoryService) {
         val categories = categoryService.getCategories()
         categories.forEach { c ->
             c.parent = null
-            c.children.clear();
+            c.children.clear()
         }
         return categories
     }

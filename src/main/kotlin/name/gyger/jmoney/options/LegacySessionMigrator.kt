@@ -2,7 +2,6 @@ package name.gyger.jmoney.options
 
 import name.gyger.jmoney.account.Account
 import name.gyger.jmoney.account.Entry
-import name.gyger.jmoney.session.Session
 import net.sf.jmoney.XMLReader
 import net.sf.jmoney.model.*
 import org.slf4j.LoggerFactory

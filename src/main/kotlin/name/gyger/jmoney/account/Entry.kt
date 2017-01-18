@@ -3,11 +3,8 @@ package name.gyger.jmoney.account
 import com.fasterxml.jackson.annotation.JsonIgnore
 import name.gyger.jmoney.category.Category
 import org.apache.commons.lang3.StringUtils
-
+import java.util.*
 import javax.persistence.*
-import java.util.ArrayList
-import java.util.Calendar
-import java.util.Date
 
 @Entity
 class Entry {

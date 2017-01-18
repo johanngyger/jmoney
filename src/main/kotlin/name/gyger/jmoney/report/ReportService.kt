@@ -2,7 +2,6 @@ package name.gyger.jmoney.report
 
 import name.gyger.jmoney.account.Entry
 import name.gyger.jmoney.category.Category
-import name.gyger.jmoney.category.Category.Type
 import name.gyger.jmoney.category.CategoryService
 import name.gyger.jmoney.session.SessionService
 import org.springframework.stereotype.Service
@@ -13,7 +12,7 @@ import javax.persistence.PersistenceContext
 
 @Service
 @Transactional
-class ReportService(private val sessionService: SessionService, private val categoryService: CategoryService) {
+open class ReportService(private val sessionService: SessionService, private val categoryService: CategoryService) {
 
     @PersistenceContext
     private lateinit var em: EntityManager

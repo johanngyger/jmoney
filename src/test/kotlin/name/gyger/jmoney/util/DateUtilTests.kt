@@ -1,9 +1,8 @@
 package name.gyger.jmoney.util
 
-import org.junit.Test
-
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.Test
 
 class DateUtilTests {
 

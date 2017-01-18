@@ -1,9 +1,7 @@
 package name.gyger.jmoney.account
 
 import name.gyger.jmoney.category.Category
-import name.gyger.jmoney.category.Category.Type
 import name.gyger.jmoney.session.Session
-
 import javax.persistence.*
 
 @Entity
@@ -17,7 +15,7 @@ class Account : Category() {
     @Column(length = 1000) var comment: String? = null
 
     @OneToMany(mappedBy = "account", cascade = arrayOf(CascadeType.REMOVE))
-    var entries: List<Entry> = mutableListOf()
+    var entries: MutableList<Entry> = mutableListOf()
 
     @ManyToOne
     var session: Session? = null
@@ -25,5 +23,4 @@ class Account : Category() {
     init {
         type = Category.Type.ACCOUNT
     }
-
 }

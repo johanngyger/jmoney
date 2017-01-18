@@ -1,9 +1,8 @@
 package name.gyger.jmoney.account
 
 import name.gyger.jmoney.category.Category
-import org.junit.Test
-
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Test
 
 class EntryTests {
 

@@ -11,7 +11,7 @@ private val sdf = SimpleDateFormat("yyyy-MM-dd")
 fun parse(dateString: String?): Date? {
     if (dateString == null) return null
 
-    var result: Date?
+    val result: Date?
     try {
         result = sdf.parse(dateString)
     } catch (e: ParseException) {

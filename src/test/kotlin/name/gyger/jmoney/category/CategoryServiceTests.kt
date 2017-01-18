@@ -1,18 +1,16 @@
 package name.gyger.jmoney.category
 
 import name.gyger.jmoney.session.SessionService
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
-
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 import javax.transaction.Transactional
-
-import org.assertj.core.api.Assertions.assertThat
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
