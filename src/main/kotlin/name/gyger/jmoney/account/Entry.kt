@@ -2,7 +2,6 @@ package name.gyger.jmoney.account
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import name.gyger.jmoney.category.Category
-import org.apache.commons.lang3.StringUtils
 import java.util.*
 import javax.persistence.*
 
@@ -11,9 +10,9 @@ class Entry {
     var creation = Calendar.getInstance().time.time
     var date: Date? = null
     var valuta: Date? = null
-    var description: String? = null
+    var description: String = ""
+    var memo: String = ""
     var amount: Long = 0
-    var memo: String? = null
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -56,19 +55,14 @@ class Entry {
     @Transient
     var categoryId: Long = 0
 
-    fun getCategoryName(): String? {
-        return category?.name
+    fun getCategoryName(): String {
+        return category?.name ?: ""
     }
 
     operator fun contains(filter: String?): Boolean {
-        if (StringUtils.isEmpty(filter)) {
-            return true
-        }
-
-        val categoryName = if (category != null) category!!.name else null
-
-        return StringUtils.contains(StringUtils.defaultString(description), filter)
-                || StringUtils.contains(StringUtils.defaultString(categoryName), filter)
-                || StringUtils.contains(StringUtils.defaultString(memo), filter)
+        val myFilter = filter ?: ""
+        return myFilter in description
+                || myFilter in getCategoryName()
+                || myFilter in memo
     }
 }

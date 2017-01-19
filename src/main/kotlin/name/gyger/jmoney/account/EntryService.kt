@@ -41,7 +41,7 @@ open class EntryService(private val accountService: AccountService) {
         entries = entries.subList(from, to)
 
         entries.forEach {
-            it.accountId = it.account!!.id
+            it.accountId = it.account?.id ?: 0
             em.detach(it)
         }
 

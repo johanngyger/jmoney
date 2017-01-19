@@ -113,7 +113,7 @@ open class LegacySessionMigrator(inputStream: InputStream, private val em: Entit
         oldToNewCategoryMap.put(oldCat, cat)
         if (oldCat is SplitCategory) {
             // Workaround for redundant split category.
-            val oldCat2 = oldSession!!.categories.splitNode.category
+            val oldCat2 = oldSession.categories.splitNode.category
             oldToNewCategoryMap.put(oldCat2, cat)
         }
         return cat
@@ -163,8 +163,8 @@ open class LegacySessionMigrator(inputStream: InputStream, private val em: Entit
         e.amount = oldEntry.amount
         e.creation = oldEntry.creation
         e.date = oldEntry.date
-        e.description = oldEntry.description
-        e.memo = oldEntry.memo
+        e.description = oldEntry.description ?: ""
+        e.memo = oldEntry.memo ?: ""
         e.status = entryStates[oldEntry.status]
         e.valuta = oldEntry.valuta
 

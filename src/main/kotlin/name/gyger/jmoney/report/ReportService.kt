@@ -100,7 +100,7 @@ open class ReportService(private val sessionService: SessionService, private val
             if (entry.amount != sum) {
                 result.add(entry)
             }
-            entry.accountId = entry.account!!.id
+            entry.accountId = entry.account?.id ?: 0
         }
 
         return result
