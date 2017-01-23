@@ -85,7 +85,7 @@ open class ReportService(private val sessionService: SessionService, private val
     private fun updateEntryBalances(entries: List<Entry>) {
         var balance = 0L
         entries.reversed().forEach { entry ->
-            entry.accountId = entry.account!!.id
+            entry.accountId = entry.account?.id ?: 0
             balance += entry.amount
             entry.balance = balance
         }
