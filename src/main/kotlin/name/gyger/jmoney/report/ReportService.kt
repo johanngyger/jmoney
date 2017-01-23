@@ -136,8 +136,8 @@ open class ReportService(private val sessionService: SessionService, private val
 
     private fun getEntrySumsByAccountId(date: Date?): Map<Long, Long> {
         var queryString = "SELECT NEW name.gyger.jmoney.report.ReportItem(e.account.id, SUM(e.amount)) " +
-                "FROM Entry e"
-        if (date != null) queryString += " WHERE e.date <= :date"
+                "FROM Entry e WHERE e.account.id IS NOT NULL"
+        if (date != null) queryString += " AND e.date <= :date"
         queryString += " GROUP BY e.account.id"
 
         val q = em.createQuery(queryString, ReportItem::class.java)

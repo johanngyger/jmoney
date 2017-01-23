@@ -96,7 +96,6 @@ open class ReportServiceTests {
         val catA = createTopLevelCategory("A", categoryService)
         val catB = createTopLevelCategory("B", categoryService)
         val catC = createTopLevelCategory("C", categoryService)
-        val catD = createTopLevelCategory("D", categoryService)
 
         val date = parse("2000-10-07")
         val entry = Entry()
