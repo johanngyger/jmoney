@@ -1,11 +1,12 @@
 import {fakeAsync, tick, ComponentFixture, TestBed} from '@angular/core/testing';
-import {DebugElement} from '@angular/core';
+import {DebugElement, NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {By} from '@angular/platform-browser';
 import {ReportsService} from './reports.service';
 import {CashFlowComponent} from './cash-flow.component';
 import {CashFlow} from './cash-flow';
 import * as moment from 'moment';
+import {Entry} from '../accounts/entry';
 
 describe('CashFlowComponent', () => {
   let comp: CashFlowComponent;
@@ -19,9 +20,19 @@ describe('CashFlowComponent', () => {
     new CashFlow({categoryId: 0, categoryName: 'Total', income: 10000, expense: 20000, difference: 10000, total: true}),
     new CashFlow(),
   ];
+  let entries = [
+    new Entry({description: 'Entry1'}),
+    new Entry({description: 'Entry2'}),
+    new Entry({description: 'Entry3'}),
+    new Entry({description: 'Entry4'})
+  ];
   let success: boolean;
 
   class FakeReportsService {
+    getEntriesWithoutCategory(): Promise<Entry[]> {
+      return success ? Promise.resolve(cashFlow) : Promise.reject(success);
+    }
+
     getCashFlow(fromDate: string, toDate: string): Promise<CashFlow[]> {
       return success ? Promise.resolve(cashFlow) : Promise.reject(success);
     }
@@ -31,7 +42,8 @@ describe('CashFlowComponent', () => {
     TestBed.configureTestingModule({
       imports: [FormsModule],
       declarations: [CashFlowComponent],
-      providers: [{provide: ReportsService, useClass: FakeReportsService}]
+      providers: [{provide: ReportsService, useClass: FakeReportsService}],
+      schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(CashFlowComponent);
     comp = fixture.componentInstance;
@@ -48,13 +60,13 @@ describe('CashFlowComponent', () => {
     success = true;
     comp.fetchCashFlow();
     handleChanges();
-    let entries = de.queryAll(By.css('tr'));
-    expect(entries.length).toBe(7);
-    expect(entries[1].nativeElement.textContent).toContain('Cat 1');
-    expect(entries[2].nativeElement.textContent).toContain('Cat 2');
-    expect(entries[3].nativeElement.textContent).toContain('Cat 3');
-    expect(entries[4].nativeElement.textContent).toContain('Cat 4');
-    expect(entries[5].nativeElement.textContent).toContain('Total');
+    let trEntries = de.queryAll(By.css('tr'));
+    expect(trEntries.length).toBe(7);
+    expect(trEntries[1].nativeElement.textContent).toContain('Cat 1');
+    expect(trEntries[2].nativeElement.textContent).toContain('Cat 2');
+    expect(trEntries[3].nativeElement.textContent).toContain('Cat 3');
+    expect(trEntries[4].nativeElement.textContent).toContain('Cat 4');
+    expect(trEntries[5].nativeElement.textContent).toContain('Total');
   }));
 
   it('should show an an error message when fetchCashFlow() fails', fakeAsync(() => {

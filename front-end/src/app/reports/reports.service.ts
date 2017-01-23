@@ -42,10 +42,22 @@ export class ReportsService {
       .then(response => response.json() as Balance[]);
   }
 
+  getEntriesForCategory(categoryId: number, fromDate: string, toDate: string) {
+    let params = new URLSearchParams();
+    params.set('categoryId', '' + categoryId);
+    params.set('fromDate', fromDate);
+    params.set('toDate', toDate);
+
+    return this.http
+      .get('/rest/reports/entries-with-category', {search: params})
+      .toPromise()
+      .then(response => response.json() as Entry[]);
+  }
+
   getEntriesWithoutCategory(): Promise<Entry[]> {
     return this.http
       .get('rest/reports/consitency/entries-without-category')
       .toPromise()
-      .then(response => response.json() as Balance[]);
+      .then(response => response.json() as Entry[]);
   }
 }

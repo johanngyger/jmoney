@@ -3,12 +3,14 @@ import {Component, OnInit} from '@angular/core';
 import {ReportsService} from './reports.service';
 import {CashFlow} from './cash-flow';
 import * as moment from 'moment';
+import {Entry} from '../accounts/entry';
 
 @Component({
   templateUrl: './cash-flow.component.html'
 })
 export class CashFlowComponent implements OnInit {
   cashFlows: CashFlow[];
+  entries: Entry[];
   periods = [
     {value: 'thisMonth', description: 'This month'},
     {value: 'thisYear', description: 'This year'},
@@ -30,6 +32,12 @@ export class CashFlowComponent implements OnInit {
   fetchCashFlow(): void {
     this.reportsService.getCashFlow(this.fromDate, this.toDate)
       .then(cashFlows => this.cashFlows = cashFlows)
+      .catch(() => this.error = true);
+  }
+
+  getEntriesForCategory(categoryId: number): void {
+    this.reportsService.getEntriesForCategory(categoryId, this.fromDate, this.toDate)
+      .then(entries => this.entries = entries)
       .catch(() => this.error = true);
   }
 

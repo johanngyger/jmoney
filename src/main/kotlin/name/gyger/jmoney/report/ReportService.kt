@@ -82,6 +82,15 @@ open class ReportService(private val sessionService: SessionService, private val
         return resultList
     }
 
+    private fun updateEntryBalances(entries: List<Entry>) {
+        var balance = 0L
+        entries.reversed().forEach { entry ->
+            entry.accountId = entry.account!!.id
+            balance += entry.amount
+            entry.balance = balance
+        }
+    }
+
     fun getInconsistentSplitEntries(): List<Entry> {
         val splitCategory = sessionService.getSession().splitCategory
 
@@ -110,7 +119,7 @@ open class ReportService(private val sessionService: SessionService, private val
         val q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = null AND e.splitEntry = null ORDER BY " +
                 "CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC", Entry::class.java)
         val entries = q.resultList
-        entries.forEach { entry -> entry.accountId = entry.account!!.id }
+        updateEntryBalances(entries)
         return entries
     }
 
@@ -121,6 +130,7 @@ open class ReportService(private val sessionService: SessionService, private val
         q.setParameter("from", from)
         q.setParameter("to", to)
         val entries = q.resultList
+        updateEntryBalances(entries)
         return entries
     }
 
@@ -141,6 +151,7 @@ open class ReportService(private val sessionService: SessionService, private val
     private fun getEntrySumsByCategoryId(from: Date?, to: Date?): Map<Long, Long> {
         val queryString = "SELECT NEW name.gyger.jmoney.report.ReportItem(e.category.id, SUM(e.amount)) FROM Entry e " +
                 " WHERE e.date >= :from AND e.date <= :to" +
+                " AND e.category.id IS NOT NULL" +
                 " GROUP BY e.category.id"
         val q = em.createQuery(queryString, ReportItem::class.java)
         q.setParameter("from", from)

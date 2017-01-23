@@ -3,6 +3,7 @@ import {MockBackend, MockConnection} from '@angular/http/testing';
 import {HttpModule, Http, XHRBackend, Response, ResponseOptions} from '@angular/http';
 import {ReportsService} from './reports.service';
 import {Balance} from './balance';
+import {Entry} from '../accounts/entry';
 
 describe('ReportsService', () => {
   beforeEach(async(() => {
@@ -79,6 +80,14 @@ describe('ReportsService', () => {
       let response = new Response(new ResponseOptions({status: 200, body: balances}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getEntriesWithoutCategory()
+        .then(res => expect(res).toEqual(balances));
+    })));
+
+    it('getEntriesForCategory()', async(inject([], () => {
+      let balances = [new Entry(), new Entry(), new Entry()];
+      let response = new Response(new ResponseOptions({status: 200, body: balances}));
+      backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
+      service.getEntriesForCategory(0, '2016-01-01', '2016-01-31')
         .then(res => expect(res).toEqual(balances));
     })));
   });

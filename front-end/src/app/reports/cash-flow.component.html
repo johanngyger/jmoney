@@ -29,7 +29,7 @@
   <tbody>
   <tr *ngFor="let cashFlow of cashFlows" [ngClass]="{'report-total': cashFlow.total}">
     <td class="thSpace">
-      <a *ngIf="cashFlow.categoryId != null" ng-click="getEntriesForCategory(cashFlow.categoryId)">{{cashFlow.categoryName}}</a>
+      <a class="kinda-link" *ngIf="cashFlow.categoryId != null" (click)="getEntriesForCategory(cashFlow.categoryId)">{{cashFlow.categoryName}}</a>
       <span *ngIf="!cashFlow.categoryId">{{cashFlow.categoryName}}</span>
     </td>
     <td class="amount thSpace">
@@ -44,3 +44,5 @@
   </tr>
   </tbody>
 </table>
+
+<app-jmoney-entries-table [entries]="entries"></app-jmoney-entries-table>

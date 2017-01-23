@@ -24,12 +24,12 @@ open class EntryService(private val accountService: AccountService) {
                 "ORDER BY CASE WHEN e.date IS NULL THEN 1 ELSE 0 END, e.date, e.creation", Entry::class.java)
         q.setParameter("id", accountId)
 
-        val balance = longArrayOf(accountService.getAccount(accountId)!!.startBalance)
+        var balance = accountService.getAccount(accountId)!!.startBalance
         var entries = q.resultList
                 .filter { e -> e.contains(filter) }
                 .map { e ->
-                    balance[0] += e.amount
-                    e.balance = balance[0]
+                    balance += e.amount
+                    e.balance = balance
                     e
                 }
                 .reversed()
