@@ -24,13 +24,14 @@ describe('CashFlowComponent', () => {
     new Entry({description: 'Entry1'}),
     new Entry({description: 'Entry2'}),
     new Entry({description: 'Entry3'}),
-    new Entry({description: 'Entry4'})
+    new Entry({description: 'Entry4'}),
+    new Entry({description: 'Entry5'})
   ];
   let success: boolean;
 
   class FakeReportsService {
-    getEntriesWithoutCategory(): Promise<Entry[]> {
-      return success ? Promise.resolve(cashFlow) : Promise.reject(success);
+    getEntriesForCategory(categoryId: number, fromDate: string, toDate: string): Promise<Entry[]> {
+      return success ? Promise.resolve(entries) : Promise.reject(success);
     }
 
     getCashFlow(fromDate: string, toDate: string): Promise<CashFlow[]> {
@@ -48,6 +49,7 @@ describe('CashFlowComponent', () => {
     fixture = TestBed.createComponent(CashFlowComponent);
     comp = fixture.componentInstance;
     de = fixture.debugElement;
+    success = true;
   });
 
   let handleChanges = function () {
@@ -57,21 +59,34 @@ describe('CashFlowComponent', () => {
   };
 
   it('should fetchCashFlow()', fakeAsync(() => {
-    success = true;
     comp.fetchCashFlow();
     handleChanges();
-    let trEntries = de.queryAll(By.css('tr'));
-    expect(trEntries.length).toBe(7);
-    expect(trEntries[1].nativeElement.textContent).toContain('Cat 1');
-    expect(trEntries[2].nativeElement.textContent).toContain('Cat 2');
-    expect(trEntries[3].nativeElement.textContent).toContain('Cat 3');
-    expect(trEntries[4].nativeElement.textContent).toContain('Cat 4');
-    expect(trEntries[5].nativeElement.textContent).toContain('Total');
+    let cfItems = de.queryAll(By.css('tr'));
+    expect(cfItems.length).toBe(7);
+    expect(cfItems[1].nativeElement.textContent).toContain('Cat 1');
+    expect(cfItems[2].nativeElement.textContent).toContain('Cat 2');
+    expect(cfItems[3].nativeElement.textContent).toContain('Cat 3');
+    expect(cfItems[4].nativeElement.textContent).toContain('Cat 4');
+    expect(cfItems[5].nativeElement.textContent).toContain('Total');
   }));
 
   it('should show an an error message when fetchCashFlow() fails', fakeAsync(() => {
     success = false;
     comp.fetchCashFlow();
+    handleChanges();
+    expect(de.query(By.css('.alert-error'))).toBeTruthy();
+  }));
+
+  it('should show the entries when clicking a cash flow item', fakeAsync(() => {
+    comp.getEntriesForCategory(0);
+    handleChanges();
+    expect(comp.entries).toBeTruthy();
+    expect(comp.entries.length).toBe(5);
+  }));
+
+  it('should show the entries when clicking a cash flow item', fakeAsync(() => {
+    success = false;
+    comp.getEntriesForCategory(0);
     handleChanges();
     expect(de.query(By.css('.alert-error'))).toBeTruthy();
   }));
