@@ -4,22 +4,23 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/rest/accounts")
-class AccountController(private val accountService: AccountService) {
+class AccountController(private val accountService: AccountService,
+                        private val accountRepository : AccountRepository) {
 
     @GetMapping
-    fun getAccounts(): Collection<Account> {
-        return accountService.getAccounts()
+    fun getAccounts(): Iterable<Account> {
+        return accountRepository.findAll()
     }
 
     @GetMapping("/{accountId}")
     fun getAccount(@PathVariable accountId: Long): Account? {
-        return accountService.getAccount(accountId)
+        return accountRepository.findOne(accountId)
     }
 
     @PutMapping("/{accountId}")
     fun updateAccount(@RequestBody account: Account, @PathVariable accountId: Long) {
         account.id = accountId
-        accountService.updateAccount(account)
+        accountRepository.save(account)
     }
 
     @PostMapping
@@ -29,7 +30,7 @@ class AccountController(private val accountService: AccountService) {
 
     @DeleteMapping("/{accountId}")
     fun deleteAccount(@PathVariable accountId: Long) {
-        accountService.deleteAccount(accountId)
+        accountRepository.delete(accountId)
     }
 
 }

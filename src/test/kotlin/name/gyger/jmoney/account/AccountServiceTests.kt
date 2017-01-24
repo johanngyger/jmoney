@@ -23,6 +23,9 @@ open class AccountServiceTests {
     @Autowired
     lateinit var accountService: AccountService
 
+    @Autowired
+    lateinit var accountRepository: AccountRepository
+
     @PersistenceContext
     lateinit private var em: EntityManager
 
@@ -35,29 +38,29 @@ open class AccountServiceTests {
 
     @Test
     fun testBasics() {
-        val accounts = accountService.getAccounts()
+        val accounts = accountRepository.findAll()
         assertThat(accounts).isEmpty()
 
         val accountDetailsDto = Account()
         accountDetailsDto.name = "my account"
         val id = accountService.createAccount(accountDetailsDto)
 
-        var account: Account? = accountService.getAccount(id)
+        var account: Account? = accountRepository.findOne(id)
         assertThat(account?.id).isEqualTo(id)
         assertThat(account?.name).isEqualTo("my account")
 
-        account = accountService.getAccount(id)
+        account = accountRepository.findOne(id)
         assertThat(accountDetailsDto.id).isEqualTo(id)
         assertThat(accountDetailsDto.name).isEqualTo("my account")
 
         account?.name = "my other account"
-        accountService.updateAccount(account!!)
+        accountRepository.save(account!!)
 
-        account = accountService.getAccount(id)
+        account = accountRepository.findOne(id)
         assertThat(account?.name).isEqualTo("my other account")
 
-        accountService.deleteAccount(id)
-        assertThat(accountService.getAccount(id)).isNull()
+        accountRepository.delete(id)
+        assertThat(accountRepository.findOne(id)).isNull()
     }
 
     @Test
@@ -67,18 +70,18 @@ open class AccountServiceTests {
         accountDetailsDto = Account()
         accountDetailsDto.name = "A"
         val acctA = accountService.createAccount(accountDetailsDto)
-        assertThat(accountService.getAccount(acctA)).isNotNull()
+        assertThat(accountRepository.findOne(acctA)).isNotNull()
         assertThat(overallAccountCount()).isEqualTo(1)
-        assertThat(accountService.getAccounts()).hasSize(1)
+        assertThat(accountRepository.findAll()).hasSize(1)
 
         accountDetailsDto = Account()
         accountDetailsDto.name = "B"
         val acctB = accountService.createAccount(accountDetailsDto)
         em.flush()
         em.clear()
-        assertThat(accountService.getAccount(acctB)).isNotNull()
+        assertThat(accountRepository.findOne(acctB)).isNotNull()
         assertThat(overallAccountCount()).isEqualTo(2)
-        assertThat(accountService.getAccounts()).hasSize(2)
+        assertThat(accountRepository.findAll()).hasSize(2)
     }
 
     private fun overallAccountCount(): Long? {

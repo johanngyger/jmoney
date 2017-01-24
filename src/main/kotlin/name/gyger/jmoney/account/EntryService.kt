@@ -8,7 +8,7 @@ import javax.persistence.PersistenceContext
 
 @Service
 @Transactional
-open class EntryService(private val accountService: AccountService) {
+open class EntryService(private val accountRepository : AccountRepository) {
 
     @PersistenceContext
     private lateinit var em: EntityManager
@@ -24,7 +24,7 @@ open class EntryService(private val accountService: AccountService) {
                 "ORDER BY CASE WHEN e.date IS NULL THEN 1 ELSE 0 END, e.date, e.creation", Entry::class.java)
         q.setParameter("id", accountId)
 
-        var balance = accountService.getAccount(accountId)!!.startBalance
+        var balance = accountRepository.findOne(accountId)?.startBalance ?: 0
         var entries = q.resultList
                 .filter { e -> e.contains(filter) }
                 .map { e ->
