@@ -2,6 +2,7 @@ buildscript {
     ext {
         kotlinVersion = '1.0.6'
         springBootVersion = '1.4.2.RELEASE'
+        powerMockVersion = '1.6.6'
     }
     repositories {
         mavenCentral()
@@ -72,6 +73,8 @@ dependencies {
     compile project("legacy")
     runtime('com.h2database:h2')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile("org.powermock:powermock-module-junit4:${powerMockVersion}")
+    testCompile("org.powermock:powermock-api-mockito:${powerMockVersion}")
 }
 
 build.dependsOn('legacy:build')
