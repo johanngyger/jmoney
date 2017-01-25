@@ -4,11 +4,12 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/rest/accounts")
-class EntryController(private val entryService: EntryService) {
+class EntryController(private val entryService: EntryService,
+                      private val entryRepository : EntryRepository) {
 
     @GetMapping("/{accountId}/entries/count")
     fun getEntryCount(@PathVariable accountId: Long): Long {
-        return entryService.getEntryCount(accountId)
+        return entryRepository.count(accountId)
     }
 
     @GetMapping("/{accountId}/entries")
@@ -26,19 +27,19 @@ class EntryController(private val entryService: EntryService) {
     @PostMapping("/{accountId}/entries")
     fun createEntry(@RequestBody entry: Entry, @PathVariable accountId: Long): Long {
         entry.accountId = accountId
-        return entryService.createEntry(entry)
+        return entryService.deepSave(entry).id
     }
 
     @PutMapping("/{accountId}/entries/{entryId}")
     fun updateEntry(@PathVariable accountId: Long, @PathVariable entryId: Long, @RequestBody entry: Entry) {
         entry.id = entryId
         entry.accountId = accountId
-        entryService.updateEntry(entry)
+        entryService.deepSave(entry)
     }
 
     @DeleteMapping("/{accountId}/entries/{entryId}")
     fun deleteEntry(@PathVariable accountId: Long, @PathVariable entryId: Long) {
-        entryService.deleteEntry(entryId)
+        entryRepository.delete(entryId)
     }
 
 }

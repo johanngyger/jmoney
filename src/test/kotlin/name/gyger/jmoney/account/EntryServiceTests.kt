@@ -28,6 +28,9 @@ open class EntryServiceTests {
     lateinit var entryService: EntryService
 
     @Autowired
+    lateinit var entryRepository: EntryRepository
+
+    @Autowired
     lateinit var accountService: AccountService
 
     @Autowired
@@ -46,7 +49,7 @@ open class EntryServiceTests {
     @Test
     fun testBasics() {
         val accountId = createAccount("my account", 1000, accountService)
-        assertThat(entryService.getEntryCount(accountId)).isEqualTo(0)
+        assertThat(entryRepository.count(accountId)).isEqualTo(0)
         assertThat(overallEntryCount()).isEqualTo(0)
 
         val myCat = Category()
@@ -61,19 +64,19 @@ open class EntryServiceTests {
             entry.description = "My description"
             entry.categoryId = myCatId
             entry.date = parse("2016-01-0" + i)
-            entryService.createEntry(entry)
+            entryService.deepSave(entry)
         }
         em.flush()
         em.clear()
         val entries = entryService.getEntries(accountId, null, null)
         assertThat(entries).hasSize(10)
-        assertThat(entryService.getEntryCount(accountId)).isEqualTo(10)
+        assertThat(entryRepository.count(accountId)).isEqualTo(10)
         assertThat(overallEntryCount()).isEqualTo(10)
         assertThat(entries[0].category?.id).isEqualTo(myCatId)
         assertThat(entries[0].balance).isEqualTo(1045)
 
-        entryService.deleteEntry(entries[9].id)
-        assertThat(entryService.getEntryCount(accountId)).isEqualTo(9)
+        entryRepository.delete(entries[9].id)
+        assertThat(entryRepository.count(accountId)).isEqualTo(9)
         assertThat(overallEntryCount()).isEqualTo(9)
 
         assertThat(entryService.getEntries(accountId, 1, "description")).hasSize(9)
@@ -96,14 +99,12 @@ open class EntryServiceTests {
             subEntry
         }.toMutableList()
         entry.subEntries = subEntries
-        val entryId = entryService.createEntry(entry)
+        val entryId = entryService.deepSave(entry).id
         em.flush()
         em.clear()
         entry = entryService.getEntry(entryId)
-        assertThat(entry.accountId).isGreaterThan(0)
-        assertThat(entry.categoryId).isGreaterThan(0)
         assertThat(overallEntryCount()).isEqualTo(8)
-        assertThat(entryService.getEntryCount(accountId)).isEqualTo(1)
+        assertThat(entryRepository.count(accountId)).isEqualTo(1)
         assertThat(entryService.getEntries(accountId, null, null)).hasSize(1)
         subEntries = entry.subEntries
         assertThat(subEntries).hasSize(7)
@@ -112,7 +113,7 @@ open class EntryServiceTests {
         assertThat(entryService.getEntry(firstSubEntry.id)).isEqualTo(firstSubEntry)
 
         entry.subEntries.removeAt(0)
-        entryService.updateEntry(entry)
+        entryService.deepSave(entry)
         em.flush()
         em.clear()
         entry = entryService.getEntry(entryId)
@@ -120,7 +121,7 @@ open class EntryServiceTests {
         assertThat(entryService.getEntries(accountId, null, null)).hasSize(1)
         assertThat(entry.subEntries).hasSize(6)
 
-        entryService.deleteEntry(entry.id)
+        entryRepository.delete(entry.id)
         em.flush()
         em.clear()
         assertThat(overallEntryCount()).isZero()
@@ -135,18 +136,18 @@ open class EntryServiceTests {
         val entry = Entry()
         entry.accountId = accIdA
         entry.categoryId = accIdB
-        val entryId = entryService.createEntry(entry)
+        val entryId = entryService.deepSave(entry)
         em.flush()
         em.clear()
-        assertThat(entryService.getEntryCount(accIdA)).isEqualTo(1)
-        assertThat(entryService.getEntryCount(accIdB)).isEqualTo(1)
+        assertThat(entryRepository.count(accIdA)).isEqualTo(1)
+        assertThat(entryRepository.count(accIdB)).isEqualTo(1)
         assertThat(overallEntryCount()).isEqualTo(2)
 
-        entryService.deleteEntry(entryId)
+        entryRepository.delete(entryId)
         em.flush()
         em.clear()
-        assertThat(entryService.getEntryCount(accIdA)).isZero()
-        assertThat(entryService.getEntryCount(accIdB)).isZero()
+        assertThat(entryRepository.count(accIdA)).isZero()
+        assertThat(entryRepository.count(accIdB)).isZero()
         assertThat(overallEntryCount()).isZero()
     }
 
@@ -158,27 +159,27 @@ open class EntryServiceTests {
         var entry = Entry()
         entry.accountId = accIdA
         entry.categoryId = accIdB
-        val entryId = entryService.createEntry(entry)
+        val entryId = entryService.deepSave(entry).id
         em.flush()
         em.clear()
-        assertThat(entryService.getEntryCount(accIdA)).isEqualTo(1)
-        assertThat(entryService.getEntryCount(accIdB)).isEqualTo(1)
+        assertThat(entryRepository.count(accIdA)).isEqualTo(1)
+        assertThat(entryRepository.count(accIdB)).isEqualTo(1)
         assertThat(overallEntryCount()).isEqualTo(2)
 
         entry = entryService.getEntry(entryId)
-        entryService.updateEntry(entry)
+        entryService.deepSave(entry)
         em.flush()
         em.clear()
         assertThat(overallEntryCount()).isEqualTo(2)
 
         entry = entryService.getEntry(entryId)
         entry.categoryId = 0
-        entryService.updateEntry(entry)
+        entryService.deepSave(entry)
         em.flush()
         em.clear()
         assertThat(overallEntryCount()).isEqualTo(1)
-        assertThat(entryService.getEntryCount(accIdA)).isEqualTo(1)
-        assertThat(entryService.getEntryCount(accIdB)).isEqualTo(0)
+        assertThat(entryRepository.count(accIdA)).isEqualTo(1)
+        assertThat(entryRepository.count(accIdB)).isEqualTo(0)
 
     }
 

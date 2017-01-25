@@ -90,7 +90,7 @@ open class AccountControllerTests {
 
         mockMvc.perform(get("/rest/accounts/" + accountId))
                 .andExpect(status().isOk)
-                .andExpect(content().json("{'name':'Account 1','entries':null}"))
+                .andExpect(content().json("{'name':'Account 1'}"))
 
         val entry = mockMvc.perform(get("/rest/accounts/$accountId/entries"))
                 .andExpect(status().isOk)

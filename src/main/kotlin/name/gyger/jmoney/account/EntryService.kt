@@ -8,24 +8,16 @@ import javax.persistence.PersistenceContext
 
 @Service
 @Transactional
-open class EntryService(private val accountRepository : AccountRepository) {
+open class EntryService(private val accountRepository: AccountRepository,
+                        private val entryRepository: EntryRepository) {
 
     @PersistenceContext
     private lateinit var em: EntityManager
 
-    fun getEntryCount(accountId: Long): Long {
-        val q = em.createQuery("SELECT count(e) FROM Entry e WHERE e.account.id = :id")
-        q.setParameter("id", accountId)
-        return q.singleResult as Long
-    }
-
     fun getEntries(accountId: Long, pageParam: Int?, filter: String?): List<Entry> {
-        val q = em.createQuery("SELECT e FROM Entry e LEFT JOIN FETCH e.category WHERE e.account.id = :id " +
-                "ORDER BY CASE WHEN e.date IS NULL THEN 1 ELSE 0 END, e.date, e.creation", Entry::class.java)
-        q.setParameter("id", accountId)
-
+        // TODO: Use pageable/sortable repository
         var balance = accountRepository.findOne(accountId)?.startBalance ?: 0
-        var entries = q.resultList
+        var entries = entryRepository.findEntriesForAccount(accountId)
                 .filter { e -> e.contains(filter) }
                 .map { e ->
                     balance += e.amount
@@ -42,86 +34,71 @@ open class EntryService(private val accountRepository : AccountRepository) {
 
         entries.forEach {
             it.accountId = it.account?.id ?: 0
-            em.detach(it)
         }
 
         return entries
     }
 
     fun getEntry(id: Long): Entry {
-        val entry = em.find(Entry::class.java, id)
+        val entry = entryRepository.findOne(id)
         entry.accountId = entry.account?.id ?: 0
         entry.categoryId = entry.category?.id ?: 0
-        em.detach(entry)
         return entry
     }
 
-    fun createEntry(entry: Entry): Long {
-        em.detach(entry)
-        entry.id = 0
-        em.persist(entry)
-        updateEntryInternal(entry)
-        return entry.id
+    fun deepSave(entry: Entry): Entry {
+        entry.account = accountRepository.findOne(entry.accountId)
+        entry.category = em.find(Category::class.java, entry.categoryId)
+
+        updateSubEntries(entry)
+        updateTransferEntry(entry)
+
+        return entryRepository.save(entry)
     }
 
-    fun updateEntry(entry: Entry) {
-        updateEntryInternal(entry)
-        em.merge(entry)
-    }
-
-    private fun updateEntryInternal(e: Entry) {
-        e.account = em.find(Account::class.java, e.accountId)
-        e.category = em.find(Category::class.java, e.categoryId)
-
-        removeOldSubEntries(e)
-        if (e.category?.type == Category.Type.SPLIT) {
-            createSubEntries(e)
-        }
-
-        if (e.category is Account) {
-            var other: Entry? = e.other
-            if (other == null) {
-                other = Entry()
-                em.persist(other)
-            }
-
-            other.other = e
-            other.category = e.account
-            other.account = e.category as Account
-            e.other = other
+    private fun updateSubEntries(entry: Entry) {
+        val oldSubEntries = entryRepository.findSubEntries(entry.id)
+        if (entry.category?.type == Category.Type.SPLIT) {
+            entryRepository.delete(oldSubEntries - entry.subEntries)
+            createSubEntries(entry)
         } else {
-            val other = e.other
-            e.other = null
-
-            if (other != null) {
-                other.other = null
-                em.remove(other)
-            }
+            entryRepository.delete(entry.subEntries)
         }
     }
 
-    private fun removeOldSubEntries(e: Entry) {
-        val q = em.createQuery("SELECT e FROM Entry e WHERE e.splitEntry.id = :id", Entry::class.java)
-        q.setParameter("id", e.id)
-        val oldSubEntries = q.resultList
-        val newSubEntries = e.subEntries
-        oldSubEntries.forEach { subEntry ->
-            if (!newSubEntries.contains(subEntry)) {
-                em.remove(subEntry)
-            }
+    private fun updateTransferEntry(entry: Entry) {
+        if (entry.category is Account) {
+            updateOtherEntry(entry)
+        } else {
+            removeOtherEntry(entry)
         }
     }
 
-    private fun createSubEntries(e: Entry) {
-        e.subEntries.forEach {
-            val subEntry = em.merge(it)
+    private fun removeOtherEntry(entry: Entry) {
+        val other = entry.other
+        if (other != null) {
+            entry.other = null
+            other.other = null
+            entryRepository.delete(other)
+        }
+    }
+
+    private fun updateOtherEntry(entry: Entry) {
+        val other: Entry = entry.other ?: Entry()
+
+        other.other = entry
+        other.category = entry.account
+        other.account = entry.category as Account
+
+        entry.other = entryRepository.save(other)
+    }
+
+    private fun createSubEntries(entry: Entry) {
+        entry.subEntries.forEach { subEntry ->
             subEntry.category = em.find(Category::class.java, subEntry.categoryId)
-            subEntry.splitEntry = e
+            subEntry.splitEntry = entry
+            entryRepository.save(subEntry)
         }
     }
 
-    fun deleteEntry(entryId: Long) {
-        val e = em.find(Entry::class.java, entryId)
-        em.remove(e)
-    }
 }

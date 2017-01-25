@@ -155,7 +155,7 @@ open class ReportServiceTests {
         entry.categoryId = split.id
         entry.accountId = accountId
         entry.amount = 12715
-        entryService.createEntry(entry)
+        entryService.deepSave(entry)
         assertThat(reportService.getInconsistentSplitEntries()).hasSize(1)
 
         val subEntry = Entry()
@@ -163,7 +163,7 @@ open class ReportServiceTests {
         val subEntries = ArrayList<Entry>()
         subEntries.add(subEntry)
         entry.subEntries = subEntries
-        entryService.updateEntry(entry)
+        entryService.deepSave(entry)
         assertThat(reportService.getInconsistentSplitEntries()).hasSize(0)
     }
 

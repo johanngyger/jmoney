@@ -1,5 +1,6 @@
 package name.gyger.jmoney.account
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import name.gyger.jmoney.category.Category
 import name.gyger.jmoney.session.Session
 import javax.persistence.*
@@ -14,9 +15,11 @@ class Account : Category() {
     var abbreviation: String? = null
     @Column(length = 1000) var comment: String? = null
 
+    @JsonIgnore
     @OneToMany(mappedBy = "account", cascade = arrayOf(CascadeType.REMOVE))
     var entries: MutableList<Entry> = mutableListOf()
 
+    @JsonIgnore
     @ManyToOne
     var session: Session? = null
 

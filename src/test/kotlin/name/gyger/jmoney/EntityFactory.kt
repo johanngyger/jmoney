@@ -9,10 +9,15 @@ import name.gyger.jmoney.category.CategoryService
 
 import java.util.stream.IntStream
 
-class EntityFactory
-
-fun createEntries(entry: Entry, count: Int, entryService: EntryService) {
-    IntStream.range(0, count).forEach { entryService.createEntry(entry) }
+fun createEntries(entryProto: Entry, count: Int, entryService: EntryService) {
+    IntStream.range(0, count).forEach {
+        val entry = Entry()
+        entry.accountId = entryProto.accountId
+        entry.categoryId = entryProto.categoryId
+        entry.date = entryProto.date
+        entry.amount = entryProto.amount
+        entryService.deepSave(entry)
+    }
 }
 
 fun createAccount(name: String, startBalance: Long, accountService: AccountService): Long {
