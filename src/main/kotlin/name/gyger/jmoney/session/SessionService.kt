@@ -5,31 +5,20 @@ import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
 
 @Service
 @Transactional
-open class SessionService(private val categoryFactory: CategoryFactory) {
-
-    @PersistenceContext
-    private lateinit var em: EntityManager
-
-    fun getSession(): Session {
-        val query = "SELECT s FROM Session s LEFT JOIN FETCH s.rootCategory " +
-                "LEFT JOIN FETCH s.splitCategory LEFT JOIN FETCH s.transferCategory"
-        return em.createQuery(query, Session::class.java).singleResult
-    }
+open class SessionService(private val sessionRepository: SessionRepository,
+                          private val categoryFactory: CategoryFactory) {
 
     fun initSession() {
         removeOldSession()
-
         val rootCategory = categoryFactory.createRootCategory()
         val transferCategory = categoryFactory.createTransferCategory(rootCategory)
         val splitCategory = categoryFactory.createSplitCategory(rootCategory)
         val session = Session(rootCategory, transferCategory, splitCategory)
         categoryFactory.createNormalCategories(rootCategory)
-        em.persist(session)
+        sessionRepository.save(session)
     }
 
     @EventListener
@@ -41,14 +30,12 @@ open class SessionService(private val categoryFactory: CategoryFactory) {
 
     fun removeOldSession() {
         if (isSessionAvailable()) {
-            val oldSession = getSession()
-            em.remove(oldSession)
+            sessionRepository.delete(sessionRepository.getSession())
         }
     }
 
     fun isSessionAvailable(): Boolean {
-        val count = em.createQuery("SELECT COUNT(s) FROM Session s").singleResult as Long
-        return count == 1L
+        return sessionRepository.isSessionAvailable()
     }
 
 }

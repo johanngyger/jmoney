@@ -1,20 +1,20 @@
 package name.gyger.jmoney.category
 
 import name.gyger.jmoney.account.EntryRepository
-import name.gyger.jmoney.session.SessionService
+import name.gyger.jmoney.session.SessionRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
 @Transactional
-open class CategoryService(private val sessionService: SessionService,
+open class CategoryService(private val sessionRepository: SessionRepository,
                            private val categoryRepository: CategoryRepository,
                            private val entryRepository: EntryRepository) {
 
     fun getRootCategory(): Category {
         categoryRepository.findAll()  // prefetch
-        return sessionService.getSession().rootCategory
+        return sessionRepository.getSession().rootCategory
     }
 
     fun getCategories(): List<Category> {
@@ -69,11 +69,11 @@ open class CategoryService(private val sessionService: SessionService,
     }
 
     fun getSplitCategory(): Category {
-        return sessionService.getSession().splitCategory
+        return sessionRepository.getSession().splitCategory
     }
 
     fun getTransferCategory(): Category {
-        return sessionService.getSession().transferCategory
+        return sessionRepository.getSession().transferCategory
     }
 
 }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/rest/accounts")
 class AccountController(private val accountService: AccountService,
-                        private val accountRepository : AccountRepository) {
+                        private val accountRepository: AccountRepository) {
 
     @GetMapping
     fun getAccounts(): Iterable<Account> {

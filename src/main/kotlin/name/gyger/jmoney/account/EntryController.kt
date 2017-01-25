@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/rest/accounts")
 class EntryController(private val entryService: EntryService,
-                      private val entryRepository : EntryRepository) {
+                      private val entryRepository: EntryRepository) {
 
     @GetMapping("/{accountId}/entries/count")
     fun getEntryCount(@PathVariable accountId: Long): Long {

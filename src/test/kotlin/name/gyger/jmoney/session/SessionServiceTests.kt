@@ -16,15 +16,18 @@ open class SessionServiceTests {
     @Autowired
     lateinit var sessionService: SessionService
 
+    @Autowired
+    lateinit var sessionRepository: SessionRepository
+
     @Test
     fun testBasics() {
         sessionService.initSession()
-        assertThat(sessionService.isSessionAvailable()).isTrue()
+        assertThat(sessionRepository.isSessionAvailable()).isTrue()
 
         sessionService.handleContextRefresh(null)
-        assertThat(sessionService.isSessionAvailable()).isTrue()
+        assertThat(sessionRepository.isSessionAvailable()).isTrue()
 
-        val s = sessionService.getSession()
+        val s = sessionRepository.getSession()
         assertThat(s).isNotNull()
         assertThat(s.rootCategory).isNotNull()
         assertThat(s.splitCategory).isNotNull()
@@ -32,7 +35,7 @@ open class SessionServiceTests {
         assertThat(s.id).isNotNull()
 
         sessionService.removeOldSession()
-        assertThat(sessionService.isSessionAvailable()).isFalse()
+        assertThat(sessionRepository.isSessionAvailable()).isFalse()
     }
 
 }

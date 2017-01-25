@@ -3,7 +3,7 @@ package name.gyger.jmoney.report
 import name.gyger.jmoney.account.Entry
 import name.gyger.jmoney.category.Category
 import name.gyger.jmoney.category.CategoryRepository
-import name.gyger.jmoney.session.SessionService
+import name.gyger.jmoney.session.SessionRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -12,14 +12,14 @@ import javax.persistence.PersistenceContext
 
 @Service
 @Transactional
-open class ReportService(private val sessionService: SessionService,
+open class ReportService(private val sessionRepository: SessionRepository,
                          private val categoryRepository: CategoryRepository) {
 
     @PersistenceContext
     private lateinit var em: EntityManager
 
     fun getBalances(date: Date?): List<Balance> {
-        val session = sessionService.getSession()
+        val session = sessionRepository.getSession()
         val result = ArrayList<Balance>()
 
         val entrySums = getEntrySumsByAccountId(date)
@@ -45,7 +45,7 @@ open class ReportService(private val sessionService: SessionService,
     }
 
     fun getCashFlow(from: Date?, to: Date?): List<CashFlow> {
-        val session = sessionService.getSession()
+        val session = sessionRepository.getSession()
         val resultList = ArrayList<CashFlow>()
 
         categoryRepository.findAll()  // prefetch
@@ -93,7 +93,7 @@ open class ReportService(private val sessionService: SessionService,
     }
 
     fun getInconsistentSplitEntries(): List<Entry> {
-        val splitCategory = sessionService.getSession().splitCategory
+        val splitCategory = sessionRepository.getSession().splitCategory
 
         val q = em.createQuery("SELECT e FROM Entry e WHERE e.category.id = :categoryId" + " ORDER BY " +
                 "CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC", Entry::class.java)
