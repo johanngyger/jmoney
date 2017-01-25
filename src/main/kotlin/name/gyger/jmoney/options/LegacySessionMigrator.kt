@@ -1,25 +1,34 @@
 package name.gyger.jmoney.options
 
 import name.gyger.jmoney.account.Account
+import name.gyger.jmoney.account.AccountRepository
 import name.gyger.jmoney.account.Entry
+import name.gyger.jmoney.account.EntryRepository
+import name.gyger.jmoney.category.CategoryRepository
+import name.gyger.jmoney.session.SessionRepository
 import net.sf.jmoney.XMLReader
 import net.sf.jmoney.model.*
 import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
 import java.io.InputStream
 import java.util.*
-import javax.persistence.EntityManager
 
-open class LegacySessionMigrator(inputStream: InputStream, private val em: EntityManager) {
+@Component
+open class LegacySessionMigrator(private val sessionRepository: SessionRepository,
+                                 private val accountRepository: AccountRepository,
+                                 private val categoryRepository: CategoryRepository,
+                                 private val entryRepository: EntryRepository) {
     private val session = name.gyger.jmoney.session.Session(name.gyger.jmoney.category.Category(),
             name.gyger.jmoney.category.Category(), name.gyger.jmoney.category.Category())
-    private val oldSession = XMLReader.readSessionFromInputStream(inputStream)
     private val oldToNewCategoryMap = HashMap<Category, name.gyger.jmoney.category.Category>()
     private val entryToOldCategoryMap = HashMap<Entry, Category>()
     private val oldToNewDoubleEntryMap = HashMap<DoubleEntry, Entry>()
 
+    lateinit var oldSession: Session
 
-    fun importSession() {
-        em.persist(session)
+    fun importSession(inputStream: InputStream) {
+        oldSession = XMLReader.readSessionFromInputStream(inputStream)
+        sessionRepository.save(session)
         mapCategoryNode(oldSession.categories.rootNode, null)
         mapRootCategoryToSession()
         mapCategoryToEntry()
@@ -48,7 +57,7 @@ open class LegacySessionMigrator(inputStream: InputStream, private val em: Entit
         acc.session = session
         acc.parent = parent
 
-        em.persist(acc)
+        accountRepository.save(acc)
 
         oldToNewCategoryMap.put(oldAcc, acc)
 
@@ -108,7 +117,7 @@ open class LegacySessionMigrator(inputStream: InputStream, private val em: Entit
         cat.name = oldCat.categoryName
         cat.parent = parent
 
-        em.persist(cat)
+        categoryRepository.save(cat)
 
         oldToNewCategoryMap.put(oldCat, cat)
         if (oldCat is SplitCategory) {
@@ -174,7 +183,7 @@ open class LegacySessionMigrator(inputStream: InputStream, private val em: Entit
             entryToOldCategoryMap.put(e, oldCat)
         }
 
-        em.persist(e)
+        entryRepository.save(e)
     }
 
     companion object {

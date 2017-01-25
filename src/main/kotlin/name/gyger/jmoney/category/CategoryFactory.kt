@@ -1,14 +1,9 @@
 package name.gyger.jmoney.category
 
 import org.springframework.stereotype.Component
-import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
 
 @Component
-class CategoryFactory {
-
-    @PersistenceContext
-    private lateinit var em: EntityManager
+class CategoryFactory(private val categoryRepository: CategoryRepository) {
 
     fun createNormalCategories(root: Category) {
         createNormalCategory("Taxes", root)
@@ -94,7 +89,7 @@ class CategoryFactory {
         c.type = type
         c.name = name
         c.parent = parent
-        em.persist(c)
+        categoryRepository.save(c)
         return c
     }
 
