@@ -2,6 +2,7 @@ package name.gyger.jmoney.report
 
 import name.gyger.jmoney.account.AccountService
 import name.gyger.jmoney.account.Entry
+import name.gyger.jmoney.account.EntryRepository
 import name.gyger.jmoney.account.EntryService
 import name.gyger.jmoney.category.Category
 import name.gyger.jmoney.category.CategoryService
@@ -38,6 +39,9 @@ open class ReportServiceTests {
 
     @Autowired
     lateinit var entryService: EntryService
+
+    @Autowired
+    lateinit var entryRepository: EntryRepository
 
     @Autowired
     lateinit var sessionService: SessionService
@@ -173,7 +177,7 @@ open class ReportServiceTests {
         val entryDto = Entry()
         entryDto.accountId = accountId
         createEntries(entryDto, 37, entryService)
-        assertThat(reportService.getEntriesWithoutCategory()).hasSize(37)
+        assertThat(entryRepository.getEntriesWithoutCategory()).hasSize(37)
     }
 
     @Test
@@ -191,7 +195,7 @@ open class ReportServiceTests {
         entry.categoryId = newCatId
         createEntries(entry, 7, entryService)
 
-        assertThat(reportService.getEntriesForCategory(newCatId, date, date)).hasSize(7)
+        assertThat(entryRepository.getEntriesForCategory(newCatId, date, date)).hasSize(7)
     }
 
 }

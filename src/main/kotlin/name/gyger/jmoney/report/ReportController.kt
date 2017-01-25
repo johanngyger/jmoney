@@ -1,6 +1,7 @@
 package name.gyger.jmoney.report
 
 import name.gyger.jmoney.account.Entry
+import name.gyger.jmoney.account.EntryService
 import name.gyger.jmoney.util.parse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -10,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/rest/reports")
-class ReportController(private val reportService: ReportService) {
+class ReportController(private val reportService: ReportService,
+                       private val entryService: EntryService) {
 
     @GetMapping("/balances")
     fun getBalances(@RequestParam(value = "date", required = false) dateString: String?): List<Balance> {
@@ -32,7 +34,7 @@ class ReportController(private val reportService: ReportService) {
                    @RequestParam(value = "toDate") toDateString: String): List<Entry> {
         val from = parse(fromDateString)
         val to = parse(toDateString)
-        return reportService.getEntriesForCategory(categoryId, from, to)
+        return entryService.getEntriesForCategory(categoryId, from, to)
     }
 
     @GetMapping("/consitency/inconsistent-split-entries")
@@ -42,7 +44,7 @@ class ReportController(private val reportService: ReportService) {
 
     @GetMapping("/consitency/entries-without-category")
     fun getEntriesWithoutCategory(): List<Entry> {
-        return reportService.getEntriesWithoutCategory()
+        return entryService.getEntriesWithoutCategory()
     }
 
 }

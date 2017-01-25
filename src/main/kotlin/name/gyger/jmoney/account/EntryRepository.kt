@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
+import java.util.*
 
 interface EntryRepository : CrudRepository<Entry, Long> {
 
@@ -20,5 +21,18 @@ interface EntryRepository : CrudRepository<Entry, Long> {
     @Modifying
     @Query("UPDATE Entry SET CATEGORY_ID = NULL WHERE CATEGORY_ID = :categoryId")
     fun deleteCategoryFromEntry(@Param("categoryId") categoryId: Long)
+
+    @Query("SELECT e FROM Entry e WHERE e.category.id = null AND e.splitEntry = null ORDER BY " +
+            "CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC")
+    fun getEntriesWithoutCategory(): List<Entry>
+
+    @Query("SELECT e FROM Entry e WHERE e.category.id = :categoryId " +
+            "AND e.date >= :from AND e.date <= :to ORDER BY e.date DESC, e.creation DESC")
+    fun getEntriesForCategory(@Param("categoryId") categoryId: Long, @Param("from") fromDate: Date?,
+                              @Param("to") to: Date?): List<Entry>
+
+    @Query("SELECT e FROM Entry e WHERE e.category.id = :categoryId " +
+            "ORDER BY CASE WHEN e.date IS NULL THEN 0 ELSE 1 END, e.date DESC, e.creation DESC")
+    fun getInconsistentSplitEntries(@Param("categoryId") categoryId: Long): List<Entry>
 
 }

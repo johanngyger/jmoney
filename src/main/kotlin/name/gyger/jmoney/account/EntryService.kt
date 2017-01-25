@@ -4,6 +4,7 @@ import name.gyger.jmoney.category.Category
 import name.gyger.jmoney.category.CategoryRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Service
 @Transactional
@@ -95,6 +96,27 @@ open class EntryService(private val accountRepository: AccountRepository,
             subEntry.category = categoryRepository.findOne(subEntry.categoryId)
             subEntry.splitEntry = entry
             entryRepository.save(subEntry)
+        }
+    }
+
+    fun getEntriesWithoutCategory(): List<Entry> {
+        val entries = entryRepository.getEntriesWithoutCategory()
+        updateEntryBalances(entries)
+        return entries
+    }
+
+    fun getEntriesForCategory(categoryId: Long, from: Date?, to: Date?): List<Entry> {
+        val entries = entryRepository.getEntriesForCategory(categoryId, from, to)
+        updateEntryBalances(entries)
+        return entries
+    }
+
+    private fun updateEntryBalances(entries: List<Entry>) {
+        var balance = 0L
+        entries.reversed().forEach { entry ->
+            entry.accountId = entry.account?.id ?: 0
+            balance += entry.amount
+            entry.balance = balance
         }
     }
 
