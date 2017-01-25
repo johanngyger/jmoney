@@ -2,7 +2,7 @@ package name.gyger.jmoney.report
 
 import name.gyger.jmoney.account.Entry
 import name.gyger.jmoney.category.Category
-import name.gyger.jmoney.category.CategoryService
+import name.gyger.jmoney.category.CategoryRepository
 import name.gyger.jmoney.session.SessionService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -12,7 +12,8 @@ import javax.persistence.PersistenceContext
 
 @Service
 @Transactional
-open class ReportService(private val sessionService: SessionService, private val categoryService: CategoryService) {
+open class ReportService(private val sessionService: SessionService,
+                         private val categoryRepository: CategoryRepository) {
 
     @PersistenceContext
     private lateinit var em: EntityManager
@@ -47,7 +48,7 @@ open class ReportService(private val sessionService: SessionService, private val
         val session = sessionService.getSession()
         val resultList = ArrayList<CashFlow>()
 
-        categoryService.prefetchCategories()
+        categoryRepository.findAll()  // prefetch
         val root = session.rootCategory
 
         val entrySums = getEntrySumsByCategoryId(from, to)

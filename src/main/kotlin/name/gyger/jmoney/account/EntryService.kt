@@ -1,18 +1,15 @@
 package name.gyger.jmoney.account
 
 import name.gyger.jmoney.category.Category
+import name.gyger.jmoney.category.CategoryRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
 
 @Service
 @Transactional
 open class EntryService(private val accountRepository: AccountRepository,
-                        private val entryRepository: EntryRepository) {
-
-    @PersistenceContext
-    private lateinit var em: EntityManager
+                        private val entryRepository: EntryRepository,
+                        private val categoryRepository: CategoryRepository) {
 
     fun getEntries(accountId: Long, pageParam: Int?, filter: String?): List<Entry> {
         // TODO: Use pageable/sortable repository
@@ -48,7 +45,7 @@ open class EntryService(private val accountRepository: AccountRepository,
 
     fun deepSave(entry: Entry): Entry {
         entry.account = accountRepository.findOne(entry.accountId)
-        entry.category = em.find(Category::class.java, entry.categoryId)
+        entry.category = categoryRepository.findOne(entry.categoryId)
 
         updateSubEntries(entry)
         updateTransferEntry(entry)
@@ -95,7 +92,7 @@ open class EntryService(private val accountRepository: AccountRepository,
 
     private fun createSubEntries(entry: Entry) {
         entry.subEntries.forEach { subEntry ->
-            subEntry.category = em.find(Category::class.java, subEntry.categoryId)
+            subEntry.category = categoryRepository.findOne(subEntry.categoryId)
             subEntry.splitEntry = entry
             entryRepository.save(subEntry)
         }

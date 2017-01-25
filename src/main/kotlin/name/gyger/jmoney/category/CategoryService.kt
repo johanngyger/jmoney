@@ -1,26 +1,19 @@
 package name.gyger.jmoney.category
 
+import name.gyger.jmoney.account.EntryRepository
 import name.gyger.jmoney.session.SessionService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
 
 @Service
 @Transactional
-open class CategoryService(private val sessionService: SessionService) {
-
-    @PersistenceContext
-    private lateinit var em: EntityManager
-
-    fun prefetchCategories(): List<Category> {
-        return em.createQuery("SELECT c FROM Category c LEFT JOIN FETCH c.children", Category::class.java)
-                .resultList
-    }
+open class CategoryService(private val sessionService: SessionService,
+                           private val categoryRepository: CategoryRepository,
+                           private val entryRepository: EntryRepository) {
 
     fun getRootCategory(): Category {
-        prefetchCategories()
+        categoryRepository.findAll()  // prefetch
         return sessionService.getSession().rootCategory
     }
 
@@ -28,7 +21,6 @@ open class CategoryService(private val sessionService: SessionService) {
         val categories = ArrayList<Category>()
         addChildCategories(categories, getRootCategory(), 0)
         categories.forEach { c ->
-            em.detach(c)
             c.parentId = c.parent?.id ?: 0
         }
         return categories
@@ -57,26 +49,23 @@ open class CategoryService(private val sessionService: SessionService) {
 
     fun saveCategoryTree(category: Category) {
         resolveParents(category)
-        em.merge(category)
+        categoryRepository.save(category)
     }
 
     private fun resolveParents(node: Category) {
-        node.parent = em.find(Category::class.java, node.parentId)
+        node.parent = categoryRepository.findOne(node.parentId)
         node.children.forEach { c -> resolveParents(c) }
     }
 
     fun createCategory(category: Category): Long {
-        category.parent = em.find(Category::class.java, category.parentId)
-        em.persist(category)
+        category.parent = categoryRepository.findOne(category.parentId)
+        categoryRepository.save(category)
         return category.id
     }
 
     fun deleteCategory(categoryId: Long) {
-        val q = em.createNativeQuery("UPDATE ENTRY SET CATEGORY_ID = NULL WHERE CATEGORY_ID = :categoryId")
-        q.setParameter("categoryId", categoryId)
-        q.executeUpdate()
-
-        em.remove(em.find(Category::class.java, categoryId))
+        entryRepository.deleteCategoryFromEntry(categoryId)
+        categoryRepository.delete(categoryId)
     }
 
     fun getSplitCategory(): Category {
