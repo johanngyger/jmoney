@@ -7,7 +7,6 @@ import {Entry} from '../accounts/entry';
 
 @Injectable()
 export class ReportsService {
-  accountsPath = '/rest/accounts';
 
   constructor(private http: Http) {
   }
@@ -19,7 +18,7 @@ export class ReportsService {
     }
 
     return this.http
-      .get('/rest/reports/balances', {search: params})
+      .get('/api/reports/balances', {search: params})
       .toPromise()
       .then(response => response.json() as Balance[]);
   }
@@ -30,14 +29,14 @@ export class ReportsService {
     params.set('toDate', toDate);
 
     return this.http
-      .get('/rest/reports/cash-flows', {search: params})
+      .get('/api/reports/cash-flows', {search: params})
       .toPromise()
       .then(response => response.json() as CashFlow[]);
   }
 
   getInconsistentSplitEntries(): Promise<Entry[]> {
     return this.http
-      .get('rest/reports/consitency/inconsistent-split-entries')
+      .get('api/reports/consistency/inconsistent-split-entries')
       .toPromise()
       .then(response => response.json() as Balance[]);
   }
@@ -49,14 +48,14 @@ export class ReportsService {
     params.set('toDate', toDate);
 
     return this.http
-      .get('/rest/reports/entries-with-category', {search: params})
+      .get('/api/reports/entries-with-category', {search: params})
       .toPromise()
       .then(response => response.json() as Entry[]);
   }
 
   getEntriesWithoutCategory(): Promise<Entry[]> {
     return this.http
-      .get('rest/reports/consitency/entries-without-category')
+      .get('/api/reports/consistency/entries-without-category')
       .toPromise()
       .then(response => response.json() as Entry[]);
   }

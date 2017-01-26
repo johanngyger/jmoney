@@ -3,7 +3,7 @@ package name.gyger.jmoney.category
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/rest")
+@RequestMapping("/api")
 class CategoryController(private val categoryService: CategoryService) {
 
     @GetMapping("/categories")

@@ -37,7 +37,7 @@ open class OptionsControllerTests {
         val cpr = ClassPathResource("options-service-tests.xml.gz")
         val `is` = cpr.inputStream
         val multipartFile = MockMultipartFile("file", `is`)
-        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/rest/options/import")
+        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/api/options/import")
                 .file(multipartFile))
                 .andExpect(status().isOk)
     }

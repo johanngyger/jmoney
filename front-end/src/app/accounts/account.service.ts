@@ -6,7 +6,7 @@ import {Account} from './account';
 
 @Injectable()
 export class AccountService {
-  accountsPath = '/rest/accounts';
+  accountsPath = '/api/accounts';
   accountChange = new Subject<number>();
 
   constructor(private http: Http) {
@@ -27,7 +27,7 @@ export class AccountService {
   }
 
   createAccount(account: Account): Promise<number> {
-    return this.http.post('rest/accounts', account)
+    return this.http.post(this.accountsPath, account)
       .toPromise()
       .then(response => response.json() as number)
       .then(accountId => {
@@ -37,7 +37,7 @@ export class AccountService {
   }
 
   updateAccount(account: Account): Promise<any> {
-    return this.http.put('rest/accounts/' + account.id, account)
+    return this.http.put(`${this.accountsPath}/${account.id}`, account)
       .toPromise()
       .then(res => {
         this.accountChange.next(account.id);
@@ -46,7 +46,7 @@ export class AccountService {
   }
 
   deleteAccount(accountId): Promise<any> {
-    return this.http.delete('rest/accounts/' + accountId)
+    return this.http.delete(`${this.accountsPath}/${accountId}`)
       .toPromise()
       .then(res => {
         this.accountChange.next(accountId);

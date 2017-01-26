@@ -29,13 +29,13 @@ open class AccountControllerTests {
     @Throws(Exception::class)
     fun setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
-        mockMvc.perform(put("/rest/options/init"))
+        mockMvc.perform(put("/api/options/init"))
     }
 
     @Test
     @Throws(Exception::class)
     fun testGetEmptyAccounts() {
-        mockMvc.perform(get("/rest/accounts"))
+        mockMvc.perform(get("/api/accounts"))
                 .andExpect(content().json("[]"))
                 .andExpect(status().isOk)
     }
@@ -43,27 +43,27 @@ open class AccountControllerTests {
     @Test
     @Throws(Exception::class)
     fun testBasics() {
-        val result = mockMvc.perform(post("/rest/accounts")
+        val result = mockMvc.perform(post("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"Account 1\"}"))
                 .andExpect(status().isOk)
                 .andReturn()
         val accountId = result.response.contentAsString
 
-        mockMvc.perform(get("/rest/accounts"))
+        mockMvc.perform(get("/api/accounts"))
                 .andExpect(status().isOk)
                 .andExpect(content().json("[{'name':'Account 1'}]"))
 
-        mockMvc.perform(put("/rest/accounts/" + accountId)
+        mockMvc.perform(put("/api/accounts/" + accountId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"Account 1b\"}"))
                 .andExpect(status().isOk)
 
-        mockMvc.perform(get("/rest/accounts/" + accountId))
+        mockMvc.perform(get("/api/accounts/" + accountId))
                 .andExpect(status().isOk)
                 .andExpect(content().json("{'name':'Account 1b'}"))
 
-        mockMvc.perform(delete("/rest/accounts/" + accountId))
+        mockMvc.perform(delete("/api/accounts/" + accountId))
                 .andExpect(status().isOk)
 
         testGetEmptyAccounts()
@@ -73,7 +73,7 @@ open class AccountControllerTests {
     @Test
     @Throws(Exception::class)
     fun testAccountWithEntries() {
-        val accountId = mockMvc.perform(post("/rest/accounts")
+        val accountId = mockMvc.perform(post("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"name\": \"Account 1\",\n" +
@@ -88,11 +88,11 @@ open class AccountControllerTests {
                 .andExpect(status().isOk)
                 .andReturn().response.contentAsString
 
-        mockMvc.perform(get("/rest/accounts/" + accountId))
+        mockMvc.perform(get("/api/accounts/" + accountId))
                 .andExpect(status().isOk)
                 .andExpect(content().json("{'name':'Account 1'}"))
 
-        val entry = mockMvc.perform(get("/rest/accounts/$accountId/entries"))
+        val entry = mockMvc.perform(get("/api/accounts/$accountId/entries"))
                 .andExpect(status().isOk)
                 .andExpect(content().json("[]"))
                 .andReturn().response.contentAsString

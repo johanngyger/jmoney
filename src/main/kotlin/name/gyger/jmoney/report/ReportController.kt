@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-@RequestMapping("/rest/reports")
+@RequestMapping("/api/reports")
 class ReportController(private val reportService: ReportService,
                        private val entryService: EntryService) {
 
@@ -37,12 +37,12 @@ class ReportController(private val reportService: ReportService,
         return entryService.getEntriesForCategory(categoryId, from, to)
     }
 
-    @GetMapping("/consitency/inconsistent-split-entries")
+    @GetMapping("/consistency/inconsistent-split-entries")
     fun getInconsistentSplitEntries(): List<Entry> {
         return reportService.getInconsistentSplitEntries()
     }
 
-    @GetMapping("/consitency/entries-without-category")
+    @GetMapping("/consistency/entries-without-category")
     fun getEntriesWithoutCategory(): List<Entry> {
         return entryService.getEntriesWithoutCategory()
     }

@@ -3,7 +3,7 @@ package name.gyger.jmoney.account
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/rest/accounts")
+@RequestMapping("/api/accounts")
 class EntryController(private val entryService: EntryService,
                       private val entryRepository: EntryRepository) {
 

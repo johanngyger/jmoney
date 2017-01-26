@@ -10,20 +10,20 @@ export class CategoryService {
 
   getCategoryTree(): Promise<Category> {
     return this.http
-      .get('/rest/category-tree')
+      .get('/api/category-tree')
       .toPromise()
       .then(response => response.json() as Category);
   }
 
   saveCategoryTree(rootCategory: Category): Promise<any> {
     return this.http
-      .put('/rest/category-tree', rootCategory)
+      .put('/api/category-tree', rootCategory)
       .toPromise();
   }
 
   getCategories(): Promise<Category[]> {
     return this.http
-      .get('/rest/categories')
+      .get('/api/categories')
       .toPromise()
       .then(response => response.json() as Category[]);
   }
@@ -33,7 +33,7 @@ export class CategoryService {
     newCat.name = '<New category>';
     newCat.parentId = parentId;
 
-    return this.http.post('/rest/categories', newCat)
+    return this.http.post('/api/categories', newCat)
       .toPromise()
       .then(response => {
         newCat.id = response.json();
@@ -43,13 +43,13 @@ export class CategoryService {
 
   deleteCategory(id: number): Promise<any> {
     return this.http
-      .delete('/rest/categories/' + id)
+      .delete('/api/categories/' + id)
       .toPromise();
   }
 
   getSplitCategory(): Promise<Category> {
     return this.http
-      .get('/rest/split-category')
+      .get('/api/split-category')
       .toPromise()
       .then(result => result.json() as Category);
 

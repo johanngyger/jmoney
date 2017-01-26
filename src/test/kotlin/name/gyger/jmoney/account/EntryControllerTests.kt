@@ -33,51 +33,51 @@ class EntryControllerTests {
     @Throws(Exception::class)
     fun setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
-        mockMvc.perform(put("/rest/options/init"))
+        mockMvc.perform(put("/api/options/init"))
     }
 
     @Test
     @Throws(Exception::class)
     fun testEntries() {
-        val accountId = mockMvc.perform(post("/rest/accounts")
+        val accountId = mockMvc.perform(post("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"Account 1\"}"))
                 .andExpect(status().isOk)
                 .andReturn().response.contentAsString
 
-        mockMvc.perform(post("/rest/accounts/{accountId}/entries", accountId)
+        mockMvc.perform(post("/api/accounts/{accountId}/entries", accountId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"date\":\"2001-17-19\",\"description\":\"My entry\",\"expense\":10}"))
 
-        val entriesStr = mockMvc.perform(get("/rest/accounts/{accountId}/entries", accountId))
+        val entriesStr = mockMvc.perform(get("/api/accounts/{accountId}/entries", accountId))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.[0].description", equalTo("My entry")))
                 .andReturn().response.contentAsString
         val entries = JSONArray(entriesStr)
         val entry = entries.get(0) as JSONObject
 
-        mockMvc.perform(get("/rest/accounts/{accountId}/entries/{entryId}", accountId, entry.get("id")))
+        mockMvc.perform(get("/api/accounts/{accountId}/entries/{entryId}", accountId, entry.get("id")))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.description", equalTo("My entry")))
 
-        mockMvc.perform(get("/rest/accounts/{accountId}/entries/count", accountId))
+        mockMvc.perform(get("/api/accounts/{accountId}/entries/count", accountId))
                 .andExpect(status().isOk)
                 .andExpect(content().string("1"))
 
         entry.put("description", "My fancy entry")
-        mockMvc.perform(put("/rest/accounts/{accountId}/entries/{entryId}", accountId, entry.get("id"))
+        mockMvc.perform(put("/api/accounts/{accountId}/entries/{entryId}", accountId, entry.get("id"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(entry.toString()))
                 .andExpect(status().isOk)
 
-        mockMvc.perform(get("/rest/accounts/{accountId}/entries/{entryId}", accountId, entry.get("id")))
+        mockMvc.perform(get("/api/accounts/{accountId}/entries/{entryId}", accountId, entry.get("id")))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.description", equalTo("My fancy entry")))
 
-        mockMvc.perform(delete("/rest/accounts/{accountId}/entries/{entryId}", accountId, entry.get("id")))
+        mockMvc.perform(delete("/api/accounts/{accountId}/entries/{entryId}", accountId, entry.get("id")))
                 .andExpect(status().isOk)
 
-        mockMvc.perform(get("/rest/accounts/{accountId}/entries/count", accountId))
+        mockMvc.perform(get("/api/accounts/{accountId}/entries/count", accountId))
                 .andExpect(status().isOk)
                 .andExpect(content().string("0"))
     }
@@ -85,18 +85,18 @@ class EntryControllerTests {
     @Test
     @Throws(Exception::class)
     fun testSplitEntry() {
-        val accountId = mockMvc.perform(post("/rest/accounts")
+        val accountId = mockMvc.perform(post("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"Account 1\"}"))
                 .andReturn().response.contentAsString
 
-        val splitCatJson = mockMvc.perform(get("/rest/split-category"))
+        val splitCatJson = mockMvc.perform(get("/api/split-category"))
                 .andReturn().response.contentAsString
         val splitCat = JSONObject(splitCatJson)
 
         val entry = JSONObject()
         entry.put("categoryId", splitCat.get("id"))
-        val entryId = mockMvc.perform(post("/rest/accounts/{accountId}/entries", accountId)
+        val entryId = mockMvc.perform(post("/api/accounts/{accountId}/entries", accountId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(entry.toString()))
                 .andReturn().response.contentAsString
@@ -105,31 +105,31 @@ class EntryControllerTests {
         val splitEntries = JSONArray()
         splitEntries.put(JSONObject("{\"description\": \"s1\"}"))
         entry.put("subEntries", splitEntries)
-        mockMvc.perform(put("/rest/accounts/{accountId}/entries/{entryId}", accountId, entryId)
+        mockMvc.perform(put("/api/accounts/{accountId}/entries/{entryId}", accountId, entryId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(entry.toString()))
                 .andExpect(status().isOk)
 
-        mockMvc.perform(get("/rest/accounts/{accountId}/entries/{entryId}", accountId, entryId))
+        mockMvc.perform(get("/api/accounts/{accountId}/entries/{entryId}", accountId, entryId))
                 .andExpect(status().isOk)
                 .andExpect(content().string(containsString("s1")))
 
         splitEntries.put(JSONObject("{\"description\": \"s2\"}"))
-        mockMvc.perform(put("/rest/accounts/{accountId}/entries/{entryId}", accountId, entryId)
+        mockMvc.perform(put("/api/accounts/{accountId}/entries/{entryId}", accountId, entryId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(entry.toString()))
                 .andExpect(status().isOk)
-        mockMvc.perform(get("/rest/accounts/{accountId}/entries/{entryId}", accountId, entryId))
+        mockMvc.perform(get("/api/accounts/{accountId}/entries/{entryId}", accountId, entryId))
                 .andExpect(status().isOk)
                 .andExpect(content().string(containsString("s1")))
                 .andExpect(content().string(containsString("s2")))
 
         splitEntries.remove(0)
-        mockMvc.perform(put("/rest/accounts/{accountId}/entries/{entryId}", accountId, entryId)
+        mockMvc.perform(put("/api/accounts/{accountId}/entries/{entryId}", accountId, entryId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(entry.toString()))
                 .andExpect(status().isOk)
-        mockMvc.perform(get("/rest/accounts/{accountId}/entries/{entryId}", accountId, entryId))
+        mockMvc.perform(get("/api/accounts/{accountId}/entries/{entryId}", accountId, entryId))
                 .andExpect(status().isOk)
                 .andExpect(content().string(not(containsString("s1"))))
                 .andExpect(content().string(containsString("s2")))

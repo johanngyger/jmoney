@@ -9,7 +9,7 @@ export class OptionsService {
   }
 
   init(): Promise<any> {
-    return this.http.put('/rest/options/init', {timeout: 5000}).toPromise();
+    return this.http.put('/api/options/init', {timeout: 5000}).toPromise();
   }
 
 }

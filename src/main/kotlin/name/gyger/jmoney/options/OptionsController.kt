@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
 @Controller
-@RequestMapping("/rest/options")
+@RequestMapping("/api/options")
 class OptionsController(private val optionsService: OptionsService, private val sessionService: SessionService) {
 
     @PutMapping("/init")

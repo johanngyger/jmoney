@@ -64,6 +64,6 @@ export class EntryService {
   }
 
   private getEntriesPath(accountId: number): string {
-    return 'rest/accounts/' + accountId + '/entries/';
+    return '/api/accounts/' + accountId + '/entries/';
   }
 }
