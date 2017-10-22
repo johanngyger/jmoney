@@ -32,6 +32,7 @@ open class EntryService(private val accountRepository: AccountRepository,
 
         entries.forEach {
             it.accountId = it.account?.id ?: 0
+            it.other?.other = null  // prevent recursion
         }
 
         return entries
