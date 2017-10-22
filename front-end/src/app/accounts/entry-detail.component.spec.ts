@@ -11,7 +11,7 @@ import {CategoryService} from '../categories/category.service';
 import {Category} from '../categories/category';
 
 describe('EntryDetailComponent', () => {
-  let activatedRoute = new ActivatedRouteStub();
+  const activatedRoute = new ActivatedRouteStub();
   let comp: EntryDetailComponent;
   let fixture: ComponentFixture<EntryDetailComponent>;
   let de: DebugElement;
@@ -56,7 +56,7 @@ describe('EntryDetailComponent', () => {
       return Promise.resolve(true);
     }
   }
-  let routerStub = new RouterStub();
+  const routerStub = new RouterStub();
 
   beforeEach(() => {
     activatedRoute.testParams = {accountId: 376, entryId: 123};
@@ -105,7 +105,7 @@ describe('EntryDetailComponent', () => {
     success = true;
   });
 
-  let handleChanges = function () {
+  const handleChanges = function () {
     fixture.detectChanges();
     tick();
     fixture.detectChanges();
@@ -116,12 +116,12 @@ describe('EntryDetailComponent', () => {
   it('correctly initialized input fields (including sub-entries)', fakeAsync(() => {
     entry.categoryId = 444;
     handleChanges();
-    let entryInputs = de.queryAll(By.css('tr input'));
+    const entryInputs = de.queryAll(By.css('tr input'));
     expect(entryInputs.length).toBe(6);
     expect(entryInputs[1].nativeElement.value).toBe('Desc1');
     expect(entryInputs[2].nativeElement.value).toBe('10');
 
-    let subEntryInputs = de.queryAll(By.css('p input'));
+    const subEntryInputs = de.queryAll(By.css('p input'));
     expect(subEntryInputs.length).toBe(6);
     expect(subEntryInputs[0].nativeElement.value).toBe('SubEntry1');
     expect(subEntryInputs[2].nativeElement.value).toBe('17');
@@ -132,7 +132,7 @@ describe('EntryDetailComponent', () => {
   it('new entry form', fakeAsync(() => {
     activatedRoute.testParams = {accountId: 376};
     handleChanges();
-    let entryInputs = de.queryAll(By.css('tr input'));
+    const entryInputs = de.queryAll(By.css('tr input'));
     expect(entryInputs.length).toBe(6);
     expect(entryInputs[1].nativeElement.value).toBe('');
     expect(entryInputs[2].nativeElement.value).toBe('');

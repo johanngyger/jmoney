@@ -8,7 +8,7 @@ export class EntryService {
   }
 
   getEntries(accountId: number, filter: string, page: number): Promise<Entry[]> {
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     if (filter) {
       params.set('filter', filter);
     }
@@ -23,7 +23,7 @@ export class EntryService {
   }
 
   getEntryCount(accountId: number, filter: string, page: number): Promise<number> {
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     if (filter) {
       params.set('filter', filter);
     }

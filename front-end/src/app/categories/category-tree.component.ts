@@ -21,7 +21,7 @@ export class CategoryTreeComponent {
   remove(category: Category): void {
     this.categoryService.deleteCategory(category.id)
       .then(newCat => {
-        let index = this.categories.findIndex(cat => category.id === cat.id);
+        const index = this.categories.findIndex(cat => category.id === cat.id);
         this.categories.splice(index, 1);
       });
 

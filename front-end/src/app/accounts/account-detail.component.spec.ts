@@ -8,8 +8,10 @@ import {AccountService} from './account.service';
 import {AccountDetailComponent} from './account-detail.component';
 import {Account} from './account';
 
+declare var confirm: any;
+
 describe('AccountDetailComponent', () => {
-  let activatedRoute = new ActivatedRouteStub();
+  const activatedRoute = new ActivatedRouteStub();
   let comp: AccountDetailComponent;
   let fixture: ComponentFixture<AccountDetailComponent>;
   let de: DebugElement;
@@ -38,7 +40,7 @@ describe('AccountDetailComponent', () => {
       return Promise.resolve(true);
     }
   }
-  let routerStub = new RouterStub();
+  const routerStub = new RouterStub();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -57,7 +59,7 @@ describe('AccountDetailComponent', () => {
     spyOn(routerStub, 'navigate');
   });
 
-  let handleChanges = function () {
+  const handleChanges = function () {
     fixture.detectChanges();
     tick();
     fixture.detectChanges();
@@ -68,7 +70,7 @@ describe('AccountDetailComponent', () => {
   it('form for new account', fakeAsync(() => {
     activatedRoute.testParams = {};
     handleChanges();
-    let inputs = de.queryAll(By.css('input'));
+    const inputs = de.queryAll(By.css('input'));
     expect(inputs.length).toBe(7);
     inputs.forEach(i => expect(i.nativeElement.value).toBe(''));
   }));
@@ -76,7 +78,7 @@ describe('AccountDetailComponent', () => {
   it('form for existing account', fakeAsync(() => {
     activatedRoute.testParams = {accountId: 376};
     handleChanges();
-    let inputs = de.queryAll(By.css('input'));
+    const inputs = de.queryAll(By.css('input'));
     expect(inputs.length).toBe(7);
     expect(inputs[0].nativeElement.value).toBe('Account A');
   }));
@@ -97,7 +99,7 @@ describe('AccountDetailComponent', () => {
   }));
 
   it('delete() confirmed', fakeAsync(() => {
-    let origConfirm = confirm;
+    const origConfirm = confirm;
     confirm = jasmine.createSpy('confirm').and.returnValue(true);
     handleChanges();
 
@@ -109,14 +111,13 @@ describe('AccountDetailComponent', () => {
   }));
 
   it('delete() unconfirmed', fakeAsync(() => {
-    let origConfirm = confirm;
+    const origConfirm = confirm;
     confirm = jasmine.createSpy('confirm').and.returnValue(false);
     handleChanges();
 
     comp.delete();
     handleChanges();
     expect(confirm).toHaveBeenCalledWith('Really delete this account?');
-    confirm = origConfirm;
     expect(routerStub.navigate).not.toHaveBeenCalled();
   }));
 });

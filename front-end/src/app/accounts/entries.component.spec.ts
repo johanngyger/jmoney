@@ -13,7 +13,7 @@ describe('EntriesComponent', () => {
   let fixture: ComponentFixture<EntriesComponent>;
   let de: DebugElement;
   let success: boolean;
-  let entries = [
+  const entries = [
     new Entry({description: 'Entry1'}),
     new Entry({description: 'Entry2'}),
     new Entry({description: 'Entry3'}),
@@ -49,7 +49,7 @@ describe('EntriesComponent', () => {
     de = fixture.debugElement;
   });
 
-  let handleChanges = function () {
+  const handleChanges = function () {
     fixture.detectChanges();
     tick();
     fixture.detectChanges();

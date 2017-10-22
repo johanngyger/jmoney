@@ -23,7 +23,7 @@ describe('EntryService', () => {
 
   it('can instantiate service with new', inject([Http], (http: Http) => {
     expect(http).not.toBeNull('http should be provided');
-    let service = new EntryService(http);
+    const service = new EntryService(http);
     expect(service instanceof EntryService).toBe(true, 'new service should be ok');
   }));
 
@@ -43,61 +43,61 @@ describe('EntryService', () => {
     }));
 
     it('getEntries(), no param', async(inject([], () => {
-      let entries = [new Entry(), new Entry()];
-      let response = new Response(new ResponseOptions({status: 200, body: entries}));
+      const entries = [new Entry(), new Entry()];
+      const response = new Response(new ResponseOptions({status: 200, body: entries}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getEntries(0, null, null)
         .then(res => expect(res).toEqual(entries));
     })));
 
     it('getEntries(), with params', async(inject([], () => {
-      let entries = [new Entry({id: 1, status: null, creation: 0})];
-      let response = new Response(new ResponseOptions({status: 200, body: entries}));
+      const entries = [new Entry({id: 1, status: null, creation: 0})];
+      const response = new Response(new ResponseOptions({status: 200, body: entries}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getEntries(0, 'foo', 1)
         .then(res => expect(res).toEqual(entries));
     })));
 
     it('getEntryCount()', async(inject([], () => {
-      let response = new Response(new ResponseOptions({status: 200, body: 57}));
+      const response = new Response(new ResponseOptions({status: 200, body: 57}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getEntryCount(0, null, null)
         .then(res => expect(res).toBe(57));
     })));
 
     it('getEntryCount(), with params', async(inject([], () => {
-      let response = new Response(new ResponseOptions({status: 200, body: 57}));
+      const response = new Response(new ResponseOptions({status: 200, body: 57}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getEntryCount(0, 'bar', 2)
         .then(res => expect(res).toBe(57));
     })));
 
     it('getEntry()', async(inject([], () => {
-      let entry = new Entry({id: 17});
-      let response = new Response(new ResponseOptions({status: 200, body: entry}));
+      const entry = new Entry({id: 17});
+      const response = new Response(new ResponseOptions({status: 200, body: entry}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getEntry(24, 17)
         .then(res => expect(res).toEqual(entry));
     })));
 
     it('createEntry()', async(inject([], () => {
-      let entry = new Entry();
-      let response = new Response(new ResponseOptions({status: 200, body: 17}));
+      const entry = new Entry();
+      const response = new Response(new ResponseOptions({status: 200, body: 17}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.createEntry(24, entry)
         .then(res => expect(res).toEqual(17));
     })));
 
     it('updateEntry()', async(inject([], () => {
-      let entry = new Entry({id: 27, description: 'Entry27'});
-      let response = new Response(new ResponseOptions({status: 200, body: entry}));
+      const entry = new Entry({id: 27, description: 'Entry27'});
+      const response = new Response(new ResponseOptions({status: 200, body: entry}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.updateEntry(2, entry)
         .then(res => expect(res.status).toBe(200));
     })));
 
     it('deleteEntry()', async(inject([], () => {
-      let response = new Response(new ResponseOptions({status: 200, body: 22}));
+      const response = new Response(new ResponseOptions({status: 200, body: 22}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.deleteEntry(9, 243)
         .then(res => expect(res.status).toBe(200));

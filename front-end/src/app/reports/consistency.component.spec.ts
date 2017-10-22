@@ -12,7 +12,7 @@ describe('ConsistencyComponent', () => {
   let comp: ConsistencyComponent;
   let fixture: ComponentFixture<ConsistencyComponent>;
   let de: DebugElement;
-  let entries = [
+  const entries = [
     new Entry({
       date: 1483228800000,
       valuta: 1483833600000,
@@ -64,7 +64,7 @@ describe('ConsistencyComponent', () => {
     de = fixture.debugElement;
   });
 
-  let handleChanges = function () {
+  const handleChanges = function () {
     fixture.detectChanges();
     tick();
     fixture.detectChanges();
@@ -73,7 +73,7 @@ describe('ConsistencyComponent', () => {
   it('should show inconsistent split entries and entries without category', fakeAsync(() => {
     success = true;
     handleChanges();
-    let entryElems = de.queryAll(By.css('tr'));
+    const entryElems = de.queryAll(By.css('tr'));
     expect(entryElems.length).toBe(8);
   }));
 

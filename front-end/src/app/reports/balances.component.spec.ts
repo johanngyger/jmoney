@@ -10,7 +10,7 @@ describe('BalancesComponent', () => {
   let comp: BalancesComponent;
   let fixture: ComponentFixture<BalancesComponent>;
   let de: DebugElement;
-  let balances = [
+  const balances = [
     new Balance({accountName: 'Account A', balance: 12345, total: false}),
     new Balance({accountName: 'Account B', balance: -10000, total: false}),
     new Balance({accountName: 'Account C', balance: 1528000, total: false}),
@@ -35,7 +35,7 @@ describe('BalancesComponent', () => {
     de = fixture.debugElement;
   });
 
-  let handleChanges = function () {
+  const handleChanges = function () {
     fixture.detectChanges();
     tick();
     fixture.detectChanges();
@@ -45,7 +45,7 @@ describe('BalancesComponent', () => {
     success = true;
     comp.fetchBalances();
     handleChanges();
-    let entries = de.queryAll(By.css('div.report-entry'));
+    const entries = de.queryAll(By.css('div.report-entry'));
     expect(entries.length).toBe(4);
     expect(entries[0].nativeElement.textContent).toContain('Account A');
     expect(entries[1].nativeElement.textContent).toContain('Account B');

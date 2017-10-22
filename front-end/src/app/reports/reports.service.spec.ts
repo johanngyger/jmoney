@@ -4,6 +4,7 @@ import {HttpModule, Http, XHRBackend, Response, ResponseOptions} from '@angular/
 import {ReportsService} from './reports.service';
 import {Balance} from './balance';
 import {Entry} from '../accounts/entry';
+import {CashFlow} from './cash-flow';
 
 describe('ReportsService', () => {
   beforeEach(async(() => {
@@ -24,7 +25,7 @@ describe('ReportsService', () => {
 
   it('can instantiate service with new', inject([Http], (http: Http) => {
     expect(http).not.toBeNull('http should be provided');
-    let service = new ReportsService(http);
+    const service = new ReportsService(http);
     expect(service instanceof ReportsService).toBe(true, 'new service should be ok');
   }));
 
@@ -44,48 +45,48 @@ describe('ReportsService', () => {
     }));
 
     it('getBalances(), no param', async(inject([], () => {
-      let balances = [new Balance(), new Balance()];
-      let response = new Response(new ResponseOptions({status: 200, body: balances}));
+      const balances = [new Balance(), new Balance()];
+      const response = new Response(new ResponseOptions({status: 200, body: balances}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getBalances(null)
         .then(res => expect(res).toEqual(balances));
     })));
 
     it('getBalances(), with actual date param', async(inject([], () => {
-      let balances = [new Balance(), new Balance()];
-      let response = new Response(new ResponseOptions({status: 200, body: balances}));
+      const balances = [new Balance(), new Balance()];
+      const response = new Response(new ResponseOptions({status: 200, body: balances}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getBalances('2017-01-01')
         .then(res => expect(res).toEqual(balances));
     })));
 
     it('getCashFlow()', async(inject([], () => {
-      let balances = [new Balance(), new Balance()];
-      let response = new Response(new ResponseOptions({status: 200, body: balances}));
+      const cashflows = [new CashFlow(), new CashFlow()];
+      const response = new Response(new ResponseOptions({status: 200, body: cashflows}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getCashFlow('2001-01-01', '2016-31-12')
-        .then(res => expect(res).toEqual(balances));
+        .then(res => expect(res).toEqual(cashflows));
     })));
 
     it('getInconsistentSplitEntries()', async(inject([], () => {
-      let balances = [new Balance(), new Balance()];
-      let response = new Response(new ResponseOptions({status: 200, body: balances}));
+      const entries = [new Entry(), new Entry()];
+      const response = new Response(new ResponseOptions({status: 200, body: entries}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getInconsistentSplitEntries()
-        .then(res => expect(res).toEqual(balances));
+        .then(res => expect(res).toEqual(entries));
     })));
 
     it('getEntriesWithoutCategory()', async(inject([], () => {
-      let balances = [new Balance(), new Balance()];
-      let response = new Response(new ResponseOptions({status: 200, body: balances}));
+      const entries = [new Entry(), new Entry()];
+      const response = new Response(new ResponseOptions({status: 200, body: entries}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getEntriesWithoutCategory()
-        .then(res => expect(res).toEqual(balances));
+        .then(res => expect(res).toEqual(entries));
     })));
 
     it('getEntriesForCategory()', async(inject([], () => {
-      let balances = [new Entry(), new Entry(), new Entry()];
-      let response = new Response(new ResponseOptions({status: 200, body: balances}));
+      const balances = [new Entry(), new Entry(), new Entry()];
+      const response = new Response(new ResponseOptions({status: 200, body: balances}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getEntriesForCategory(0, '2016-01-01', '2016-01-31')
         .then(res => expect(res).toEqual(balances));

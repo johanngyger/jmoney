@@ -22,7 +22,7 @@ describe('OptionsService', () => {
 
   it('can instantiate service with new', inject([Http], (http: Http) => {
     expect(http).not.toBeNull('http should be provided');
-    let service = new OptionsService(http);
+    const service = new OptionsService(http);
     expect(service instanceof OptionsService).toBe(true, 'new service should be ok');
   }));
 
@@ -40,7 +40,7 @@ describe('OptionsService', () => {
     beforeEach(inject([Http, XHRBackend], (http: Http, be: MockBackend) => {
       backend = be;
       service = new OptionsService(http);
-      let options = new ResponseOptions({status: 200});
+      const options = new ResponseOptions({status: 200});
       response = new Response(options);
     }));
 

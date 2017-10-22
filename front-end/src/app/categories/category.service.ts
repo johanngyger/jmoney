@@ -29,7 +29,7 @@ export class CategoryService {
   }
 
   createCategory(parentId: number): Promise<Category> {
-    let newCat = new Category();
+    const newCat = new Category();
     newCat.name = '<New category>';
     newCat.parentId = parentId;
 

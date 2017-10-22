@@ -23,7 +23,7 @@ describe('AccountService', () => {
 
   it('can instantiate service with new', inject([Http], (http: Http) => {
     expect(http).not.toBeNull('http should be provided');
-    let service = new AccountService(http);
+    const service = new AccountService(http);
     expect(service instanceof AccountService).toBe(true, 'new service should be ok');
   }));
 
@@ -43,39 +43,39 @@ describe('AccountService', () => {
     }));
 
     it('getAccounts(), no param', async(inject([], () => {
-      let accounts = [new Account(), new Account()];
-      let response = new Response(new ResponseOptions({status: 200, body: accounts}));
+      const accounts = [new Account(), new Account()];
+      const response = new Response(new ResponseOptions({status: 200, body: accounts}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getAccounts()
         .then(res => expect(res).toEqual(accounts));
     })));
 
     it('getAccount()', async(inject([], () => {
-      let account = new Account();
-      let response = new Response(new ResponseOptions({status: 200, body: account}));
+      const account = new Account();
+      const response = new Response(new ResponseOptions({status: 200, body: account}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.getAccount(0)
         .then(res => expect(res).toEqual(account));
     })));
 
     it('createAccount()', async(inject([], () => {
-      let account = new Account({name: 'Account A'});
-      let response = new Response(new ResponseOptions({status: 200, body: account}));
+      const account = new Account({name: 'Account A'});
+      const response = new Response(new ResponseOptions({status: 200, body: 4213}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.createAccount(account)
-        .then(res => expect(res).toEqual(account));
+        .then(res => expect(res).toEqual(4213));
     })));
 
     it('updateAccount()', async(inject([], () => {
-      let account = new Account();
-      let response = new Response(new ResponseOptions({status: 200, body: account}));
+      const account = new Account();
+      const response = new Response(new ResponseOptions({status: 200, body: account}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.updateAccount(account)
         .then(res => expect(res.status).toBe(200));
     })));
 
     it('deleteAccount()', async(inject([], () => {
-      let response = new Response(new ResponseOptions({status: 200}));
+      const response = new Response(new ResponseOptions({status: 200}));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
       service.deleteAccount(0)
         .then(res => expect(res.status).toBe(200));

@@ -49,9 +49,9 @@ describe('EntriesTableComponent', () => {
   });
 
   it('can show a table with three entries', () => {
-    let entryTable = de.query(By.css('table.entryTable'));
+    const entryTable = de.query(By.css('table.entryTable'));
     expect(entryTable.nativeElement).toBeTruthy();
-    let rows = entryTable.queryAll(By.css('tr'));
+    const rows = entryTable.queryAll(By.css('tr'));
 
     expect(rows.length).toBe(4);
     expect(rows[0].nativeElement.textContent).toContain('Description');

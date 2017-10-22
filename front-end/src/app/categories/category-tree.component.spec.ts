@@ -10,17 +10,17 @@ describe('CategoryTreeComponent', () => {
   let comp: CategoryTreeComponent;
   let fixture: ComponentFixture<CategoryTreeComponent>;
   let de: DebugElement;
-  let cat11 = new Category({id: 4, name: 'Cat1.1', children: []});
-  let cat12 = new Category({id: 5, name: 'Cat1.2', children: []});
-  let cat1 = new Category({id: 1, name: 'Cat1', children: [cat11, cat12]});
-  let cat2 = new Category({id: 2, name: 'Cat2', children: []});
-  let cat31 = new Category({id: 5, name: 'Cat3.1', children: []});
-  let cat321 = new Category({id: 5, name: 'Cat3.2.1', children: []});
-  let cat322 = new Category({id: 5, name: 'Cat3.2.2', children: []});
-  let cat323 = new Category({id: 5, name: 'Cat3.2.3', children: []});
-  let cat32 = new Category({id: 1, name: 'Cat3.2', children: [cat321, cat322, cat323]});
-  let cat33 = new Category({id: 5, name: 'Cat3.3', children: []});
-  let cat3 = new Category({id: 1, name: 'Cat3', children: [cat31, cat32, cat33]});
+  const cat11 = new Category({id: 4, name: 'Cat1.1', children: []});
+  const cat12 = new Category({id: 5, name: 'Cat1.2', children: []});
+  const cat1 = new Category({id: 1, name: 'Cat1', children: [cat11, cat12]});
+  const cat2 = new Category({id: 2, name: 'Cat2', children: []});
+  const cat31 = new Category({id: 5, name: 'Cat3.1', children: []});
+  const cat321 = new Category({id: 5, name: 'Cat3.2.1', children: []});
+  const cat322 = new Category({id: 5, name: 'Cat3.2.2', children: []});
+  const cat323 = new Category({id: 5, name: 'Cat3.2.3', children: []});
+  const cat32 = new Category({id: 1, name: 'Cat3.2', children: [cat321, cat322, cat323]});
+  const cat33 = new Category({id: 5, name: 'Cat3.3', children: []});
+  const cat3 = new Category({id: 1, name: 'Cat3', children: [cat31, cat32, cat33]});
 
   class FakeCategoryService {
     createCategory(parentId: number): Promise<Category> {
@@ -49,7 +49,7 @@ describe('CategoryTreeComponent', () => {
     fixture.detectChanges();
     tick();
     fixture.detectChanges();
-    let catList = de.queryAll(By.css('input'));
+    const catList = de.queryAll(By.css('input'));
     expect(catList.length).toBe(11);
     expect(catList[0].nativeElement.value).toBe('Cat1');
     expect(catList[1].nativeElement.value).toBe('Cat1.1');
@@ -71,7 +71,7 @@ describe('CategoryTreeComponent', () => {
     fixture.detectChanges();
     tick();
     fixture.detectChanges();
-    let catList = de.queryAll(By.css('input'));
+    const catList = de.queryAll(By.css('input'));
     expect(catList.length).toBe(12);
     expect(catList[4].nativeElement.value).toBe('NewCat');
   }));
@@ -83,7 +83,7 @@ describe('CategoryTreeComponent', () => {
     fixture.detectChanges();
     tick();
     fixture.detectChanges();
-    let catList = de.queryAll(By.css('input'));
+    const catList = de.queryAll(By.css('input'));
     expect(catList.length).toBe(9);
     expect(catList[0].nativeElement.value).toBe('Cat2');
   }));

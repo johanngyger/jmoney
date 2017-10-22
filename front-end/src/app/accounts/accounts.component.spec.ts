@@ -13,7 +13,7 @@ describe('AccountsComponent', () => {
   let de: DebugElement;
   let success: boolean;
   let accounts: Account[];
-  let accountSubject = new Subject<number>();
+  const accountSubject = new Subject<number>();
 
   class FakeAccountService {
     accountChange = accountSubject;
@@ -40,7 +40,7 @@ describe('AccountsComponent', () => {
     ];
   });
 
-  let handleChanges = function () {
+  const handleChanges = function () {
     fixture.detectChanges();
     tick();
     fixture.detectChanges();
@@ -49,7 +49,7 @@ describe('AccountsComponent', () => {
   it('can get accounts and show them', fakeAsync(() => {
     success = true;
     handleChanges();
-    let entryElems = de.queryAll(By.css('a'));
+    const entryElems = de.queryAll(By.css('a'));
     expect(entryElems.length).toBe(4);
     expect(entryElems[0].nativeElement.textContent).toBe('Account A');
     expect(entryElems[1].nativeElement.textContent).toBe('Account B');

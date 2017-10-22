@@ -12,7 +12,7 @@ export class ReportsService {
   }
 
   getBalances(date: string): Promise<Balance[]> {
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     if (date) {
       params.set('date', date);
     }
@@ -24,7 +24,7 @@ export class ReportsService {
   }
 
   getCashFlow(fromDate: string, toDate: string): Promise<CashFlow[]> {
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.set('fromDate', fromDate);
     params.set('toDate', toDate);
 
@@ -38,11 +38,11 @@ export class ReportsService {
     return this.http
       .get('api/reports/consistency/inconsistent-split-entries')
       .toPromise()
-      .then(response => response.json() as Balance[]);
+      .then(response => response.json() as Entry[]);
   }
 
   getEntriesForCategory(categoryId: number, fromDate: string, toDate: string) {
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.set('categoryId', '' + categoryId);
     params.set('fromDate', fromDate);
     params.set('toDate', toDate);

@@ -15,7 +15,7 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.params
       .switchMap(params => {
-        let id = params['accountId'];
+        const id = params['accountId'];
         if (id) {
           return this.accountService.getAccount(+id);
         } else {

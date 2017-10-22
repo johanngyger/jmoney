@@ -34,7 +34,7 @@ export class EntryDetailComponent implements OnInit {
     this.route.params
       .switchMap(params => {
         this.accountId = +params['accountId'];
-        let entryId = params['entryId'];
+        const entryId = params['entryId'];
         if (entryId) {
           return this.entryService.getEntry(this.accountId, +entryId);
         } else {
@@ -71,13 +71,13 @@ export class EntryDetailComponent implements OnInit {
   }
 
   addSubEntry(): void {
-    let e = new Entry();
+    const e = new Entry();
     e.amount = 0;
     this.entry.subEntries.push(e);
   }
 
   removeSubEntry(subEntry: Entry): void {
-    let index = this.entry.subEntries.indexOf(subEntry);
+    const index = this.entry.subEntries.indexOf(subEntry);
     this.entry.subEntries.splice(index, 1);
   }
 
