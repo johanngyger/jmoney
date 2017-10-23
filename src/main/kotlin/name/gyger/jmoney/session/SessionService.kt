@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
-open class SessionService(private val sessionRepository: SessionRepository,
-                          private val categoryFactory: CategoryFactory) {
+class SessionService(private val sessionRepository: SessionRepository,
+                     private val categoryFactory: CategoryFactory) {
 
     fun initSession() {
         removeOldSession()

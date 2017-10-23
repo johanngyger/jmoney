@@ -12,8 +12,8 @@ fun parse(dateString: String?): Date? {
     if (dateString == null) return null
 
     val result: Date?
-    try {
-        result = sdf.parse(dateString)
+    result = try {
+        sdf.parse(dateString)
     } catch (e: ParseException) {
         throw IllegalArgumentException(dateString, e)
     }

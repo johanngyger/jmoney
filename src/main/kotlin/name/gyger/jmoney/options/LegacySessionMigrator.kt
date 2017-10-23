@@ -14,10 +14,10 @@ import java.io.InputStream
 import java.util.*
 
 @Component
-open class LegacySessionMigrator(private val sessionRepository: SessionRepository,
-                                 private val accountRepository: AccountRepository,
-                                 private val categoryRepository: CategoryRepository,
-                                 private val entryRepository: EntryRepository) {
+class LegacySessionMigrator(private val sessionRepository: SessionRepository,
+                            private val accountRepository: AccountRepository,
+                            private val categoryRepository: CategoryRepository,
+                            private val entryRepository: EntryRepository) {
     private val session = name.gyger.jmoney.session.Session(name.gyger.jmoney.category.Category(),
             name.gyger.jmoney.category.Category(), name.gyger.jmoney.category.Category())
     private val oldToNewCategoryMap = HashMap<Category, name.gyger.jmoney.category.Category>()
@@ -69,7 +69,7 @@ open class LegacySessionMigrator(private val sessionRepository: SessionRepositor
         val oldCat = node.category
         val cat = createCategory(parent, oldCat)
 
-        (0..node.childCount - 1)
+        (0 until node.childCount)
                 .map { node.getChildAt(it) as CategoryNode }
                 .forEach { mapCategoryNode(it, cat) }
     }
@@ -104,15 +104,20 @@ open class LegacySessionMigrator(private val sessionRepository: SessionRepositor
     private fun createCategory(parent: name.gyger.jmoney.category.Category?,
                                oldCat: net.sf.jmoney.model.Category): name.gyger.jmoney.category.Category {
         val cat = name.gyger.jmoney.category.Category()
-        if (oldCat is SplitCategory) {
-            cat.type = name.gyger.jmoney.category.Category.Type.SPLIT
-            session.splitCategory = cat
-        } else if (oldCat is TransferCategory) {
-            cat.type = name.gyger.jmoney.category.Category.Type.TRANSFER
-            session.transferCategory = cat
-        } else if (oldCat is RootCategory) {
-            cat.type = name.gyger.jmoney.category.Category.Type.ROOT
-            session.transferCategory = cat
+        // Workaround for redundant split category.
+        when (oldCat) {
+            is SplitCategory -> {
+                cat.type = name.gyger.jmoney.category.Category.Type.SPLIT
+                session.splitCategory = cat
+            }
+            is TransferCategory -> {
+                cat.type = name.gyger.jmoney.category.Category.Type.TRANSFER
+                session.transferCategory = cat
+            }
+            is RootCategory -> {
+                cat.type = name.gyger.jmoney.category.Category.Type.ROOT
+                session.transferCategory = cat
+            }
         }
         cat.name = oldCat.categoryName
         cat.parent = parent

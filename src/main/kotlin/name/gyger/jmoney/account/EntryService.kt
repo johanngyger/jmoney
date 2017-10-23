@@ -8,9 +8,9 @@ import java.util.*
 
 @Service
 @Transactional
-open class EntryService(private val accountRepository: AccountRepository,
-                        private val entryRepository: EntryRepository,
-                        private val categoryRepository: CategoryRepository) {
+class EntryService(private val accountRepository: AccountRepository,
+                   private val entryRepository: EntryRepository,
+                   private val categoryRepository: CategoryRepository) {
 
     fun getEntries(accountId: Long, pageParam: Int?, filter: String?): List<Entry> {
         // TODO: Use pageable/sortable repository

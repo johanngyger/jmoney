@@ -11,10 +11,10 @@ import java.util.*
 
 @Service
 @Transactional
-open class ReportService(private val sessionRepository: SessionRepository,
-                         private val categoryRepository: CategoryRepository,
-                         private val reportRepository: ReportRepository,
-                         private val entryRepository: EntryRepository) {
+class ReportService(private val sessionRepository: SessionRepository,
+                    private val categoryRepository: CategoryRepository,
+                    private val reportRepository: ReportRepository,
+                    private val entryRepository: EntryRepository) {
 
     fun getBalances(date: Date?): List<Balance> {
         val session = sessionRepository.getSession()
@@ -115,11 +115,7 @@ open class ReportService(private val sessionRepository: SessionRepository,
     }
 
     private fun toZeroIfNull(value: Long?): Long {
-        if (value != null) {
-            return value
-        } else {
-            return 0
-        }
+        return value ?: 0
     }
 
     private fun calculateCashFlowForCategory(resultList: MutableList<CashFlow>, entrySums: Map<Long, Long>,

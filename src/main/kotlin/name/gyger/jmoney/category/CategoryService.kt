@@ -8,9 +8,9 @@ import java.util.*
 
 @Service
 @Transactional
-open class CategoryService(private val sessionRepository: SessionRepository,
-                           private val categoryRepository: CategoryRepository,
-                           private val entryRepository: EntryRepository) {
+class CategoryService(private val sessionRepository: SessionRepository,
+                      private val categoryRepository: CategoryRepository,
+                      private val entryRepository: EntryRepository) {
 
     fun getRootCategory(): Category {
         categoryRepository.findAll()  // prefetch

@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
-open class AccountService(private val sessionRepository: SessionRepository,
-                          private val accountRepository: AccountRepository) {
+class AccountService(private val sessionRepository: SessionRepository,
+                     private val accountRepository: AccountRepository) {
 
     fun createAccount(a: Account): Long {
         val s = sessionRepository.getSession()

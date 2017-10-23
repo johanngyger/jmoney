@@ -7,8 +7,8 @@ import java.io.InputStream
 
 @Service
 @Transactional
-open class OptionsService(private val sessionService: SessionService,
-                          private val legacySessionMigrator: LegacySessionMigrator) {
+class OptionsService(private val sessionService: SessionService,
+                     private val legacySessionMigrator: LegacySessionMigrator) {
 
     fun importFile(inputStream: InputStream) {
         sessionService.removeOldSession()
