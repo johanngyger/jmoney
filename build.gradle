@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.1.4-3'
+        kotlinVersion = '1.1.51'
         springBootVersion = '1.5.8.RELEASE'
         powerMockVersion = '1.6.6'
     }
