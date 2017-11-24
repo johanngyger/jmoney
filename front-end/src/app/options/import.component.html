@@ -12,6 +12,8 @@
 
 <hr>
 
-<input type="file" ngFileSelect [options]="options" (onUpload)="handleUpload($event)"
-       (beforeUpload)="beforeUpload($event)">
-<img src=" img/loader.gif" *ngIf="loading">
+<label class="upload-button">
+  <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+</label>
+
+<img src="img/loader.gif" *ngIf="loading">

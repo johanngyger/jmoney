@@ -4,7 +4,7 @@ This is the Angular 2 based front-end. It runs with a standalone dev server that
 
 ## Preparations
 
-`npm install -g angular-cli`
+`npm install -g @angular/cli@latest`
 
 and
 

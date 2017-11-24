@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {NgUploaderOptions} from 'ngx-uploader';
+import {Component, EventEmitter} from '@angular/core';
+import {UploadOutput, UploadInput, UploadFile} from 'ngx-uploader';
 
 @Component({
   templateUrl: './import.component.html'
@@ -7,20 +7,30 @@ import {NgUploaderOptions} from 'ngx-uploader';
 export class ImportComponent {
   status: string;
   loading: boolean;
-  options: NgUploaderOptions = new NgUploaderOptions({url: '/api/options/import'});
+  uploadInput: EventEmitter<UploadInput>;
 
-  beforeUpload(uploadingFile): void {
-    this.loading = true;
-    this.status = '';
+  constructor() {
+    this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
   }
 
-  handleUpload(data): void {
-    if (data.status === 200) {
-      this.status = 'success';
-      this.loading = false;
-    } else {
-      this.status = 'error';
-      this.loading = false;
+  onUploadOutput(output: UploadOutput): void {
+    if (output.type === 'allAddedToQueue') {
+      this.loading = true;
+      this.status = '';
+      const event: UploadInput = {
+        type: 'uploadAll',
+        url: '/api/options/import',
+        method: 'POST',
+      };
+      this.uploadInput.emit(event);
+    } else if (output.type === 'done') {
+      if (output.file.responseStatus === 200) {
+        this.status = 'success';
+        this.loading = false;
+      } else {
+        this.status = 'error';
+        this.loading = false;
+      }
     }
   }
 }
