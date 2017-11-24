@@ -29,32 +29,4 @@ describe('ImportComponent', () => {
     imgLoading = de.query(By.css('img'));
   }
 
-  it('can show the loading status', () => {
-    expect(imgLoading).toBeNull();
-    comp.beforeUpload('file');
-    fixture.detectChanges();
-    fetchElements();
-    expect(imgLoading.nativeElement).toBeTruthy();
-  });
-
-  it('can handle the upload (positive case)', () => {
-    expect(divSuccess).toBeNull();
-    comp.handleUpload({status: 200});
-    fixture.detectChanges();
-    fetchElements();
-    expect(divSuccess.nativeElement).toBeTruthy();
-    expect(divError).toBeNull();
-    expect(imgLoading).toBeNull();
-  });
-
-  it('can handle the upload (negative case)', () => {
-    expect(divError).toBeNull();
-    comp.handleUpload({status: 500});
-    fixture.detectChanges();
-    fetchElements();
-    expect(divError.nativeElement).toBeTruthy();
-    expect(divSuccess).toBeNull();
-    expect(imgLoading).toBeNull();
-  });
-
 });
