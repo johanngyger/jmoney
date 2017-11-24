@@ -1,10 +1,11 @@
 import {Component, EventEmitter} from '@angular/core';
-import {UploadOutput, UploadInput, UploadFile} from 'ngx-uploader';
+import {UploadOutput, UploadInput, UploadFile, UploaderOptions} from 'ngx-uploader';
 
 @Component({
   templateUrl: './import.component.html'
 })
 export class ImportComponent {
+  options: UploaderOptions;
   status: string;
   loading: boolean;
   uploadInput: EventEmitter<UploadInput>;
