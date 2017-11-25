@@ -13,7 +13,7 @@
 <hr>
 
 <label class="upload-button">
-  <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+  <input type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
 </label>
 
 <img src="img/loader.gif" *ngIf="loading">
