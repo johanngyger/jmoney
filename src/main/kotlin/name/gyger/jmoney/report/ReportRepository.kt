@@ -10,7 +10,7 @@ interface ReportRepository : Repository<Entry, Long> {
 
     @Query("SELECT NEW name.gyger.jmoney.report.ReportItem(e.account.id, SUM(e.amount)) " +
             "FROM Entry e " +
-            "WHERE e.account.id IS NOT NULL AND e.date <= :date " +
+            "WHERE e.account.id IS NOT NULL AND (:date IS NULL OR e.date <= :date)" +
             "GROUP BY e.account.id")
     fun getEntrySumsByAccountId(@Param("date") date: Date?): List<ReportItem>
 
