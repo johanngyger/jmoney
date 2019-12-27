@@ -88,7 +88,7 @@ build.dependsOn jacocoTestReport
 task buildDocker(type: Docker, dependsOn: build) {
     push = true
     applicationName = jar.baseName
-    baseImage "frolvlad/alpine-oraclejdk8:slim"
+    baseImage "adoptopenjdk/openjdk8"
     volume '/tmp'
     addFile {
         from jar
