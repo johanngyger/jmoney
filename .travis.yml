@@ -21,7 +21,7 @@ jobs:
       if: branch = master
       script:
         - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-        - ./gradlew pushDocker
+        - ./gradlew buildDocker
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

@@ -86,6 +86,7 @@ processResources.dependsOn buildFE
 build.dependsOn jacocoTestReport
 
 task buildDocker(type: Docker, dependsOn: build) {
+    push = true
     applicationName = jar.baseName
     baseImage "adoptopenjdk/openjdk8"
     volume '/tmp'
@@ -95,9 +96,4 @@ task buildDocker(type: Docker, dependsOn: build) {
     }
     runCommand 'sh -c "touch /app.jar"'
     entryPoint(["sh", "-c", 'java -jar /app.jar'])
-}
-
-task pushDocker(type: Docker, dependsOn: buildDocker) {
-    push = true
-    description 'Push task for Travis, see .travis.yml'
 }

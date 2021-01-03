@@ -23,25 +23,17 @@ Then fire up a browser at <http://localhost:8080>.
 You can pull a Docker image from Docker Hub:
 
 ```
-docker run -p 8080:8080 -t jogy/jmoney:<tag>
+docker run -ti -p 8080:8080 jogy/jmoney:<tag>
 ```
-(See https://hub.docker.com/r/jogy/jmoney/tags/ for valid tags.)
+(See <https://hub.docker.com/r/jogy/jmoney/tags/> for valid tags.)
 
 You can also build the Docker image before running it:
 ```
 git clone https://github.com/jogy/jmoney.git
 cd jmoney
 ./gradlew buildDocker
-docker run -p 8080:8080 -t jogy/jmoney
+docker run -ti -p 8080:8080 jogy/jmoney
 ```
-
-## Running on Heroku
-
-A demo instance is available at <https://jmoney-demo.herokuapp.com>.
-
-You can also deploy your own instance: 
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ## Development
 
