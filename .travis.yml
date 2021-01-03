@@ -1,17 +1,10 @@
 sudo: required
 language: java
 jdk: openjdk8
-script: "./gradlew buildTravis"
 
 services:
   - docker
 
-before_install:
-  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
     - front-end/.gradle/nodejs/
@@ -20,6 +13,19 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
+jobs:
+  include:
+    - stage: build
+      script: ./gradlew build
+    - stage: deploy
+      if: branch = master
+      script:
+        - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+        - ./gradlew pushDocker
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-
