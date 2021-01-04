@@ -40,7 +40,7 @@
     "codecov": "3.8.1",
     "codelyzer": "4.5.0",
     "jasmine-core": "2.99.1",
-    "jasmine-spec-reporter": "4.2.1",
+    "jasmine-spec-reporter": "6.0.0",
     "karma": "1.7.1",
     "karma-chrome-launcher": "2.2.0",
     "karma-cli": "1.0.1",
